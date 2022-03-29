@@ -9,8 +9,7 @@ import DetailsDrinks from '../pages/detailsDrinks/DetailsDrinks';
 import ProgressFoods from '../pages/progressFoods/ProgressFoods';
 import ProgressDrinks from '../pages/progressDrinks/ProgressDrinks';
 import Explore from '../pages/explore/Explore';
-import ExploreFoods from '../pages/exploreFoods/ExploreFoods';
-import ExploreDrinks from '../pages/exploreDrinks/ExploreDrinks';
+import ExploreDrinksOrFoods from '../pages/exploreDrinksOrFoods/ExploreDrinksOrFoods';
 import FoodsIngredients from '../pages/foodsIngredients/FoodsIngredients';
 import DrinksIngredients from '../pages/drinksIngredients/DrinksIngredients';
 import Nationalities from '../pages/nationalities/Nationalities';
@@ -28,8 +27,8 @@ function Routes() {
       <Route exact path="/foods/:id/in-progress" component={ ProgressFoods } />
       <Route exact path="/drink/:id/in-progress" component={ ProgressDrinks } />
       <Route exact path="/explore" component={ Explore } />
-      <Route exact path="/explore/foods" component={ ExploreFoods } />
-      <Route exact path="/explore/drinks" component={ ExploreDrinks } />
+      <Route exact path="/explore/foods" component={ ExploreDrinksOrFoods } />
+      <Route exact path="/explore/drinks" component={ ExploreDrinksOrFoods } />
       <Route exact path="/explore/foods/ingredients" component={ FoodsIngredients } />
       <Route exact path="/explore/drinks/ingredients" component={ DrinksIngredients } />
       <Route exact path="/explore/foods/nationalities" component={ Nationalities } />
