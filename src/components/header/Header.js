@@ -41,7 +41,7 @@ function Header(props) {
   };
 
   const searchByClick = async () => {
-    let response;
+    let response = [];
     if (aboutDrink) {
       switch (category) {
       case 'ingredient':
@@ -55,6 +55,7 @@ function Header(props) {
           response = await requestfirstLetterDrink(search);
         } else {
           global.alert('Your search must have only 1 (one) character');
+          return null;
         }
         break;
       default:
@@ -79,6 +80,7 @@ function Header(props) {
         break;
       }
     }
+
     resultsApi(response);
     searchInput(search);
     return response;

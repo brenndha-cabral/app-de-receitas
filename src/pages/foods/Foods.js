@@ -32,7 +32,7 @@ function Foods(props) {
     <section>
       <Header aboutDrink={ false } searchButtonIsVisible title="Foods" />
       <section>
-        { (results.length <= 0 && search !== '')
+        { (results.length <= 0)
         && global.alert('Sorry, we haven\'t found any recipes for these filters.') }
 
         {
