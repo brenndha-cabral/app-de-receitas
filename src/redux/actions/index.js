@@ -1,14 +1,21 @@
 // import requestRates from '../services/apis';
 
-// export const LOGIN_INFOS = 'LOGIN_INFOS';
+export const LOGIN_INFOS = 'LOGIN_INFOS';
+export const SET_RESULTS_API = 'SET_RESULTS_API';
 
-// export const removeExpense = (expenseId) => ({
+export const setInfoUser = (...stateUser) => ({
+  type: LOGIN_INFOS,
+  payload: {
+    ...stateUser,
+  },
+});
 
-//   type: REMOVE_EXPENSE,
-//   payload: {
-//     expenseId,
-//   },
-// });
+export const setResultsApi = (results) => ({
+  type: SET_RESULTS_API,
+  payload: {
+    results,
+  },
+});
 
 // export const fetchRates = (expense) => async (dispatch) => {
 //   const dataBase = await requestRates();
