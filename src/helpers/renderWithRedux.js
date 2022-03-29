@@ -1,7 +1,8 @@
 import React from 'react';
-import { createStore, combineReducers } from 'redux';
+import { render } from '@testing-library/react';
+import { Provider } from 'react-redux';
+import { createStore } from 'redux';
 import rootReducer from '../redux/reducers';
-import renderWithRouter from './renderWithRouter';
 
 const renderWithRedux = (
   component,
