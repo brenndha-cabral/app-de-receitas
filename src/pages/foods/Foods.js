@@ -1,27 +1,27 @@
 import React, { useState, useEffect } from 'react';
-import { drinksRecipes, buttonsCategoriesDrinks } from '../../services/requestApi';
+import { foodsRecipes, buttonsCategoriesFoods } from '../../services/requestApi';
 import Header from '../../components/header/Header';
 import Footer from '../../components/footer/Footer';
 
-function Drinks() {
-  const [drink, setDrinks] = useState([]);
+function Foods() {
+  const [foods, setFoods] = useState([]);
   const [buttons, setButtons] = useState([]);
 
   useEffect(() => {
     (async () => {
-      const { drinks } = await drinksRecipes();
-      setDrinks(drinks);
-      const data = await buttonsCategoriesDrinks();
-      setButtons(data.drinks);
+      const { meals } = await foodsRecipes();
+      setFoods(meals);
+      const data = await buttonsCategoriesFoods();
+      setButtons(data.meals);
     })();
   }, []);
 
-  const showsNumberDrinks = 12;
+  const showsNumberFoods = 12;
   const showsNumberButtons = 5;
 
   return (
     <div>
-      <Header aboutDrink searchButtonIsVisible title="Drinks" />
+      <Header searchButtonIsVisible title="Foods" />
       <section>
         <button
           type="button"
@@ -42,20 +42,20 @@ function Drinks() {
         }
       </section>
       {
-        drink.slice(0, showsNumberDrinks).map(({ strDrinkThumb, strDrink }, index) => (
+        foods.slice(0, showsNumberFoods).map(({ strMealThumb, strMeal }, index) => (
           <section
             data-testid={ `${index}-recipe-card` }
-            key={ strDrink }
+            key={ strMeal }
           >
             <img
               data-testid={ `${index}-card-img` }
-              src={ strDrinkThumb }
-              alt="drinks"
+              src={ strMealThumb }
+              alt="foods"
             />
             <h3
               data-testid={ `${index}-card-name` }
             >
-              { strDrink }
+              { strMeal }
             </h3>
           </section>
         ))
@@ -65,4 +65,4 @@ function Drinks() {
   );
 }
 
-export default Drinks;
+export default Foods;
