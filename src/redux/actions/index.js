@@ -3,7 +3,7 @@
 export const LOGIN_INFOS = 'LOGIN_INFOS';
 export const SET_RESULTS_API = 'SET_RESULTS_API';
 
-export const setInfoUser = (...stateUser) => ({
+export const setInfoUser = (stateUser) => ({
   type: LOGIN_INFOS,
   payload: {
     ...stateUser,
