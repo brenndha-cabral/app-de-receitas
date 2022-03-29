@@ -12,9 +12,7 @@ export const setInfoUser = (stateUser) => ({
 
 export const setResultsApi = (results) => ({
   type: SET_RESULTS_API,
-  payload: {
-    results,
-  },
+  results,
 });
 
 // export const fetchRates = (expense) => async (dispatch) => {
