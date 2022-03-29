@@ -3,6 +3,7 @@ import { Router } from 'react-router-dom/cjs/react-router-dom.min';
 import { createStore } from 'redux';
 import React from 'react';
 import { Provider } from 'react-redux';
+import { createMemoryHistory } from 'history';
 import rootReducer from '../redux/reducers';
 
 const renderWithRouterAndRedux = (
