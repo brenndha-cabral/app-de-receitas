@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import profileIcon from '../../images/profileIcon.svg';
 import searchIcon from '../../images/searchIcon.svg';
 import './header.css';
-import { setResultsApi } from '../../redux/actions';
+import { setResultsApi, setSearch as setSearchAction } from '../../redux/actions';
 import {
   requestIngredientFood,
   requestNameFood,
@@ -16,7 +16,7 @@ import {
 } from '../../services/requestApi';
 
 function Header(props) {
-  const { searchButtonIsVisible, title, aboutDrink, resultsApi } = props;
+  const { searchButtonIsVisible, title, aboutDrink, resultsApi, searchInput } = props;
 
   // Referência useHistory() | Link: https://stackoverflow.com/questions/50644976/react-button-onclick-redirect-page
 
@@ -80,6 +80,7 @@ function Header(props) {
       }
     }
     resultsApi(response);
+    searchInput(search);
     return response;
   };
 
@@ -168,6 +169,9 @@ const mapDispatchToProps = (dispatch) => ({
   resultsApi: (result) => {
     dispatch(setResultsApi(result));
   },
+  searchInput: (search) => {
+    dispatch(setSearchAction(search));
+  },
 });
 
 export default connect(null, mapDispatchToProps)(Header);
@@ -177,4 +181,5 @@ Header.propTypes = {
   title: PropTypes.string.isRequired,
   aboutDrink: PropTypes.bool.isRequired,
   resultsApi: PropTypes.func.isRequired,
+  searchInput: PropTypes.func.isRequired,
 };

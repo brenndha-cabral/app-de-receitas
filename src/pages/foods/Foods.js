@@ -1,9 +1,14 @@
 import React, { useState, useEffect } from 'react';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import { foodsRecipes, buttonsCategoriesFoods } from '../../services/requestApi';
 import Header from '../../components/header/Header';
 import Footer from '../../components/footer/Footer';
 
-function Foods() {
+function Foods(props) {
+  const { search } = props;
+  let { results } = props;
+
   const [foods, setFoods] = useState([]);
   const [buttons, setButtons] = useState([]);
 
@@ -19,50 +24,75 @@ function Foods() {
   const showsNumberFoods = 12;
   const showsNumberButtons = 5;
 
+  if (results.length <= 0 && search === '') {
+    results = foods.slice(0, showsNumberFoods);
+  }
+
   return (
-    <div>
-      <Header searchButtonIsVisible title="Foods" />
+    <section>
+      <Header aboutDrink={ false } searchButtonIsVisible title="Foods" />
       <section>
-        <button
-          type="button"
-          data-testid="All-category-filter"
-        >
-          ALL
-        </button>
+        { (results.length <= 0 && search !== '')
+        && global.alert('Sorry, we haven\'t found any recipes for these filters.') }
+
         {
-          buttons.slice(0, showsNumberButtons).map(({ strCategory }) => (
+          (search === '')
+        && (
+          <section>
             <button
               type="button"
-              key={ strCategory }
-              data-testid={ `${strCategory}-category-filter` }
+              data-testid="All-category-filter"
             >
-              { strCategory }
+              ALL
             </button>
+            {
+              buttons.slice(0, showsNumberButtons).map(({ strCategory }) => (
+                <button
+                  type="button"
+                  key={ strCategory }
+                  data-testid={ `${strCategory}-category-filter` }
+                >
+                  { strCategory }
+                </button>
+              ))
+            }
+          </section>
+        )
+        }
+
+        {
+          results.map(({ strMealThumb, strMeal }, index) => (
+            <section
+              data-testid={ `${index}-recipe-card` }
+              key={ strMeal }
+            >
+              <img
+                data-testid={ `${index}-card-img` }
+                src={ strMealThumb }
+                alt="foods"
+              />
+              <h3
+                data-testid={ `${index}-card-name` }
+              >
+                { strMeal }
+              </h3>
+            </section>
           ))
         }
       </section>
-      {
-        foods.slice(0, showsNumberFoods).map(({ strMealThumb, strMeal }, index) => (
-          <section
-            data-testid={ `${index}-recipe-card` }
-            key={ strMeal }
-          >
-            <img
-              data-testid={ `${index}-card-img` }
-              src={ strMealThumb }
-              alt="foods"
-            />
-            <h3
-              data-testid={ `${index}-card-name` }
-            >
-              { strMeal }
-            </h3>
-          </section>
-        ))
-      }
       <Footer />
-    </div>
+    </section>
   );
 }
 
-export default Foods;
+const mapStateToProps = ({ results, search }) => ({
+  results,
+  search,
+});
+
+export default connect(mapStateToProps)(Foods);
+
+Foods.propTypes = {
+  results: PropTypes.arrayOf(PropTypes.object).isRequired,
+  search: PropTypes.string.isRequired,
+};
