@@ -13,7 +13,6 @@ function Explore() {
 
       >
         Explore Foods
-
       </button>
       <button
         type="button"
