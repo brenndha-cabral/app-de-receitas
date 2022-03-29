@@ -1,15 +1,71 @@
-const requestRecipes = async () => {
+export const requestIngredientFood = async (ingredient) => {
   try {
-    // const URL = '';
+    const URL = `https://www.themealdb.com/api/json/v1/1/filter.php?i=${ingredient}`;
     const response = await fetch(URL);
-    const dataBase = await response.json();
+    const { meals } = await response.json();
 
-    return dataBase;
+    return meals;
   } catch (error) {
     throw new Error(error.message);
   }
 };
 
-export default requestRecipes;
+export const requestNameFood = async (name) => {
+  try {
+    const URL = `https://www.themealdb.com/api/json/v1/1/search.php?s=${name}`;
+    const response = await fetch(URL);
+    const { meals } = await response.json();
 
-// Outras requisições ficam neste mesmo arquivo, somente mudar o export default da primeira api
+    return meals;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
+
+export const requestfirstLetterFood = async (firstLetter) => {
+  try {
+    const URL = `https://www.themealdb.com/api/json/v1/1/search.php?f=${firstLetter}`;
+    const response = await fetch(URL);
+    const { meals } = await response.json();
+
+    return meals;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
+
+export const requestIngredientDrink = async (ingredient) => {
+  try {
+    const URL = `https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=${ingredient}`;
+    const response = await fetch(URL);
+    const { drinks } = await response.json();
+
+    return drinks;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
+
+export const requestNameDrink = async (name) => {
+  try {
+    const URL = `https://www.thecocktaildb.com/api/json/v1/1/search.php?s=${name}`;
+    const response = await fetch(URL);
+    const { drinks } = await response.json();
+
+    return drinks;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
+
+export const requestfirstLetterDrink = async (firstLetter) => {
+  try {
+    const URL = `https://www.thecocktaildb.com/api/json/v1/1/search.php?f=${firstLetter}`;
+    const response = await fetch(URL);
+    const { drinks } = await response.json();
+
+    return drinks;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
