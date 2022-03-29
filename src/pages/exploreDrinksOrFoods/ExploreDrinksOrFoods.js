@@ -1,11 +1,28 @@
 import React from 'react';
-import { useLocation } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import Header from '../../components/header/Header';
 import Footer from '../../components/footer/Footer';
+import { requestRandomDrinkDetails,
+  requestRandomFoodDetails } from '../../services/requestApi';
 
 function ExploreDrinksOrFoods() {
   const location = useLocation();
+  const history = useHistory();
   const { pathname } = location;
+
+  async function handleSurpriseButton() {
+    if (pathname === '/explore/foods') {
+      const randomDetails = await requestRandomFoodDetails();
+      const { idMeal } = randomDetails;
+
+      history.push(`/foods/${idMeal}`);
+    } else {
+      const randomDetails = await requestRandomDrinkDetails();
+      const { idDrink } = randomDetails;
+
+      history.push(`/drinks/${idDrink}`);
+    }
+  }
 
   return (
     <div>
@@ -16,25 +33,28 @@ function ExploreDrinksOrFoods() {
 
       <button
         type="button"
+        onClick={ () => history.push(`${pathname}/ingredients`) }
         data-testid="explore-by-ingredient"
       >
         By Ingredient
-
       </button>
+
+      { pathname === '/explore/foods' && (
+        <button
+          type="button"
+          onClick={ () => history.push(`${pathname}/nationalities`) }
+          data-testid="explore-by-nationality"
+        >
+          By Nationality
+        </button>
+      ) }
+
       <button
         type="button"
-        disabled={ pathname === '/explore/drinks' }
-        data-testid="explore-by-nationality"
-      >
-        By Nationality
-
-      </button>
-      <button
-        type="button"
+        onClick={ handleSurpriseButton }
         data-testid="explore-surprise"
       >
         Surprise me!
-
       </button>
       <Footer />
     </div>

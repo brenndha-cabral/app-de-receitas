@@ -69,3 +69,25 @@ export const requestfirstLetterDrink = async (firstLetter) => {
     throw new Error(error.message);
   }
 };
+
+export const requestRandomFoodDetails = async () => {
+  try {
+    const URL = 'https://www.themealdb.com/api/json/v1/1/random.php';
+    const response = await fetch(URL);
+    const { meals } = await response.json();
+    return meals[0];
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
+
+export const requestRandomDrinkDetails = async () => {
+  try {
+    const URL = 'https://www.thecocktaildb.com/api/json/v1/1/random.php';
+    const response = await fetch(URL);
+    const { drinks } = await response.json();
+    return drinks[0];
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};

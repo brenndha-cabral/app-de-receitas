@@ -10,8 +10,7 @@ import ProgressFoods from '../pages/progressFoods/ProgressFoods';
 import ProgressDrinks from '../pages/progressDrinks/ProgressDrinks';
 import Explore from '../pages/explore/Explore';
 import ExploreDrinksOrFoods from '../pages/exploreDrinksOrFoods/ExploreDrinksOrFoods';
-import FoodsIngredients from '../pages/foodsIngredients/FoodsIngredients';
-import DrinksIngredients from '../pages/drinksIngredients/DrinksIngredients';
+import Ingridients from '../pages/ingredients/Ingridients';
 import Nationalities from '../pages/nationalities/Nationalities';
 import DoneRecipes from '../pages/doneRecipes/DoneRecipes';
 import FavoritesRecipes from '../pages/favoritesRecipes/FavoritesRecipes';
@@ -29,8 +28,8 @@ function Routes() {
       <Route exact path="/explore" component={ Explore } />
       <Route exact path="/explore/foods" component={ ExploreDrinksOrFoods } />
       <Route exact path="/explore/drinks" component={ ExploreDrinksOrFoods } />
-      <Route exact path="/explore/foods/ingredients" component={ FoodsIngredients } />
-      <Route exact path="/explore/drinks/ingredients" component={ DrinksIngredients } />
+      <Route exact path="/explore/foods/ingredients" component={ Ingridients } />
+      <Route exact path="/explore/drinks/ingredients" component={ Ingridients } />
       <Route exact path="/explore/foods/nationalities" component={ Nationalities } />
       <Route exact path="/profile" component={ Profile } />
       <Route exact path="/done-recipes" component={ DoneRecipes } />
