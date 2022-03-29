@@ -1,9 +1,12 @@
 import React from 'react';
+import Footer from '../../components/footer/Footer';
+import Header from '../../components/header/Header';
 
 function Recipes() {
   return (
     <div>
-      <h1>Aqui é a tela de receitas</h1>
+      <Header searchButtonIsVisible title="Foods" />
+      <Footer />
     </div>
   );
 }
