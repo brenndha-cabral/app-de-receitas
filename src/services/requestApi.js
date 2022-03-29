@@ -99,7 +99,8 @@ export const requestRandomDrinkDetails = async () => {
   } catch (error) {
     throw new Error(error.message);
   }
- 
+};
+
 export const buttonsCategoriesFoods = async () => {
   const URL_API = 'https://www.themealdb.com/api/json/v1/1/list.php?c=list';
   const response = await fetch(URL_API);
