@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-// import { Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import {
   foodsRecipes,
@@ -17,7 +16,6 @@ function Foods(props) {
   const [foods, setFoods] = useState([]);
   const [buttons, setButtons] = useState([]);
   const [category, setCategory] = useState('');
-  console.log(foods, 'foods');
 
   useEffect(() => {
     (async () => {
@@ -78,7 +76,6 @@ function Foods(props) {
           </section>
         )
         }
-        {/* Referência <Redirect push /> | Iria ser usado o history para redirecionar mas por causa de avisos, foi mais adequado usar o <Redirect /> | Link: https://stackoverflow.com/questions/64306989/cannot-update-during-an-existing-state-transition-such-as-within-render-ren */}
         {
           results.map(({ strMealThumb, strMeal }, index) => (
             <section

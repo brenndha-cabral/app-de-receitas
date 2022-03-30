@@ -52,7 +52,6 @@ export const requestNameDrink = async (name) => {
     throw new Error(error.message);
   }
 };
-// Outras requisições ficam neste mesmo arquivo, somente mudar o export default da primeira api
 
 export const foodsRecipes = async () => {
   const URL_API = 'https://www.themealdb.com/api/json/v1/1/search.php?s=';
