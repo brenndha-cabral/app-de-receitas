@@ -136,16 +136,11 @@ export const requestAllFoodsIngredients = async () => {
   return meals;
 };
 
-export const requestAllFoodsIngredientsImages = async (ingredient) => {
-  console.log(ingredient);
-  try {
-    const URL = `https://www.themealdb.com/images/ingredients/${ingredient}-Small.png`;
-    const response = await fetch(URL);
-    const data = await response.json();
-    return data.url;
-  } catch (error) {
-    throw new Error(error.message);
-  }
+export const requestAllDrinksIngredients = async () => {
+  const URL = 'https://www.thecocktaildb.com/api/json/v1/1/list.php?i=list';
+  const response = await fetch(URL);
+  const { drinks } = await response.json();
+  return drinks;
 };
 
 export const requestArea = async () => {

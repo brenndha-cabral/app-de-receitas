@@ -10,7 +10,7 @@ const NUMBER_TWELVE = 12;
 function Nationalities() {
   const [areas, setAreas] = useState([]);
   const [foods, setFoods] = useState([]);
-  console.log(foods);
+  //  console.log(foods);
 
   useEffect(() => {
     const requestAllFoods = async () => {
