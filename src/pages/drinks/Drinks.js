@@ -1,11 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { drinksRecipes, buttonsCategoriesDrinks } from '../../services/requestApi';
+import {
+  drinksRecipes,
+  buttonsCategoriesDrinks,
+  requestFilterByCategoryDrinks,
+} from '../../services/requestApi';
 import Header from '../../components/header/Header';
 import Footer from '../../components/footer/Footer';
 
 function Drinks() {
   const [drink, setDrinks] = useState([]);
   const [buttons, setButtons] = useState([]);
+  const [category, setCategory] = useState('');
 
   useEffect(() => {
     (async () => {
@@ -18,6 +23,15 @@ function Drinks() {
 
   const showsNumberDrinks = 12;
   const showsNumberButtons = 5;
+
+  useEffect(() => {
+    if (category.length > 0) {
+      (async () => {
+        const getCategory = await requestFilterByCategoryDrinks(category);
+        setDrinks(getCategory.drinks);
+      })();
+    }
+  }, [category]);
 
   return (
     <div>
@@ -35,6 +49,7 @@ function Drinks() {
               type="button"
               key={ strCategory }
               data-testid={ `${strCategory}-category-filter` }
+              onClick={ () => setCategory(strCategory) }
             >
               { strCategory }
             </button>
