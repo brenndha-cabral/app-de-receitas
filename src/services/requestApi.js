@@ -158,3 +158,14 @@ export const requestArea = async () => {
     throw new Error(error.mesage);
   }
 };
+
+export const requestRecipesByArea = async (area) => {
+  try {
+    const URL = `https://www.themealdb.com/api/json/v1/1/filter.php?a=${area}`;
+    const response = await fetch(URL);
+    const { meals } = await response.json();
+    return meals;
+  } catch (error) {
+    throw new Error(error.mesage);
+  }
+};
