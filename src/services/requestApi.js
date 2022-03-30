@@ -147,3 +147,14 @@ export const requestAllFoodsIngredientsImages = async (ingredient) => {
     throw new Error(error.message);
   }
 };
+
+export const requestArea = async () => {
+  try {
+    const URL = 'https://www.themealdb.com/api/json/v1/1/list.php?a=list';
+    const response = await fetch(URL);
+    const { meals } = await response.json();
+    return meals;
+  } catch (error) {
+    throw new Error(error.mesage);
+  }
+};
