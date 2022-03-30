@@ -114,3 +114,22 @@ export const buttonsCategoriesDrinks = async () => {
   const data = response.json();
   return data;
 };
+
+export const requestAllFoodsIngredients = async () => {
+  const URL = 'https://www.themealdb.com/api/json/v1/1/list.php?i=list';
+  const response = await fetch(URL);
+  const { meals } = await response.json();
+  return meals;
+};
+
+export const requestAllFoodsIngredientsImages = async (ingredient) => {
+  console.log(ingredient);
+  try {
+    const URL = 'https://www.themealdb.com/images/ingredients/Baby-Plum-Tomatoes-Small.png';
+    const response = await fetch(URL);
+    console.log(response);
+    return response.url;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
