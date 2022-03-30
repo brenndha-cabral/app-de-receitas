@@ -3,7 +3,7 @@ export const requestIngredientFood = async (ingredient) => {
     const URL = `https://www.themealdb.com/api/json/v1/1/filter.php?i=${ingredient}`;
     const response = await fetch(URL);
     const { meals } = await response.json();
-    return meals;
+    return (meals || []);
   } catch (error) {
     throw new Error(error.message);
   }
@@ -14,7 +14,7 @@ export const requestNameFood = async (name) => {
     const URL = `https://www.themealdb.com/api/json/v1/1/search.php?s=${name}`;
     const response = await fetch(URL);
     const { meals } = await response.json();
-    return meals;
+    return (meals || []);
   } catch (error) {
     throw new Error(error.message);
   }
@@ -25,7 +25,7 @@ export const requestfirstLetterFood = async (firstLetter) => {
     const URL = `https://www.themealdb.com/api/json/v1/1/search.php?f=${firstLetter}`;
     const response = await fetch(URL);
     const { meals } = await response.json();
-    return meals;
+    return (meals || []);
   } catch (error) {
     throw new Error(error.message);
   }
@@ -36,7 +36,7 @@ export const requestIngredientDrink = async (ingredient) => {
     const URL = `https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=${ingredient}`;
     const response = await fetch(URL);
     const { drinks } = await response.json();
-    return drinks;
+    return (drinks || []);
   } catch (error) {
     throw new Error(error.message);
   }
@@ -47,7 +47,7 @@ export const requestNameDrink = async (name) => {
     const URL = `https://www.thecocktaildb.com/api/json/v1/1/search.php?s=${name}`;
     const response = await fetch(URL);
     const { drinks } = await response.json();
-    return drinks;
+    return (drinks || []);
   } catch (error) {
     throw new Error(error.message);
   }
@@ -73,7 +73,7 @@ export const requestfirstLetterDrink = async (firstLetter) => {
     const URL = `https://www.thecocktaildb.com/api/json/v1/1/search.php?f=${firstLetter}`;
     const response = await fetch(URL);
     const { drinks } = await response.json();
-    return drinks;
+    return (drinks || []);
   } catch (error) {
     throw new Error(error.message);
   }
@@ -123,10 +123,8 @@ export const requestFilterByCategoryFood = async (category) => {
 };
 
 export const requestFilterByCategoryDrinks = async (category) => {
-  console.log(category);
   const URL_API = `https://www.thecocktaildb.com/api/json/v1/1/filter.php?c=${category}`;
   const response = await fetch(URL_API);
   const data = await response.json();
-  console.log(data);
   return data;
 };
