@@ -57,14 +57,14 @@ export const requestNameDrink = async (name) => {
 export const foodsRecipes = async () => {
   const URL_API = 'https://www.themealdb.com/api/json/v1/1/search.php?s=';
   const response = await fetch(URL_API);
-  const data = response.json();
+  const data = await response.json();
   return data;
 };
 
 export const drinksRecipes = async () => {
   const URL_API = 'https://www.thecocktaildb.com/api/json/v1/1/search.php?s=';
   const response = await fetch(URL_API);
-  const data = response.json();
+  const data = await response.json();
   return data;
 };
 
@@ -104,14 +104,28 @@ export const requestRandomDrinkDetails = async () => {
 export const buttonsCategoriesFoods = async () => {
   const URL_API = 'https://www.themealdb.com/api/json/v1/1/list.php?c=list';
   const response = await fetch(URL_API);
-  const data = response.json();
+  const data = await response.json();
   return data;
 };
 
 export const buttonsCategoriesDrinks = async () => {
   const URL_API = 'https://www.thecocktaildb.com/api/json/v1/1/list.php?c=list';
   const response = await fetch(URL_API);
-  const data = response.json();
+  const data = await response.json();
+  return data;
+};
+
+export const requestFilterByCategoryFood = async (category) => {
+  const URL_API = `https://www.themealdb.com/api/json/v1/1/filter.php?c=${category}`;
+  const response = await fetch(URL_API);
+  const data = await response.json();
+  return data;
+};
+
+export const requestFilterByCategoryDrinks = async (category) => {
+  const URL_API = `https://www.thecocktaildb.com/api/json/v1/1/filter.php?c=${category}`;
+  const response = await fetch(URL_API);
+  const data = await response.json();
   return data;
 };
 

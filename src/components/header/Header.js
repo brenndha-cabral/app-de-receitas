@@ -40,6 +40,15 @@ function Header(props) {
     setCategory(checked && id);
   };
 
+  const verifyLength = (response) => {
+    if (response.length === 1) {
+      const { idMeal } = response[0];
+      const { idDrink } = response[0];
+      if (idMeal) history.push(`/foods/${idMeal}`);
+      if (idDrink) history.push(`/drinks/${idDrink}`);
+    }
+  };
+
   const searchByClick = async () => {
     let response = [];
 
@@ -80,7 +89,7 @@ function Header(props) {
         break;
       }
     }
-
+    verifyLength(response);
     resultsApi(response);
     searchInput(search);
     return response;

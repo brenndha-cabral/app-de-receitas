@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { connect } from 'react-redux';
-import { Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { drinksRecipes, buttonsCategoriesDrinks } from '../../services/requestApi';
+import { connect } from 'react-redux';
+// import { Redirect } from 'react-router-dom';
 import Header from '../../components/header/Header';
+import {
+  drinksRecipes,
+  buttonsCategoriesDrinks,
+  requestFilterByCategoryDrinks,
+} from '../../services/requestApi';
 import Footer from '../../components/footer/Footer';
 
 function Drinks(props) {
@@ -12,6 +16,7 @@ function Drinks(props) {
 
   const [allDrinks, setAllDrinks] = useState([]);
   const [buttons, setButtons] = useState([]);
+  const [category, setCategory] = useState('');
 
   useEffect(() => {
     (async () => {
@@ -29,6 +34,15 @@ function Drinks(props) {
     results = allDrinks;
   }
   results = results.slice(0, SHOW_NUMBER_DRINKS);
+
+  useEffect(() => {
+    if (category.length > 0) {
+      (async () => {
+        const getCategory = await requestFilterByCategoryDrinks(category);
+        setAllDrinks(getCategory.drinks);
+      })();
+    }
+  }, [category]);
 
   return (
     <section>
@@ -53,6 +67,7 @@ function Drinks(props) {
                   type="button"
                   key={ strCategory }
                   data-testid={ `${strCategory}-category-filter` }
+                  onClick={ () => setCategory(strCategory) }
                 >
                   { strCategory }
                 </button>
@@ -63,26 +78,22 @@ function Drinks(props) {
         }
         {/* Referência <Redirect push /> | Iria ser usado o history para redirecionar mas por causa de avisos, foi mais adequado usar o <Redirect /> | Link: https://stackoverflow.com/questions/64306989/cannot-update-during-an-existing-state-transition-such-as-within-render-ren */}
         {
-          results.map(({ strDrinkThumb, strDrink, idDrink }, index) => (
-            (results.length === 1)
-              ? <Redirect key={ strDrink } push to={ `/drinks/${idDrink}` } />
-              : (
-                <section
-                  data-testid={ `${index}-recipe-card` }
-                  key={ strDrink }
-                >
-                  <img
-                    data-testid={ `${index}-card-img` }
-                    src={ strDrinkThumb }
-                    alt="drinks"
-                  />
-                  <h3
-                    data-testid={ `${index}-card-name` }
-                  >
-                    { strDrink }
-                  </h3>
-                </section>
-              )
+          results.map(({ strDrinkThumb, strDrink }, index) => (
+            <section
+              data-testid={ `${index}-recipe-card` }
+              key={ strDrink }
+            >
+              <img
+                data-testid={ `${index}-card-img` }
+                src={ strDrinkThumb }
+                alt="drinks"
+              />
+              <h3
+                data-testid={ `${index}-card-name` }
+              >
+                { strDrink }
+              </h3>
+            </section>
           ))
         }
       </section>
