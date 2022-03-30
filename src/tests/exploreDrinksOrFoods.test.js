@@ -68,5 +68,4 @@ describe('1- Testa a página de explorar bebida/comida',
       const NUMBER_OF_BUTTON_WITHOUT_NATIONALITY = 6;
       const buttonsArr = screen.getAllByRole('button');
       expect(buttonsArr).toHaveLength(NUMBER_OF_BUTTON_WITHOUT_NATIONALITY);
-    });
   });
