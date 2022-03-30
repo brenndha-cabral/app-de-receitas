@@ -21,10 +21,9 @@ function Nationalities() {
     };
 
     const requestNationalities = async () => {
-      const allAreas = await requestArea();
-      const twelveAreasObj = allAreas.filter((_item, index) => index < NUMBER_TWELVE);
-      const twelveAreas = twelveAreasObj.map((areaObj) => areaObj.strArea);
-      setAreas(twelveAreas);
+      const allAreasObj = await requestArea();
+      const allAreas = allAreasObj.map((areaObj) => areaObj.strArea);
+      setAreas(allAreas);
     };
 
     requestAllFoods();
