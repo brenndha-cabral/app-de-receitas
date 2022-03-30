@@ -58,4 +58,15 @@ describe('1- Testa a página de explorar bebida/comida',
       const { location: { pathname } } = history;
       expect(pathname).toBe('/explore/foods/nationalities');
     });
+
+    test('Testa ao por explorar bebidas o botao By Nationality nao esta na tela', () => {
+      renderWithRouterAndRedux(
+        <ExploreDrinksOrFoods />, { initialEntries: ['/explore/drinks'],
+        },
+      );
+
+      const NUMBER_OF_BUTTON_WITHOUT_NATIONALITY = 6;
+      const buttonsArr = screen.getAllByRole('button');
+      expect(buttonsArr).toHaveLength(NUMBER_OF_BUTTON_WITHOUT_NATIONALITY);
+    });
   });
