@@ -139,10 +139,10 @@ export const requestAllFoodsIngredients = async () => {
 export const requestAllFoodsIngredientsImages = async (ingredient) => {
   console.log(ingredient);
   try {
-    const URL = 'https://www.themealdb.com/images/ingredients/Baby-Plum-Tomatoes-Small.png';
+    const URL = `https://www.themealdb.com/images/ingredients/${ingredient}-Small.png`;
     const response = await fetch(URL);
-    console.log(response);
-    return response.url;
+    const data = await response.json();
+    return data.url;
   } catch (error) {
     throw new Error(error.message);
   }
