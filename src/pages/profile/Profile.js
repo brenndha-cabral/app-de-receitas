@@ -14,7 +14,8 @@ function Profile(props) {
 
   useEffect(() => {
     const getLocalStorage = () => {
-      setEmail(JSON.parse(localStorage.getItem('user')).email);
+      const emailObj = JSON.parse(localStorage.getItem('user'));
+      if (emailObj) setEmail(emailObj.email);
     };
     getLocalStorage();
   }, []);
