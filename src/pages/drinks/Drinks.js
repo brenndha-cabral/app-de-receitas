@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import Header from '../../components/header/Header';
 import {
   drinksRecipes,
@@ -17,14 +18,19 @@ function Drinks(props) {
   const { search } = props;
   let { results } = props;
 
+  const history = useHistory();
+
   const [allDrinks, setAllDrinks] = useState([]);
   const [buttons, setButtons] = useState([]);
   const [category, setCategory] = useState('');
+  const [all, setAll] = useState([]);
+  const [toggleButton, setToggleButton] = useState(null);
 
   useEffect(() => {
     (async () => {
       const { drinks } = await drinksRecipes();
       setAllDrinks(drinks);
+      setAll(drinks);
       const data = await buttonsCategoriesDrinks();
       setButtons(data.drinks);
     })();
@@ -47,6 +53,18 @@ function Drinks(props) {
     }
   }, [category]);
 
+  const handleButton = () => {
+    setAllDrinks(all);
+  };
+
+  const handleToggleButton = (strCategory, index) => {
+    if (toggleButton === index) {
+      setAllDrinks(all);
+    } else {
+      setCategory(strCategory);
+    }
+  };
+
   return (
     <section>
       <Header aboutDrink searchButtonIsVisible title="Drinks" />
@@ -61,16 +79,20 @@ function Drinks(props) {
             <button
               type="button"
               data-testid="All-category-filter"
+              onClick={ handleButton }
             >
               ALL
             </button>
             {
-              buttons.slice(0, SHOW_NUMBER_BUTTOS).map(({ strCategory }) => (
+              buttons.slice(0, SHOW_NUMBER_BUTTOS).map(({ strCategory }, index) => (
                 <button
                   type="button"
                   key={ strCategory }
                   data-testid={ `${strCategory}-category-filter` }
-                  onClick={ () => setCategory(strCategory) }
+                  onClick={ () => {
+                    handleToggleButton(strCategory, index);
+                    setToggleButton(index);
+                  } }
                 >
                   { strCategory }
                 </button>
@@ -80,22 +102,27 @@ function Drinks(props) {
         )
         }
         {
-          results.map(({ strDrinkThumb, strDrink }, index) => (
-            <section
-              data-testid={ `${index}-recipe-card` }
+          results.map(({ strDrinkThumb, strDrink, idDrink }, index) => (
+            <div
               key={ strDrink }
+              data-testid={ `${index}-recipe-card` }
             >
-              <img
-                data-testid={ `${index}-card-img` }
-                src={ strDrinkThumb }
-                alt="drinks"
-              />
-              <h3
-                data-testid={ `${index}-card-name` }
+              <button
+                type="button"
+                onClick={ () => history.push(`/drinks/${idDrink}`) }
               >
-                { strDrink }
-              </h3>
-            </section>
+                <img
+                  data-testid={ `${index}-card-img` }
+                  src={ strDrinkThumb }
+                  alt="drinks"
+                />
+                <h3
+                  data-testid={ `${index}-card-name` }
+                >
+                  { strDrink }
+                </h3>
+              </button>
+            </div>
           ))
         }
       </section>

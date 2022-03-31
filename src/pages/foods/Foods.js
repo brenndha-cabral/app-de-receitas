@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import {
   foodsRecipes,
@@ -17,14 +18,19 @@ function Foods(props) {
   const { search } = props;
   let { results } = props;
 
+  const history = useHistory();
+
   const [foods, setFoods] = useState([]);
   const [buttons, setButtons] = useState([]);
   const [category, setCategory] = useState('');
+  const [all, setAll] = useState([]);
+  const [toggleButton, setToggleButton] = useState(null);
 
   useEffect(() => {
     (async () => {
       const { meals } = await foodsRecipes();
       setFoods(meals);
+      setAll(meals);
       const data = await buttonsCategoriesFoods();
       setButtons(data.meals);
     })();
@@ -47,6 +53,18 @@ function Foods(props) {
     }
   }, [category]);
 
+  const handleButton = () => {
+    setFoods(all);
+  };
+
+  const handleToggleButton = (strCategory, index) => {
+    if (toggleButton === index) {
+      setFoods(all);
+    } else {
+      setCategory(strCategory);
+    }
+  };
+
   return (
     <section>
       <Header aboutDrink={ false } searchButtonIsVisible title="Foods" />
@@ -61,17 +79,21 @@ function Foods(props) {
             <button
               type="button"
               data-testid="All-category-filter"
+              onClick={ handleButton }
             >
               ALL
             </button>
             {
-              buttons.slice(0, SHOW_NUMBER_BUTTOS).map(({ strCategory }) => (
+              buttons.slice(0, SHOW_NUMBER_BUTTOS).map(({ strCategory }, index) => (
                 <button
                   type="button"
                   key={ strCategory }
                   value={ strCategory }
                   data-testid={ `${strCategory}-category-filter` }
-                  onClick={ () => setCategory(strCategory) }
+                  onClick={ () => {
+                    handleToggleButton(strCategory, index);
+                    setToggleButton(index);
+                  } }
                 >
                   { strCategory }
                 </button>
@@ -81,22 +103,27 @@ function Foods(props) {
         )
         }
         {
-          results.map(({ strMealThumb, strMeal }, index) => (
-            <section
+          results.map(({ strMealThumb, strMeal, idMeal }, index) => (
+            <div
               data-testid={ `${index}-recipe-card` }
               key={ strMeal }
             >
-              <img
-                data-testid={ `${index}-card-img` }
-                src={ strMealThumb }
-                alt="drinks"
-              />
-              <h3
-                data-testid={ `${index}-card-name` }
+              <button
+                type="button"
+                onClick={ () => history.push(`/foods/${idMeal}`) }
               >
-                { strMeal }
-              </h3>
-            </section>
+                <img
+                  data-testid={ `${index}-card-img` }
+                  src={ strMealThumb }
+                  alt="drinks"
+                />
+                <h3
+                  data-testid={ `${index}-card-name` }
+                >
+                  { strMeal }
+                </h3>
+              </button>
+            </div>
           ))
         }
       </section>
