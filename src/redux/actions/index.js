@@ -3,6 +3,7 @@
 export const LOGIN_INFOS = 'LOGIN_INFOS';
 export const SET_SEARCH = 'SET_SEARCH';
 export const SET_RESULTS_API = 'SET_RESULTS_API';
+export const SET_DETAILS = 'SET_DETAILS';
 
 export const setInfoUser = (stateUser) => ({
   type: LOGIN_INFOS,
@@ -21,13 +22,7 @@ export const setResultsApi = (results) => ({
   results,
 });
 
-// export const fetchRates = (expense) => async (dispatch) => {
-//   const dataBase = await requestRates();
-
-//   const totalExpense = {
-//     ...expense,
-//     exchangeRates: dataBase,
-//   };
-
-//   dispatch(setExpenses(totalExpense));
-// };
+export const setDetails = (payload) => ({
+  type: SET_DETAILS,
+  payload,
+});

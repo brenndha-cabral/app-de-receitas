@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import { getFoodDetails } from '../../services/requestApi';
+import { setDetails } from '../../redux/actions';
 //  import Foods from '../foods/Foods';
 
 const ELEVEN = 11;
@@ -8,7 +10,7 @@ const ELEVEN = 11;
 function DetailsFoods(props) {
   const [foodDetails, setFoodDetails] = useState([]);
 
-  const { match: { params: { id } } } = props;
+  const { match: { params: { id } }, actionDetails, history } = props;
 
   useEffect(() => {
     document.title = 'All Tasty | Details Food';
@@ -36,9 +38,6 @@ function DetailsFoods(props) {
   function getId(url) {
     const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
     const match = url.match(regExp);
-
-    console.log(match, 'aquisduia');
-
     return (match && match[2].length === ELEVEN)
       ? match[2]
       : null;
@@ -46,6 +45,25 @@ function DetailsFoods(props) {
 
   const videoId = getId(foodDetails[0].strYoutube);
   const iframeMarkup = `https://www.youtube.com/embed/${videoId}`;
+
+  function handleStartBtn() {
+    const { idMeal,
+      strMealThumb,
+      strMeal,
+      strCategory,
+      strInstructions } = foodDetails[0];
+    const payload = {
+      id: idMeal,
+      name: strMeal,
+      photo: strMealThumb,
+      category: strCategory,
+      ingredients: ingredientFilter,
+      quantity: measureFilter,
+      instructions: strInstructions,
+    };
+    actionDetails(payload);
+    history.push(`/foods/${idMeal}/in-progress`);
+  }
 
   return (
     <div>
@@ -96,7 +114,7 @@ function DetailsFoods(props) {
           >
             {foods.strInstructions}
           </p>
-          <div>
+          <div data-testid="video">
             <iframe
               width="560"
               height="315"
@@ -109,6 +127,7 @@ function DetailsFoods(props) {
             />
           </div>
           <button
+            onClick={ handleStartBtn }
             data-testid="start-recipe-btn"
             type="button"
           >
@@ -123,10 +142,18 @@ function DetailsFoods(props) {
   );
 }
 
+const mapDispatchToProps = (dispatch) => ({
+  actionDetails: (payload) => dispatch(setDetails(payload)),
+});
+
 DetailsFoods.propTypes = {
   match: PropTypes.shape({
     params: PropTypes.objectOf(PropTypes.string, PropTypes.object),
   }).isRequired,
+  actionDetails: PropTypes.func.isRequired,
+  history: PropTypes.shape({
+    push: PropTypes.func,
+  }).isRequired,
 };
 
-export default DetailsFoods;
+export default connect(null, mapDispatchToProps)(DetailsFoods);
