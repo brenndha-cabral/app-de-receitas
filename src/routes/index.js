@@ -14,6 +14,7 @@ import Ingredients from '../pages/ingredients/Ingredients';
 import Nationalities from '../pages/nationalities/Nationalities';
 import DoneRecipes from '../pages/doneRecipes/DoneRecipes';
 import FavoritesRecipes from '../pages/favoritesRecipes/FavoritesRecipes';
+import NotFound from '../pages/notFound/NotFound';
 
 function Routes() {
   return (
@@ -34,6 +35,7 @@ function Routes() {
       <Route exact path="/profile" component={ Profile } />
       <Route exact path="/done-recipes" component={ DoneRecipes } />
       <Route exact path="/favorite-recipes" component={ FavoritesRecipes } />
+      <Route exact path="/explore/drinks/nationalities" component={ NotFound } />
     </Switch>
   );
 }
