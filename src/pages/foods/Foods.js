@@ -17,7 +17,7 @@ function Foods(props) {
   const [foods, setFoods] = useState([]);
   const [buttons, setButtons] = useState([]);
   const [category, setCategory] = useState('');
-  console.log(foods, 'foods');
+  //  console.log(foods, 'foods');
 
   useEffect(() => {
     (async () => {
