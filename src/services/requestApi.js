@@ -136,14 +136,31 @@ export const requestAllFoodsIngredients = async () => {
   return meals;
 };
 
-export const requestAllFoodsIngredientsImages = async (ingredient) => {
-  console.log(ingredient);
+export const requestAllDrinksIngredients = async () => {
+  const URL = 'https://www.thecocktaildb.com/api/json/v1/1/list.php?i=list';
+  const response = await fetch(URL);
+  const { drinks } = await response.json();
+  return drinks;
+};
+
+export const requestArea = async () => {
   try {
-    const URL = 'https://www.themealdb.com/images/ingredients/Baby-Plum-Tomatoes-Small.png';
+    const URL = 'https://www.themealdb.com/api/json/v1/1/list.php?a=list';
     const response = await fetch(URL);
-    console.log(response);
-    return response.url;
+    const { meals } = await response.json();
+    return meals;
   } catch (error) {
-    throw new Error(error.message);
+    throw new Error(error.mesage);
+  }
+};
+
+export const requestRecipesByArea = async (area) => {
+  try {
+    const URL = `https://www.themealdb.com/api/json/v1/1/filter.php?a=${area}`;
+    const response = await fetch(URL);
+    const { meals } = await response.json();
+    return meals;
+  } catch (error) {
+    throw new Error(error.mesage);
   }
 };
