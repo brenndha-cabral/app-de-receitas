@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import Header from '../../components/header/Header';
 import Footer from '../../components/footer/Footer';
@@ -6,6 +6,10 @@ import { requestRandomDrinkDetails,
   requestRandomFoodDetails } from '../../services/requestApi';
 
 function ExploreDrinksOrFoods() {
+  useEffect(() => {
+    document.title = 'All Tasty | Explore Recipes';
+  }, []);
+
   const location = useLocation();
   const history = useHistory();
   const { pathname } = location;

@@ -1,6 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 function ProgressDrinks() {
+  useEffect(() => {
+    document.title = 'All Tasty | Progress';
+  }, []);
+
   return (
     <div>
       <h1>ProgressDrinks</h1>

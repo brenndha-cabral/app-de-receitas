@@ -14,8 +14,11 @@ import { setResultsApi,
   setSearch as setSearchAction } from '../../redux/actions';
 
 const NUMBER_TWELVE = 12;
-
 function Ingredients(props) {
+  useEffect(() => {
+    document.title = 'All Tasty | Ingredients';
+  }, []);
+
   const location = useLocation();
   const { resultsApi, searchInput } = props;
   const history = useHistory();

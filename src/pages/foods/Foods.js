@@ -11,6 +11,10 @@ import Header from '../../components/header/Header';
 import Footer from '../../components/footer/Footer';
 
 function Foods(props) {
+  useEffect(() => {
+    document.title = 'All Tasty | Foods';
+  }, []);
+
   const { search } = props;
   let { results } = props;
 
@@ -98,7 +102,6 @@ function Foods(props) {
           </section>
         )
         }
-        {/* Referência <Redirect push /> | Iria ser usado o history para redirecionar mas por causa de avisos, foi mais adequado usar o <Redirect /> | Link: https://stackoverflow.com/questions/64306989/cannot-update-during-an-existing-state-transition-such-as-within-render-ren */}
         {
           results.map(({ strMealThumb, strMeal, idMeal }, index) => (
             <div

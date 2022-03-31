@@ -1,10 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import validateForm from '../../helpers/validateForm';
 import { setInfoUser } from '../../redux/actions';
 
 function Login(props) {
+  useEffect(() => {
+    document.title = 'All Tasty | Login';
+  }, []);
+
   const [formData, setFormData] = useState({
     email: '',
     password: '',

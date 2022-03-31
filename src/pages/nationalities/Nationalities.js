@@ -8,9 +8,12 @@ import { foodsRecipes,
 const NUMBER_TWELVE = 12;
 
 function Nationalities() {
+  useEffect(() => {
+    document.title = 'All Tasty | Nationalities';
+  }, []);
+
   const [areas, setAreas] = useState([]);
   const [foods, setFoods] = useState([]);
-  //  console.log(foods);
 
   useEffect(() => {
     const requestAllFoods = async () => {
