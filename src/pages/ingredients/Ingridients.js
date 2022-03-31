@@ -8,6 +8,10 @@ import { requestAllFoodsIngredients, requestAllFoodsIngredientsImages,
 const NUMBER_TWELVE = 12;
 
 function Ingredients() {
+  useEffect(() => {
+    document.title = 'All Tasty | Ingredients';
+  }, []);
+
   const [ingredients, setIngredients] = useState([]);
   const [images, setImages] = useState([]);
 

@@ -10,6 +10,10 @@ import Header from '../../components/header/Header';
 import Footer from '../../components/footer/Footer';
 
 function Foods(props) {
+  useEffect(() => {
+    document.title = 'All Tasty | Foods';
+  }, []);
+
   const { search } = props;
   let { results } = props;
 

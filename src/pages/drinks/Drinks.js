@@ -10,6 +10,10 @@ import {
 import Footer from '../../components/footer/Footer';
 
 function Drinks(props) {
+  useEffect(() => {
+    document.title = 'All Tasty | Drinks';
+  }, []);
+
   const { search } = props;
   let { results } = props;
 

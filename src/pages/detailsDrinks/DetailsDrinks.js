@@ -1,6 +1,10 @@
 import React from 'react';
 
 function DetailsDrinks() {
+  useEffect(() => {
+    document.title = 'All Tasty | Details Drink';
+  }, []);
+
   return (
     <div>
       <h1>DetailsDrinks</h1>

@@ -4,6 +4,10 @@ import Header from '../../components/header/Header';
 import Footer from '../../components/footer/Footer';
 
 function Profile(props) {
+  useEffect(() => {
+    document.title = 'All Tasty | Profile';
+  }, []);
+
   const { history } = props;
 
   const [email, setEmail] = useState('');

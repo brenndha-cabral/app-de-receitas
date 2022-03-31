@@ -4,6 +4,10 @@ import Header from '../../components/header/Header';
 import Footer from '../../components/footer/Footer';
 
 function Explore() {
+  useEffect(() => {
+    document.title = 'All Tasty | Explore';
+  }, []);
+
   const history = useHistory();
 
   return (

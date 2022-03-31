@@ -6,6 +6,10 @@ import { requestRandomDrinkDetails,
   requestRandomFoodDetails } from '../../services/requestApi';
 
 function ExploreDrinksOrFoods() {
+  useEffect(() => {
+    document.title = 'All Tasty | Explore Recipes';
+  }, []);
+
   const location = useLocation();
   const history = useHistory();
   const { pathname } = location;
