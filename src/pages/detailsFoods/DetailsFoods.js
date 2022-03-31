@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { getFoodDetails } from '../../services/requestApi';
 //  import Foods from '../foods/Foods';
 
+const ELEVEN = 11;
+
 function DetailsFoods(props) {
   const [foodDetails, setFoodDetails] = useState([]);
 
@@ -13,12 +15,10 @@ function DetailsFoods(props) {
     (async () => {
       const fetchFood = await getFoodDetails(id);
       const { meals } = fetchFood;
-      // console.log(meals);
       setFoodDetails(meals);
-      // console.log(meals);
     })();
   },
-  []);
+  [id]);
 
   if (foodDetails.length === 0) return null;
 
@@ -31,6 +31,21 @@ function DetailsFoods(props) {
     element[0].includes('Measure')
   )).filter((element) => (element[1] !== ' '))
     .map((element) => element[1]);
+
+  //  Referência: https://stackoverflow.com/questions/21607808/convert-a-youtube-video-url-to-embed-code
+  function getId(url) {
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+    const match = url.match(regExp);
+
+    console.log(match, 'aquisduia');
+
+    return (match && match[2].length === ELEVEN)
+      ? match[2]
+      : null;
+  }
+
+  const videoId = getId(foodDetails[0].strYoutube);
+  const iframeMarkup = `https://www.youtube.com/embed/${videoId}`;
 
   return (
     <div>
@@ -82,10 +97,16 @@ function DetailsFoods(props) {
             {foods.strInstructions}
           </p>
           <div>
-            {/*             <video
-              data-testid="video"
-              src={ foods.strYoutube }
-            /> */}
+            <iframe
+              width="560"
+              height="315"
+              src={ iframeMarkup }
+              title="YouTube video player"
+              frameBorder="0"
+              allow="accelerometer; autoplay;
+              clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            />
           </div>
           <button
             data-testid="start-recipe-btn"
