@@ -20,8 +20,7 @@ function Foods(props) {
   const [buttons, setButtons] = useState([]);
   const [category, setCategory] = useState('');
   const [all, setAll] = useState([]);
-  const [filter, setFilter] = useState(false);
-  // const [buttonIndex, setButtonIndex] = useState();
+  const [toggleButton, setToggleButton] = useState(null);
 
   useEffect(() => {
     (async () => {
@@ -54,27 +53,11 @@ function Foods(props) {
     setFoods(all);
   };
 
-  // const handleFilterButton = (strCategory, index) => {
-  //   if (buttonIndex.includes(index)) {
-  //     setFoods(all);
-  //     setButtonIndex([...buttonIndex, index]);
-  //     buttonIndex.splice(0, 1);
-  //   }
-  //   if (!buttonIndex.includes(index)) {
-  //     setCategory(strCategory);
-  //     setButtonIndex([...buttonIndex, index]);
-  //     buttonIndex.splice(0, 1);
-  //   }
-  // };
-
-  const handleFilterButton = (strCategory) => {
-    if (filter === false) {
-      setFilter(true);
-      setCategory(strCategory);
-    }
-    if (filter === true) {
-      setFilter(false);
+  const handleToggleButton = (strCategory, index) => {
+    if (toggleButton === index) {
       setFoods(all);
+    } else {
+      setCategory(strCategory);
     }
   };
 
@@ -97,13 +80,16 @@ function Foods(props) {
               ALL
             </button>
             {
-              buttons.slice(0, SHOW_NUMBER_BUTTOS).map(({ strCategory }) => (
+              buttons.slice(0, SHOW_NUMBER_BUTTOS).map(({ strCategory }, index) => (
                 <button
                   type="button"
                   key={ strCategory }
                   value={ strCategory }
                   data-testid={ `${strCategory}-category-filter` }
-                  onClick={ () => handleFilterButton(strCategory) }
+                  onClick={ () => {
+                    handleToggleButton(strCategory, index);
+                    setToggleButton(index);
+                  } }
                 >
                   { strCategory }
                 </button>
