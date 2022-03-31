@@ -1,29 +1,36 @@
-import { match } from 'react-router-dom';
-import React, { useEffect } from 'react';
-// import PropTypes from 'prop-types';
+import React, { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 import { getFoodDetails } from '../../services/requestApi';
-import Foods from '../foods/Foods';
+//  import Foods from '../foods/Foods';
 
-function DetailsFoods() {
+function DetailsFoods(props) {
   const [foodDetails, setFoodDetails] = useState([]);
 
-  // const { match } = props;
+  const { match: { params: { id } } } = props;
 
   useEffect(() => {
     document.title = 'All Tasty | Details Food';
     (async () => {
       const fetchFood = await getFoodDetails(id);
-      setFoodDetails(fetchFood);
-      console.log(match);
+      const { meals } = fetchFood;
+      // console.log(meals);
+      setFoodDetails(meals);
+      // console.log(meals);
     })();
   },
   []);
 
-  const ingredientFilter = foodDetails
-    .filter((element) => element.Object.key.includes('Ingredient'));
+  if (foodDetails.length === 0) return null;
 
-  const measureFilter = foodDetails
-    .filter((element) => element.Object.key.includes('Measure'));
+  const ingredientFilter = Object.entries(foodDetails[0]).filter((element) => (
+    element[0].includes('Ingredient')
+  )).filter((element) => (element[1].length !== 0))
+    .map((element) => element[1]);
+
+  const measureFilter = Object.entries(foodDetails[0]).filter((element) => (
+    element[0].includes('Measure')
+  )).filter((element) => (element[1] !== ' '))
+    .map((element) => element[1]);
 
   return (
     <div>
@@ -62,20 +69,7 @@ function DetailsFoods() {
                   >
                     {' '}
                     { ingredient }
-                  </li>
-                ))}
-
-              </ol>
-            </div>
-            <div>
-              <ol>
-                { measureFilter.map((measure, i) => (
-                  <li
-                    key={ measure }
-                    data-testid={ `${i}-ingredient-name-and-measure` }
-                  >
-                    {' '}
-                    { measure }
+                    { measureFilter[i] }
                   </li>
                 ))}
 
@@ -88,10 +82,10 @@ function DetailsFoods() {
             {foods.strInstructions}
           </p>
           <div>
-            <video
+            {/*             <video
               data-testid="video"
               src={ foods.strYoutube }
-            />
+            /> */}
           </div>
           <button
             data-testid="start-recipe-btn"
@@ -107,7 +101,11 @@ function DetailsFoods() {
     </div>
   );
 }
-// DetailsFoods.propTypes = {
-// match: PropTypes.arrayOf(PropTypes.object).isRequired,
-// };
+
+DetailsFoods.propTypes = {
+  match: PropTypes.shape({
+    params: PropTypes.objectOf(PropTypes.string, PropTypes.object),
+  }).isRequired,
+};
+
 export default DetailsFoods;

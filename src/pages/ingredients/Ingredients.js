@@ -31,8 +31,10 @@ function Ingredients(props) {
       let allIngredients;
       if (pathname === '/explore/foods/ingredients') {
         allIngredients = await requestAllFoodsIngredients();
+        console.log(allIngredients, 'aquiiiiii');
       } else {
         allIngredients = await requestAllDrinksIngredients();
+        console.log(allIngredients, 'aquiiiiii2');
       }
 
       const twelveIngredients = allIngredients
