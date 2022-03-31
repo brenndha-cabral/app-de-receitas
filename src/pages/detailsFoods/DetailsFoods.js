@@ -24,7 +24,7 @@ function DetailsFoods(props) {
 
   const ingredientFilter = Object.entries(foodDetails[0]).filter((element) => (
     element[0].includes('Ingredient')
-  )).filter((element) => (element[1].length !== 0))
+  )).filter((element) => (element[1] !== ''))
     .map((element) => element[1]);
 
   const measureFilter = Object.entries(foodDetails[0]).filter((element) => (
