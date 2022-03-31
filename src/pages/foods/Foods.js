@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-// import { Redirect } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import {
   foodsRecipes,
@@ -14,15 +14,20 @@ function Foods(props) {
   const { search } = props;
   let { results } = props;
 
+  const history = useHistory();
+
   const [foods, setFoods] = useState([]);
   const [buttons, setButtons] = useState([]);
   const [category, setCategory] = useState('');
-  console.log(foods, 'foods');
+  const [all, setAll] = useState([]);
+  const [filter, setFilter] = useState(false);
+  // const [buttonIndex, setButtonIndex] = useState();
 
   useEffect(() => {
     (async () => {
       const { meals } = await foodsRecipes();
       setFoods(meals);
+      setAll(meals);
       const data = await buttonsCategoriesFoods();
       setButtons(data.meals);
     })();
@@ -45,6 +50,34 @@ function Foods(props) {
     }
   }, [category]);
 
+  const handleButton = () => {
+    setFoods(all);
+  };
+
+  // const handleFilterButton = (strCategory, index) => {
+  //   if (buttonIndex.includes(index)) {
+  //     setFoods(all);
+  //     setButtonIndex([...buttonIndex, index]);
+  //     buttonIndex.splice(0, 1);
+  //   }
+  //   if (!buttonIndex.includes(index)) {
+  //     setCategory(strCategory);
+  //     setButtonIndex([...buttonIndex, index]);
+  //     buttonIndex.splice(0, 1);
+  //   }
+  // };
+
+  const handleFilterButton = (strCategory) => {
+    if (filter === false) {
+      setFilter(true);
+      setCategory(strCategory);
+    }
+    if (filter === true) {
+      setFilter(false);
+      setFoods(all);
+    }
+  };
+
   return (
     <section>
       <Header aboutDrink={ false } searchButtonIsVisible title="Foods" />
@@ -59,6 +92,7 @@ function Foods(props) {
             <button
               type="button"
               data-testid="All-category-filter"
+              onClick={ handleButton }
             >
               ALL
             </button>
@@ -69,7 +103,7 @@ function Foods(props) {
                   key={ strCategory }
                   value={ strCategory }
                   data-testid={ `${strCategory}-category-filter` }
-                  onClick={ () => setCategory(strCategory) }
+                  onClick={ () => handleFilterButton(strCategory) }
                 >
                   { strCategory }
                 </button>
@@ -80,22 +114,27 @@ function Foods(props) {
         }
         {/* Referência <Redirect push /> | Iria ser usado o history para redirecionar mas por causa de avisos, foi mais adequado usar o <Redirect /> | Link: https://stackoverflow.com/questions/64306989/cannot-update-during-an-existing-state-transition-such-as-within-render-ren */}
         {
-          results.map(({ strMealThumb, strMeal }, index) => (
-            <section
+          results.map(({ strMealThumb, strMeal, idMeal }, index) => (
+            <div
               data-testid={ `${index}-recipe-card` }
               key={ strMeal }
             >
-              <img
-                data-testid={ `${index}-card-img` }
-                src={ strMealThumb }
-                alt="drinks"
-              />
-              <h3
-                data-testid={ `${index}-card-name` }
+              <button
+                type="button"
+                onClick={ () => history.push(`/foods/${idMeal}`) }
               >
-                { strMeal }
-              </h3>
-            </section>
+                <img
+                  data-testid={ `${index}-card-img` }
+                  src={ strMealThumb }
+                  alt="drinks"
+                />
+                <h3
+                  data-testid={ `${index}-card-name` }
+                >
+                  { strMeal }
+                </h3>
+              </button>
+            </div>
           ))
         }
       </section>
