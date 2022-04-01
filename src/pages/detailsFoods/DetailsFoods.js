@@ -28,6 +28,8 @@ function DetailsFoods(props) {
   const six = 6;
   if (foodDetails.length === 0) return null;
 
+  console.log(foodDetails[0]);
+
   const ingredientFilter = Object.entries(foodDetails[0]).filter((element) => (
     element[0].includes('Ingredient')
   )).filter((element) => (element[1] !== ' ' && element[1] !== ''))
