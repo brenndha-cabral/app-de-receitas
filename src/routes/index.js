@@ -4,10 +4,10 @@ import Login from '../pages/login/Login';
 import Foods from '../pages/foods/Foods';
 import Profile from '../pages/profile/Profile';
 import Drinks from '../pages/drinks/Drinks';
-import DetailsFoods from '../pages/detailsFoods/DetailsFoods';
-import DetailsDrinks from '../pages/detailsDrinks/DetailsDrinks';
-import ProgressFoods from '../pages/progressFoods/ProgressFoods';
-import ProgressDrinks from '../pages/progressDrinks/ProgressDrinks';
+import DetailsOrProgressFoods
+from '../pages/detailsOrProgressFoods/DetailsOrProgressFoods';
+import DetailsOrProgressDrinks
+from '../pages/detailsOrProgressDrinks/DetailsOrProgressDrinks';
 import Explore from '../pages/explore/Explore';
 import ExploreDrinksOrFoods from '../pages/exploreDrinksOrFoods/ExploreDrinksOrFoods';
 import Ingredients from '../pages/ingredients/Ingredients';
@@ -22,10 +22,10 @@ function Routes() {
       <Route exact path="/" component={ Login } />
       <Route exact path="/foods" component={ Foods } />
       <Route exact path="/drinks" component={ Drinks } />
-      <Route exact path="/foods/:id" component={ DetailsFoods } />
-      <Route exact path="/drinks/:id" component={ DetailsDrinks } />
-      <Route exact path="/foods/:id/in-progress" component={ ProgressFoods } />
-      <Route exact path="/drink/:id/in-progress" component={ ProgressDrinks } />
+      <Route exact path="/foods/:id" component={ DetailsOrProgressFoods } />
+      <Route exact path="/drinks/:id" component={ DetailsOrProgressDrinks } />
+      <Route exact path="/foods/:id/in-progress" component={ DetailsOrProgressFoods } />
+      <Route exact path="/drinks/:id/in-progress" component={ DetailsOrProgressDrinks } />
       <Route exact path="/explore" component={ Explore } />
       <Route exact path="/explore/foods" component={ ExploreDrinksOrFoods } />
       <Route exact path="/explore/drinks" component={ ExploreDrinksOrFoods } />

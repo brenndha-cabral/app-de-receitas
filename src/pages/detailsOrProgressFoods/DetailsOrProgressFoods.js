@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { useLocation } from 'react-router-dom';
 import { getFoodDetails, getDrinksRecommendation } from '../../services/requestApi';
-import { setDetails } from '../../redux/actions';
-//  import Foods from '../foods/Foods';
 
-function DetailsFoods(props) {
+function DetailsOrProgressFoods(props) {
   const [foodDetails, setFoodDetails] = useState([]);
 
   const [drinksRecommendations, setDrinksRecommendations] = useState([]);
 
   const { match: { params: { id } }, actionDetails, history } = props;
+
+  const location = useLocation();
+  const { pathname } = location;
 
   useEffect(() => {
     document.title = 'All Tasty | Details Food';
@@ -32,12 +34,12 @@ function DetailsFoods(props) {
 
   const ingredientFilter = Object.entries(foodDetails[0]).filter((element) => (
     element[0].includes('Ingredient')
-  )).filter((element) => (element[1] !== ' ' && element[1] !== ''))
+  )).filter((element) => (element[1] !== ' ' && element[1] !== '' && element[1] !== null))
     .map((element) => element[1]);
 
   const measureFilter = Object.entries(foodDetails[0]).filter((element) => (
     element[0].includes('Measure')
-  )).filter((element) => (element[1] !== ' ' && element[1] !== ''))
+  )).filter((element) => (element[1] !== ' ' && element[1] !== '' && element[1] !== null))
     .map((element) => element[1]);
 
   // const sourceFilter =
@@ -102,40 +104,67 @@ function DetailsFoods(props) {
             { foods.strCategory }
           </h2>
           <section>
-            <div>
-              <ol>
-                { ingredientFilter.map((ingredient, i) => (
-                  <li
-                    key={ ingredient }
-                    data-testid={ `${i}-ingredient-name-and-measure` }
-                  >
-                    {' '}
-                    { ingredient }
-                    --
-                    { measureFilter[i] }
-                  </li>
-                ))}
+            { (pathname === `/foods/${foods.idMeal}/in-progress`)
+              ? (
+                <ol>
+                  { ingredientFilter.map((ingredient, indexIngredient) => (
+                    <li
+                      key={ ingredient }
+                      data-testid={ `${indexIngredient}-ingredient-step` }
+                    >
+                      <label htmlFor={ ingredient }>
+                        <input
+                          id={ ingredient }
+                          type="checkbox"
+                          name={ ingredient }
+                        />
+                        {' '}
+                        { ingredient }
+                        {' '}
+                        { measureFilter[indexIngredient] }
+                      </label>
+                    </li>
+                  ))}
+                </ol>)
+              : (
+                <div>
+                  <ol>
+                    { ingredientFilter.map((ingredient, indexIngredient) => (
+                      <li
+                        key={ ingredient }
+                        data-testid={ `${indexIngredient}-ingredient-name-and-measure` }
+                      >
+                        {' '}
+                        { ingredient }
+                        {' '}
+                        { measureFilter[indexIngredient] }
+                      </li>
+                    ))}
 
-              </ol>
-            </div>
+                  </ol>
+                </div>
+              )}
           </section>
           <p
             data-testid="instructions"
           >
             {foods.strInstructions}
           </p>
-          <div data-testid="video">
-            <iframe
-              width="560"
-              height="315"
-              src={ iframeMarkup }
-              title="YouTube video player"
-              frameBorder="0"
-              allow="accelerometer; autoplay;
+          { pathname === `/foods/${foods.idMeal}`
+          && (
+            <div data-testid="video">
+              <iframe
+                width="560"
+                height="315"
+                src={ iframeMarkup }
+                title="YouTube video player"
+                frameBorder="0"
+                allow="accelerometer; autoplay;
               clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-            />
-          </div>
+                allowFullScreen
+              />
+            </div>
+          )}
           { drinksRecommendations.slice(0, six).map((drink, ii) => (
 
             <div
@@ -150,14 +179,24 @@ function DetailsFoods(props) {
               />
             </div>
           ))}
-
-          <button
-            onClick={ handleStartBtn }
-            data-testid="start-recipe-btn"
-            type="button"
-          >
-            Start Recipe
-          </button>
+          { (pathname === `/foods/${foods.idMeal}/in-progress`)
+            ? (
+              <button
+                onClick={ handleStartBtn }
+                data-testid="finish-recipe-btn"
+                type="button"
+              >
+                Finish Recipe
+              </button>)
+            : (
+              <button
+                onClick={ handleStartBtn }
+                data-testid="start-recipe-btn"
+                type="button"
+              >
+                Start Recipe
+              </button>
+            )}
         </div>
       ))}
     </div>
@@ -168,7 +207,7 @@ const mapDispatchToProps = (dispatch) => ({
   actionDetails: (payload) => dispatch(setDetails(payload)),
 });
 
-DetailsFoods.propTypes = {
+DetailsOrProgressFoods.propTypes = {
   match: PropTypes.shape({
     params: PropTypes.objectOf(PropTypes.string, PropTypes.object),
   }).isRequired,
@@ -178,4 +217,4 @@ DetailsFoods.propTypes = {
   }).isRequired,
 };
 
-export default connect(null, mapDispatchToProps)(DetailsFoods);
+export default connect(null, mapDispatchToProps)(DetailsOrProgressFoods);
