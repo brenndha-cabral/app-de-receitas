@@ -5,8 +5,6 @@ import { getFoodDetails } from '../../services/requestApi';
 import { setDetails } from '../../redux/actions';
 //  import Foods from '../foods/Foods';
 
-const ELEVEN = 11;
-
 function DetailsFoods(props) {
   const [foodDetails, setFoodDetails] = useState([]);
 
@@ -26,16 +24,17 @@ function DetailsFoods(props) {
 
   const ingredientFilter = Object.entries(foodDetails[0]).filter((element) => (
     element[0].includes('Ingredient')
-  )).filter((element) => (element[1] !== ''))
+  )).filter((element) => (element[1] !== ' ' && element[1] !== ''))
     .map((element) => element[1]);
 
   const measureFilter = Object.entries(foodDetails[0]).filter((element) => (
     element[0].includes('Measure')
-  )).filter((element) => (element[1] !== ' '))
+  )).filter((element) => (element[1] !== ' ' && element[1] !== ''))
     .map((element) => element[1]);
 
   //  Referência: https://stackoverflow.com/questions/21607808/convert-a-youtube-video-url-to-embed-code
-  function getId(url) {
+  function convertVideo(url) {
+    const ELEVEN = 11;
     const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
     const match = url.match(regExp);
     return (match && match[2].length === ELEVEN)
@@ -43,7 +42,7 @@ function DetailsFoods(props) {
       : null;
   }
 
-  const videoId = getId(foodDetails[0].strYoutube);
+  const videoId = convertVideo(foodDetails[0].strYoutube);
   const iframeMarkup = `https://www.youtube.com/embed/${videoId}`;
 
   function handleStartBtn() {
