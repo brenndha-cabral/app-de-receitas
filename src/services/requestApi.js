@@ -174,3 +174,36 @@ export const getFoodDetails = async (id) => {
     throw new Error(error.message);
   }
 };
+
+export const getDrinksDetails = async (id) => {
+  try {
+    const URL = `https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${id}`;
+    const response = await fetch(URL);
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
+
+export const getDrinksRecommendation = async () => {
+  try {
+    const URL = 'https://www.thecocktaildb.com/api/json/v1/1/search.php?s=';
+    const response = await fetch(URL);
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
+
+export const getFoodsRecommendation = async () => {
+  try {
+    const URL = 'https://www.themealdb.com/api/json/v1/1/search.php?s=';
+    const response = await fetch(URL);
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};

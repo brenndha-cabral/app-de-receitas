@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { getFoodDetails } from '../../services/requestApi';
+import { getFoodDetails, getDrinksRecommendation } from '../../services/requestApi';
 import { setDetails } from '../../redux/actions';
 //  import Foods from '../foods/Foods';
 
 function DetailsFoods(props) {
   const [foodDetails, setFoodDetails] = useState([]);
+
+  const [drinksRecommendations, setDrinksRecommendations] = useState([]);
 
   const { match: { params: { id } }, actionDetails, history } = props;
 
@@ -16,10 +18,14 @@ function DetailsFoods(props) {
       const fetchFood = await getFoodDetails(id);
       const { meals } = fetchFood;
       setFoodDetails(meals);
+      const fetchDrinksRecommendation = await getDrinksRecommendation();
+      const { drinks } = fetchDrinksRecommendation;
+      setDrinksRecommendations(drinks);
     })();
   },
   [id]);
 
+  const six = 6;
   if (foodDetails.length === 0) return null;
 
   const ingredientFilter = Object.entries(foodDetails[0]).filter((element) => (
@@ -31,6 +37,8 @@ function DetailsFoods(props) {
     element[0].includes('Measure')
   )).filter((element) => (element[1] !== ' ' && element[1] !== ''))
     .map((element) => element[1]);
+
+  // const sourceFilter =
 
   //  Referência: https://stackoverflow.com/questions/21607808/convert-a-youtube-video-url-to-embed-code
   function convertVideo(url) {
@@ -101,6 +109,7 @@ function DetailsFoods(props) {
                   >
                     {' '}
                     { ingredient }
+                    --
                     { measureFilter[i] }
                   </li>
                 ))}
@@ -125,6 +134,21 @@ function DetailsFoods(props) {
               allowFullScreen
             />
           </div>
+          { drinksRecommendations.slice(0, six).map((drink, ii) => (
+
+            <div
+              key={ ii }
+              data-testid={ `${ii}-recomendation-card` }
+            >
+              <img
+                src={ drink.strDrinkThumb }
+                alt={ drink.strGlass }
+                width="200"
+                height="200"
+              />
+            </div>
+          ))}
+
           <button
             onClick={ handleStartBtn }
             data-testid="start-recipe-btn"
@@ -132,9 +156,6 @@ function DetailsFoods(props) {
           >
             Start Recipe
           </button>
-          <div>
-            {}
-          </div>
         </div>
       ))}
     </div>
