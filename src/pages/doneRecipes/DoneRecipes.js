@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import copy from 'clipboard-copy';
 import Header from '../../components/header/Header';
 import shareIcon from '../../images/shareIcon.svg';
 
@@ -28,8 +30,12 @@ const simulation = [
   },
 ];
 
-function DoneRecipes(/* props */) {
+function DoneRecipes(props) {
+  const { history } = props;
   const [recipes, setRecipes] = useState(simulation);
+  const [isVisible, setIsVisible] = useState(false);
+
+  console.log(history);
 
   useEffect(() => {
     document.title = 'All Tasty | Done Recipes';
@@ -50,6 +56,15 @@ function DoneRecipes(/* props */) {
     if (value === 'Drinks') {
       setRecipes(simulation.filter((recipe) => recipe.type === 'drink'));
     }
+  }
+
+  function handleCopy(id, category) {
+    if (category === 'meal') copy(`/foods/${id}/`);
+    else copy(`/drinks/${id}`);
+
+    const THREE = 3000;
+    setIsVisible(true);
+    setTimeout(() => { setIsVisible(false); }, THREE);
   }
 
   if (recipes.length === 0) return null;
@@ -95,31 +110,40 @@ function DoneRecipes(/* props */) {
           doneDate,
           tags,
         } = recipe;
+
         return (
           <section style={ { width: '400px', margin: '0 auto' } } key={ id }>
-            <img
+            <input
+              type="image"
               src={ shareIcon }
+              onClick={ () => handleCopy(id, category) }
               data-testid={ `${index}-horizontal-image` }
               alt="recipe"
             />
+            { isVisible && <p>Link copied!</p> }
             <p
               data-testid={ `${index}-horizontal-top-text` }
             >
               { type === 'meal' ? ` ${nationality} ${category}` : alcoholicOrNot }
             </p>
             <p
-              data-testid={ `${index}-horizontal-top-name` }
+              data-testid={ `${index}-horizontal-name` }
             >
               { name }
             </p>
             <p
-              data-testid={ `${index}-horizontal-top-done-date` }
+              data-testid={ `${index}-horizontal-done-date` }
             >
               { doneDate }
             </p>
             <input
               type="image"
               src={ image }
+              onClick={
+                type === 'meal'
+                  ? history.push(`/foods/${id}`)
+                  : history.push(`/drinks/${id}`)
+              }
               style={ { width: '100%' } }
               alt="share image btn"
               data-testid={ `${index}-horizontal-share-btn` }
@@ -139,6 +163,15 @@ function DoneRecipes(/* props */) {
     </div>
   );
 }
+
+DoneRecipes.propTypes = {
+  match: PropTypes.shape({
+    params: PropTypes.objectOf(PropTypes.string, PropTypes.object),
+  }).isRequired,
+  history: PropTypes.shape({
+    push: PropTypes.func,
+  }).isRequired,
+};
 
 /* const mapStateToProps = (state) => ({
 
