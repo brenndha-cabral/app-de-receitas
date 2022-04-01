@@ -1,16 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { useLocation } from 'react-router-dom';
 import { getDrinksDetails, getFoodsRecommendation } from '../../services/requestApi';
 import { setDetails } from '../../redux/actions';
-//  import Foods from '../foods/Foods';
 
-function DetailsDrinks(props) {
+function DetailsOrProgressDrinks(props) {
   const [drinksDetails, setDrinksDetails] = useState([]);
 
   const [foodsRecommendations, setFoodsRecommendations] = useState([]);
 
   const { match: { params: { id } }, actionDetails, history } = props;
+
+  const location = useLocation();
+  const { pathname } = location;
 
   useEffect(() => {
     document.title = 'All Tasty | Details Drink';
@@ -37,8 +40,6 @@ function DetailsDrinks(props) {
     element[0].includes('Measure')
   )).filter((element) => (element[1] !== ' ' && element[1] !== '' && element[1] !== null))
     .map((element) => element[1]);
-
-  // const sourceFilter =
 
   function handleStartBtn() {
     const { idDrink,
@@ -84,28 +85,49 @@ function DetailsDrinks(props) {
           <h2
             data-testid="recipe-category"
           >
-            { drink.strCategory }
+            { drink.strAlcoholic }
           </h2>
           <section>
+            { (pathname === `/drinks/${drink.idDrink}/in-progress`)
+              ? (
+                <ol>
+                  { ingredientFilter.map((ingredient, indexIngredient) => (
+                    <li
+                      key={ ingredient }
+                      data-testid={ `${indexIngredient}-ingredient-step` }
+                    >
+                      <label htmlFor={ ingredient }>
+                        <input
+                          id={ ingredient }
+                          type="checkbox"
+                          name={ ingredient }
+                        />
+                        {' '}
+                        { ingredient }
+                        {' '}
+                        { measureFilter[indexIngredient] }
+                      </label>
+                    </li>
+                  ))}
+                </ol>)
+              : (
+                <div>
+                  <ol>
+                    { ingredientFilter.map((ingredient, indexIngredient) => (
+                      <li
+                        key={ ingredient }
+                        data-testid={ `${indexIngredient}-ingredient-name-and-measure` }
+                      >
+                        {' '}
+                        { ingredient }
+                        {' '}
+                        { measureFilter[indexIngredient] }
+                      </li>
+                    ))}
 
-            <p>{ drink.strAlcoholic }</p>
-
-            <div>
-              <ol>
-                { ingredientFilter.map((ingredient, i) => (
-                  <li
-                    key={ ingredient }
-                    data-testid={ `${i}-ingredient-name-and-measure` }
-                  >
-                    {' '}
-                    { ingredient }
-                    {' '}
-                    { measureFilter[i] }
-                  </li>
-                ))}
-
-              </ol>
-            </div>
+                  </ol>
+                </div>
+              )}
           </section>
           <p
             data-testid="instructions"
@@ -126,14 +148,24 @@ function DetailsDrinks(props) {
               />
             </div>
           ))}
-
-          <button
-            onClick={ handleStartBtn }
-            data-testid="start-recipe-btn"
-            type="button"
-          >
-            Start Recipe
-          </button>
+          { (pathname === `/drinks/${drink.idDrink}/in-progress`)
+            ? (
+              <button
+                onClick={ handleStartBtn }
+                data-testid="finish-recipe-btn"
+                type="button"
+              >
+                Finish Recipe
+              </button>)
+            : (
+              <button
+                onClick={ handleStartBtn }
+                data-testid="start-recipe-btn"
+                type="button"
+              >
+                Start Recipe
+              </button>
+            )}
         </div>
       ))}
     </div>
@@ -144,7 +176,7 @@ const mapDispatchToProps = (dispatch) => ({
   actionDetails: (payload) => dispatch(setDetails(payload)),
 });
 
-DetailsDrinks.propTypes = {
+DetailsOrProgressDrinks.propTypes = {
   match: PropTypes.shape({
     params: PropTypes.objectOf(PropTypes.string, PropTypes.object),
   }).isRequired,
@@ -154,4 +186,4 @@ DetailsDrinks.propTypes = {
   }).isRequired,
 };
 
-export default connect(null, mapDispatchToProps)(DetailsDrinks);
+export default connect(null, mapDispatchToProps)(DetailsOrProgressDrinks);
