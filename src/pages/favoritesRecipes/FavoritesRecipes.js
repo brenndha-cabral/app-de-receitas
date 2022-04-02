@@ -48,6 +48,7 @@ function FavoriteRecipes(props) {
     const newFavorites = currentFavorites.filter((favorite) => favorite.id !== id);
 
     localStorage.setItem('favoriteRecipes', JSON.stringify(newFavorites));
+    setRecipes(newFavorites);
   }
 
   return (
@@ -105,7 +106,8 @@ function FavoriteRecipes(props) {
 
             <button
               type="button"
-              onClick={ () => history.push(`/foods/${id}`) }
+              onClick={ isFood ? () => history.push(`/foods/${id}`)
+                : () => history.push(`/drinks/${id}`) }
               data-testid={ `${index}-horizontal-name` }
             >
               { name }
