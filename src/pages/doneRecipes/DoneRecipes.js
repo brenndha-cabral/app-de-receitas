@@ -1,66 +1,41 @@
 import React, { useEffect, useState } from 'react';
-import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import copy from 'clipboard-copy';
 import Header from '../../components/header/Header';
 import shareIcon from '../../images/shareIcon.svg';
 
-const simulation = [
-  {
-    id: '1',
-    type: 'meal',
-    nationality: 'British',
-    category: 'Dessert',
-    alcoholicOrNot: '',
-    name: 'Chelsea Buns',
-    image: 'https://www.themealdb.com/images/media/meals/vqpwrv1511723001.jpg',
-    doneDate: '20/10/2019',
-    tags: ['Bun', 'Baking'],
-  },
-  {
-    id: '2',
-    type: 'drink',
-    nationality: '',
-    category: '',
-    alcoholicOrNot: 'alcoholic',
-    name: 'Bible Belt',
-    image: 'https://www.thecocktaildb.com/images/media/drink/6bec6v1503563675.jpg',
-    doneDate: '10/06/2019',
-    tags: [],
-  },
-];
-
 function DoneRecipes(props) {
   const { history } = props;
-  const [recipes, setRecipes] = useState(simulation);
+  const [recipes, setRecipes] = useState([]);
   const [isVisible, setIsVisible] = useState(false);
-
-  console.log(history);
 
   useEffect(() => {
     document.title = 'All Tasty | Done Recipes';
   }, []);
 
-  /*   useEffect(() => {
-    const localRecipes = localStorage.getItem()
+  useEffect(() => {
+    const localRecipes = JSON.parse(localStorage.getItem('doneRecipes'));
     setRecipes(localRecipes);
-  }, []) */
+  }, []);
 
   function handleClick({ value }) {
     if (value === 'All') {
-      setRecipes(simulation);
+      setRecipes(JSON.parse(localStorage.getItem('doneRecipes')));
     }
     if (value === 'Food') {
-      setRecipes(simulation.filter((recipe) => recipe.type === 'meal'));
+      setRecipes(recipes.filter((recipe) => recipe.type === 'food'));
     }
     if (value === 'Drinks') {
-      setRecipes(simulation.filter((recipe) => recipe.type === 'drink'));
+      setRecipes(recipes.filter((recipe) => recipe.type === 'drink'));
     }
   }
 
   function handleCopy(id, category) {
-    if (category === 'meal') copy(`/foods/${id}/`);
-    else copy(`/drinks/${id}`);
+    const { location: { href } } = window;
+    const URL = href.replace('/done-recipes', '');
+
+    if (category === 'food') copy(`${URL}/foods/${id}`);
+    else copy(`${URL}/drinks/${id}`);
 
     const THREE = 3000;
     setIsVisible(true);
@@ -72,6 +47,8 @@ function DoneRecipes(props) {
   return (
     <div>
       <Header searchButtonIsVisible={ false } title="Done Recipes" />
+
+      { isVisible && <p>Link copied!</p> }
 
       <button
         value="All"
@@ -111,26 +88,75 @@ function DoneRecipes(props) {
           tags,
         } = recipe;
 
+        if (type === 'food') {
+          return (
+            <section style={ { width: '400px', margin: '0 auto' } } key={ id }>
+              <input
+                type="image"
+                src={ shareIcon }
+                onClick={ () => handleCopy(id, type) }
+                data-testid={ `${index}-horizontal-share-btn` }
+                alt="recipe"
+              />
+              <p
+                data-testid={ `${index}-horizontal-top-text` }
+              >
+                { ` ${nationality} - ${category}` }
+              </p>
+              <button
+                type="button"
+                onClick={ () => history.push(`/foods/${id}`) }
+                data-testid={ `${index}-horizontal-name` }
+              >
+                { name }
+              </button>
+              <p
+                data-testid={ `${index}-horizontal-done-date` }
+              >
+                { doneDate }
+              </p>
+              <input
+                type="image"
+                src={ image }
+                onClick={ () => history.push(`/foods/${id}`) }
+                style={ { width: '100%' } }
+                alt="share image btn"
+                data-testid={ `${index}-horizontal-image` }
+              />
+              { tags.map((tag) => (
+                <p
+                  key={ index }
+                  data-testid={ `${index}-${tag}-horizontal-tag` }
+                >
+                  { tag }
+                </p>
+              )) }
+            </section>
+          );
+        }
+
         return (
           <section style={ { width: '400px', margin: '0 auto' } } key={ id }>
+            <p>{ type }</p>
             <input
               type="image"
               src={ shareIcon }
-              onClick={ () => handleCopy(id, category) }
-              data-testid={ `${index}-horizontal-image` }
+              onClick={ () => handleCopy(id, type) }
+              data-testid={ `${index}-horizontal-share-btn` }
               alt="recipe"
             />
-            { isVisible && <p>Link copied!</p> }
             <p
               data-testid={ `${index}-horizontal-top-text` }
             >
-              { type === 'meal' ? ` ${nationality} ${category}` : alcoholicOrNot }
+              { alcoholicOrNot }
             </p>
-            <p
+            <button
+              type="button"
+              onClick={ () => history.push(`/drinks/${id}`) }
               data-testid={ `${index}-horizontal-name` }
             >
               { name }
-            </p>
+            </button>
             <p
               data-testid={ `${index}-horizontal-done-date` }
             >
@@ -139,27 +165,14 @@ function DoneRecipes(props) {
             <input
               type="image"
               src={ image }
-              onClick={
-                type === 'meal'
-                  ? history.push(`/foods/${id}`)
-                  : history.push(`/drinks/${id}`)
-              }
+              onClick={ () => history.push(`/drinks/${id}`) }
               style={ { width: '100%' } }
               alt="share image btn"
-              data-testid={ `${index}-horizontal-share-btn` }
+              data-testid={ `${index}-horizontal-image` }
             />
-            { tags.map((tag, i) => (
-              <span
-                key={ i }
-                data-testid={ `${i}-${tag}-horizontal-tag>` }
-              >
-                { tag }
-              </span>
-            )) }
           </section>
         );
       }) }
-
     </div>
   );
 }
@@ -173,8 +186,4 @@ DoneRecipes.propTypes = {
   }).isRequired,
 };
 
-/* const mapStateToProps = (state) => ({
-
-}); */
-
-export default connect(/* mapStateToProps */null, null)(DoneRecipes);
+export default DoneRecipes;

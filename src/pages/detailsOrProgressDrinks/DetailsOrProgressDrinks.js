@@ -47,6 +47,9 @@ function DetailsOrProgressDrinks(props) {
       strDrink,
       strCategory,
       strInstructions } = drinksDetails[0];
+
+    console.log(drinksDetails[0]);
+
     const payload = {
       id: idDrink,
       name: strDrink,
@@ -58,6 +61,35 @@ function DetailsOrProgressDrinks(props) {
     };
     actionDetails(payload);
     history.push(`/drinks/${idDrink}/in-progress`);
+  }
+
+  function handleFinishBtn() {
+    const { idDrink,
+      strDrinkThumb,
+      strAlcoholic,
+      strDrink,
+    } = drinksDetails[0];
+
+    const newDoneRecipe = {
+      id: idDrink,
+      type: 'drink',
+      nationality: '',
+      category: '',
+      alcoholicOrNot: strAlcoholic,
+      name: strDrink,
+      image: strDrinkThumb,
+      doneDate: new Date().toLocaleDateString(),
+      tags: [],
+    };
+
+    const previousDoneRecipes = JSON.parse(localStorage.getItem('doneRecipes'));
+
+    if (previousDoneRecipes) {
+      const newDoneRecipes = [...previousDoneRecipes, newDoneRecipe];
+      localStorage.setItem('doneRecipes', JSON.stringify(newDoneRecipes));
+    } else {
+      localStorage.setItem('doneRecipes', JSON.stringify([newDoneRecipe]));
+    }
   }
 
   return (
@@ -151,7 +183,7 @@ function DetailsOrProgressDrinks(props) {
           { (pathname === `/drinks/${drink.idDrink}/in-progress`)
             ? (
               <button
-                onClick={ handleStartBtn }
+                onClick={ handleFinishBtn }
                 data-testid="finish-recipe-btn"
                 type="button"
               >
