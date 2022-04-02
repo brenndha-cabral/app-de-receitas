@@ -42,8 +42,6 @@ function DoneRecipes(props) {
     setTimeout(() => { setIsVisible(false); }, THREE);
   }
 
-  if (recipes.length === 0) return null;
-
   return (
     <div>
       <Header searchButtonIsVisible={ false } title="Done Recipes" />
@@ -75,7 +73,7 @@ function DoneRecipes(props) {
         Drinks
       </button>
 
-      { recipes.map((recipe, index) => {
+      { recipes && recipes.map((recipe, index) => {
         const {
           id,
           type,
