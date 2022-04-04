@@ -64,8 +64,7 @@ function DetailsOrProgressFoods(props) {
       strCategory,
       strMeal,
       strMealThumb } = foodDetails[0];
-    console.log(foodDetails[0]);
-    console.log(strMeal.split(' '));
+
     const newDoneRecipe = {
       id: idMeal,
       type: 'food',

@@ -11,17 +11,17 @@ function FavoriteRecipes(props) {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    document.title = 'All Tasty | Done Recipes';
+    document.title = 'All Tasty | Favorite Recipes';
   }, []);
 
   useEffect(() => {
-    const localRecipes = JSON.parse(localStorage.getItem('doneRecipes'));
+    const localRecipes = JSON.parse(localStorage.getItem('favoriteRecipes'));
     setRecipes(localRecipes);
   }, []);
 
   function handleClick({ value }) {
     if (value === 'All') {
-      setRecipes(JSON.parse(localStorage.getItem('doneRecipes')));
+      setRecipes(JSON.parse(localStorage.getItem('favoriteRecipes')));
     }
     if (value === 'Food') {
       setRecipes(recipes.filter((recipe) => recipe.type === 'food'));
@@ -33,7 +33,7 @@ function FavoriteRecipes(props) {
 
   function handleCopy(id, category) {
     const { location: { href } } = window;
-    const URL = href.replace('/done-recipes', '');
+    const URL = href.replace('/favorite-recipes', '');
 
     if (category === 'food') copy(`${URL}/foods/${id}`);
     else copy(`${URL}/drinks/${id}`);
@@ -41,6 +41,14 @@ function FavoriteRecipes(props) {
     const THREE = 3000;
     setIsVisible(true);
     setTimeout(() => { setIsVisible(false); }, THREE);
+  }
+
+  function handleDisfavorButton(id) {
+    const currentFavorites = JSON.parse(localStorage.getItem('favoriteRecipes'));
+    const newFavorites = currentFavorites.filter((favorite) => favorite.id !== id);
+
+    localStorage.setItem('favoriteRecipes', JSON.stringify(newFavorites));
+    setRecipes(newFavorites);
   }
 
   return (
@@ -98,7 +106,8 @@ function FavoriteRecipes(props) {
 
             <button
               type="button"
-              onClick={ () => history.push(`/foods/${id}`) }
+              onClick={ isFood ? () => history.push(`/foods/${id}`)
+                : () => history.push(`/drinks/${id}`) }
               data-testid={ `${index}-horizontal-name` }
             >
               { name }
@@ -114,8 +123,9 @@ function FavoriteRecipes(props) {
 
             <input
               type="image"
+              onClick={ () => handleDisfavorButton(id) }
               src={ blackHeartIcon }
-              data-testid={ `${index}-horizontal-share-btn` }
+              data-testid={ `${index}-horizontal-favorite-btn` }
               alt="recipe"
             />
 
