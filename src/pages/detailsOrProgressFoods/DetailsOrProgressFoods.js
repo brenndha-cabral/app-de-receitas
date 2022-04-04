@@ -56,6 +56,38 @@ function DetailsOrProgressFoods(props) {
     history.push(`/foods/${idMeal}/in-progress`);
   }
 
+  function handleFinishBtn() {
+    const {
+      idMeal,
+      strArea,
+      strTags,
+      strCategory,
+      strMeal,
+      strMealThumb } = foodDetails[0];
+    console.log(foodDetails[0]);
+    console.log(strMeal.split(' '));
+    const newDoneRecipe = {
+      id: idMeal,
+      type: 'food',
+      nationality: strArea,
+      category: strCategory,
+      alcoholicOrNot: '',
+      name: strMeal,
+      image: strMealThumb,
+      doneDate: new Date().toLocaleDateString(),
+      tags: strTags.split(','),
+    };
+
+    const previousDoneRecipes = JSON.parse(localStorage.getItem('doneRecipes'));
+
+    if (previousDoneRecipes) {
+      const newDoneRecipes = [...previousDoneRecipes, newDoneRecipe];
+      localStorage.setItem('doneRecipes', JSON.stringify(newDoneRecipes));
+    } else {
+      localStorage.setItem('doneRecipes', JSON.stringify([newDoneRecipe]));
+    }
+  }
+
   return (
     <div>
       { foodDetails.map((foods, index) => (
@@ -175,7 +207,7 @@ function DetailsOrProgressFoods(props) {
           { (pathname === `/foods/${foods.idMeal}/in-progress`)
             ? (
               <button
-                onClick={ handleStartBtn }
+                onClick={ handleFinishBtn }
                 data-testid="finish-recipe-btn"
                 type="button"
               >
