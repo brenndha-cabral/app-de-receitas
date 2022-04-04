@@ -1,13 +1,30 @@
-.share-button, .favorite {
-  background: transparent;
-  border: none;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-.favorite--active {
-  filter: brightness(0.9) invert(0.7) sepia(0.5) hue-rotate(300deg) saturate(9000%);
-  outline: none;
+.container {
+  height: 100vh;
+}
 
-  /*
-  https://stackoverflow.com/questions/41157135/is-it-possible-to-change-color-of-a-black-png-image-using-css-only
-  */
+.carousel-wrapper {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  max-width: 100vw;
+  overflow-x: scroll;
+}
+
+.main_photo {
+  max-width: 100vw;
+}
+
+.recommendation_photo {
+  max-width: 50vw;
+}
+
+.start-recipe {
+  position: fixed;
+  bottom: 0px;
 }
