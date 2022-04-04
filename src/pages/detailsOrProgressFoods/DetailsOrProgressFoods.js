@@ -104,7 +104,8 @@ function DetailsOrProgressFoods(props) {
               type="button"
               data-testid="share-btn"
               onClick={ () => {
-                navigator.clipboard.writeText(window.location.href);
+                navigator.clipboard.writeText((window.location.href)
+                  .replace('/in-progress', ''));
                 toast('Link copied!');
               } }
             >
