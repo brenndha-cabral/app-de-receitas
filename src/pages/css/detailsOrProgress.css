@@ -1,0 +1,13 @@
+.share-button, .favorite {
+  background: transparent;
+  border: none;
+}
+
+.favorite--active {
+  filter: brightness(0.9) invert(0.7) sepia(0.5) hue-rotate(300deg) saturate(9000%);
+  outline: none;
+
+  /*
+  https://stackoverflow.com/questions/41157135/is-it-possible-to-change-color-of-a-black-png-image-using-css-only
+  */
+}
