@@ -3,12 +3,14 @@ import toast, { Toaster } from 'react-hot-toast';
 import PropTypes from 'prop-types';
 import shareIcon from '../../images/shareIcon.svg';
 import blackHeartIcon from '../../images/blackHeartIcon.svg';
+import { getStoragefavoritesRecipes } from '../../helpers/localStorage';
 import whiteHeartIcon from '../../images/whiteHeartIcon.svg';
 import { getDrinksDetails, getFoodsRecommendation } from '../../services/requestApi';
 import '../css/detailsOrProgress.css';
 import { ingredientFilter, measureFilter } from '../../helpers/filterDrinksOrFoodDetails';
 import favoritesDrinksRecipes from '../../helpers/localStorageDrink';
-import { getStoragefavoritesRecipes } from '../../helpers/localStorage';
+import { handleFinishBtnDrink } from '../../helpers/handleFinishBtn';
+import { handleChangeDrink } from '../../helpers/handleChange';
 
 function DetailsOrProgressDrinks(props) {
   const [drinksDetails, setDrinksDetails] = useState([]);
@@ -50,35 +52,6 @@ function DetailsOrProgressDrinks(props) {
   function handleStartBtn() {
     const { idDrink } = drinksDetails[0];
     history.push(`/drinks/${idDrink}/in-progress`);
-  }
-
-  function handleFinishBtn() {
-    const { idDrink,
-      strDrinkThumb,
-      strAlcoholic,
-      strDrink,
-    } = drinksDetails[0];
-
-    const newDoneRecipe = {
-      id: idDrink,
-      type: 'drink',
-      nationality: '',
-      category: '',
-      alcoholicOrNot: strAlcoholic,
-      name: strDrink,
-      image: strDrinkThumb,
-      doneDate: new Date().toLocaleDateString(),
-      tags: [],
-    };
-
-    const previousDoneRecipes = JSON.parse(localStorage.getItem('doneRecipes'));
-
-    if (previousDoneRecipes) {
-      const newDoneRecipes = [...previousDoneRecipes, newDoneRecipe];
-      localStorage.setItem('doneRecipes', JSON.stringify(newDoneRecipes));
-    } else {
-      localStorage.setItem('doneRecipes', JSON.stringify([newDoneRecipe]));
-    }
   }
 
   return (
@@ -141,6 +114,8 @@ function DetailsOrProgressDrinks(props) {
                           id={ ingredient }
                           type="checkbox"
                           name={ ingredient }
+                          value={ ingredient }
+                          onChange={ (event) => handleChangeDrink(event, idRecipe) }
                         />
                         { ingredient }
                         { measureFiltered[indexIngredient] }
@@ -189,7 +164,7 @@ function DetailsOrProgressDrinks(props) {
           { (pathname === `/drinks/${drink.idDrink}/in-progress`)
             ? (
               <button
-                onClick={ handleFinishBtn }
+                onClick={ () => handleFinishBtnDrink(drinksDetails[0]) }
                 data-testid="finish-recipe-btn"
                 type="button"
                 className="start-recipe"

@@ -4,6 +4,8 @@ import PropTypes from 'prop-types';
 import shareIcon from '../../images/shareIcon.svg';
 import blackHeartIcon from '../../images/blackHeartIcon.svg';
 import whiteHeartIcon from '../../images/whiteHeartIcon.svg';
+import { getStoragefavoritesRecipes,
+  getStorageProgress } from '../../helpers/localStorage';
 import { getFoodDetails, getDrinksRecommendation } from '../../services/requestApi';
 import '../css/detailsOrProgress.css';
 import convertVideo from '../../helpers/convertVideo';
@@ -11,11 +13,15 @@ import { ingredientFilter, measureFilter } from '../../helpers/filterDrinksOrFoo
 import { getStoragefavoritesRecipes, setStorageRecipes,
   getStorageRecipes } from '../../helpers/localStorage';
 import favoritesFoodsRecipes from '../../helpers/localStorageFood';
+import { handleFinishBtnFood } from '../../helpers/handleFinishBtn';
+import { handleChangeFood } from '../../helpers/handleChange';
 
 function DetailsOrProgressFoods(props) {
   const [foodDetails, setFoodDetails] = useState([]);
   const [drinksRecommendations, setDrinksRecommendations] = useState([]);
   const [changeHeart, setChangeHeart] = useState(false);
+
+  const [inProgressIngredients, setInProgressIngredients] = useState([]);
   const [recipes, setRecipes] = useState([]);
   const { match: { params: { id: idRecipe } }, history, location: { pathname } } = props;
 
@@ -51,15 +57,19 @@ function DetailsOrProgressFoods(props) {
     setChangeHeart(getFavorites);
   };
 
-  useEffect(() => { toggleHeart(); }, []);
+  function getInProgressIngredients() {
+    const progressRecipes = (getStorageProgress() || {});
+    if (Object.keys(progressRecipes.meals).includes(idRecipe)) {
+      setInProgressIngredients(progressRecipes.meals[idRecipe]);
+    }
+  }
+
+  useEffect(() => { toggleHeart(); getInProgressIngredients(); }, []);
 
   const SIX = 6;
   if (foodDetails.length === 0) return null;
-
   const ingredientFiltered = ingredientFilter(foodDetails);
-
   const measureFiltered = measureFilter(foodDetails);
-
   const videoId = convertVideo(foodDetails[0].strYoutube);
   const iframeMarkup = `https://www.youtube.com/embed/${videoId}`;
 
@@ -110,7 +120,7 @@ function DetailsOrProgressFoods(props) {
       return 'Start Recipe';
     }
   };
-
+  
   return (
     <div>
       { foodDetails.map((foods, index) => (
@@ -170,6 +180,9 @@ function DetailsOrProgressFoods(props) {
                           id={ ingredient }
                           type="checkbox"
                           name={ ingredient }
+                          value={ ingredient }
+                          checked={ inProgressIngredients.includes(ingredient) }
+                          onChange={ (event) => handleChangeFood(event, idRecipe) }
                         />
                         { ingredient }
                         { measureFiltered[indexIngredient] }
@@ -193,11 +206,7 @@ function DetailsOrProgressFoods(props) {
                 </div>
               )}
           </section>
-          <p
-            data-testid="instructions"
-          >
-            {foods.strInstructions}
-          </p>
+          <p data-testid="instructions">{foods.strInstructions}</p>
           { pathname === `/foods/${foods.idMeal}`
           && (
             <div data-testid="video">
@@ -229,7 +238,7 @@ function DetailsOrProgressFoods(props) {
           { (pathname === `/foods/${foods.idMeal}/in-progress`)
             ? (
               <button
-                onClick={ handleFinishBtn }
+                onClick={ () => handleFinishBtnFood(foodDetails[0]) }
                 data-testid="finish-recipe-btn"
                 type="button"
               >
