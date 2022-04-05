@@ -7,7 +7,7 @@ export function handleChangeFood(type, idFood, ingredients) {
   },
   cocktails: {} };
 
-  console.log(ingredients);
+  console.log({ ingredients });
 
   if (type === 'button') {
     getProgress.meals[idFood] = [];

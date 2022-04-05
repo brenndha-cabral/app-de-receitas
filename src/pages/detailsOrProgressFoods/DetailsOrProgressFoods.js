@@ -12,10 +12,7 @@ import DetailsComponent from '../../components/detailsComponents/DetailsComponen
 function DetailsOrProgressFoods(props) {
   const [foodDetails, setFoodDetails] = useState([]);
   const [drinksRecommendations, setDrinksRecommendations] = useState([]);
-  const [inProgressIngredients, setInProgressIngredients] = useState([]);
   const [localIngredients, setLocalIngredients] = useState([]);
-
-  console.log(inProgressIngredients);
 
   const { match: { params: { id: idRecipe } }, history, location: { pathname } } = props;
 
@@ -27,12 +24,6 @@ function DetailsOrProgressFoods(props) {
       return [...prev, value];
     });
   }
-
-  //  handleChangeFood('localIngredients', idRecipe, inProgressIngredients);
-  useEffect(() => {
-    console.log(inProgressIngredients);
-    handleChangeFood('localIngrediens', idRecipe, inProgressIngredients);
-  }, [inProgressIngredients]);
 
   useEffect(() => {
     document.title = 'All Tasty | Details Food';
@@ -55,11 +46,15 @@ function DetailsOrProgressFoods(props) {
     }
 
     if (Object.keys(progressRecipes.meals).includes(idRecipe)) {
-      setInProgressIngredients(progressRecipes.meals[idRecipe]);
+      setLocalIngredients(progressRecipes.meals[idRecipe]);
     }
   }
 
   useEffect(() => { getInProgressIngredients(); }, []);
+
+  useEffect(() => {
+    handleChangeFood('localIngredients', idRecipe, localIngredients);
+  }, [localIngredients]);
 
   const SIX = 6;
 
