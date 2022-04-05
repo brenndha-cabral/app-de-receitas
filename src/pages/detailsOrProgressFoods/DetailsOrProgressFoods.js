@@ -13,8 +13,26 @@ function DetailsOrProgressFoods(props) {
   const [foodDetails, setFoodDetails] = useState([]);
   const [drinksRecommendations, setDrinksRecommendations] = useState([]);
   const [inProgressIngredients, setInProgressIngredients] = useState([]);
+  const [localIngredients, setLocalIngredients] = useState([]);
+
+  console.log(inProgressIngredients);
 
   const { match: { params: { id: idRecipe } }, history, location: { pathname } } = props;
+
+  function handleLocalIngredients({ target }) {
+    const { value } = target;
+
+    setLocalIngredients((prev) => {
+      if (prev.includes(value)) return prev.filter((item) => item !== value);
+      return [...prev, value];
+    });
+  }
+
+  //  handleChangeFood('localIngredients', idRecipe, inProgressIngredients);
+  useEffect(() => {
+    console.log(inProgressIngredients);
+    handleChangeFood('localIngrediens', idRecipe, inProgressIngredients);
+  }, [inProgressIngredients]);
 
   useEffect(() => {
     document.title = 'All Tasty | Details Food';
@@ -98,8 +116,10 @@ function DetailsOrProgressFoods(props) {
                       type="checkbox"
                       name={ ingredient }
                       value={ ingredient }
-                      checked={ inProgressIngredients.includes(ingredient) }
-                      onChange={ (event) => handleChangeFood(event, idRecipe) }
+                      checked={ localIngredients.includes(ingredient) }
+                      onChange={ (event) => {
+                        handleLocalIngredients(event);
+                      } }
                     />
                     { ingredient }
                     { measureFiltered[indexIngredient] }
@@ -173,9 +193,9 @@ function DetailsOrProgressFoods(props) {
         : (
           <button
             className="start-recipe"
-            onClick={ (event) => {
+            onClick={ () => {
               handleStartBtn();
-              handleChangeFood(event, idRecipe);
+              handleChangeFood('button', idRecipe);
             } }
             data-testid="start-recipe-btn"
             type="button"

@@ -1,23 +1,21 @@
 import { getStorageProgress,
   setStorageProgress } from './localStorage';
 
-export function handleChangeFood(event, idFood) {
-  const { checked, value, type } = event.target;
-
+export function handleChangeFood(type, idFood, ingredients) {
   const getProgress = getStorageProgress() || { meals: {
     [idFood]: [],
   },
   cocktails: {} };
+
+  console.log(ingredients);
 
   if (type === 'button') {
     getProgress.meals[idFood] = [];
     setStorageProgress(getProgress);
   }
 
-  if (checked) {
-    getProgress.meals[idFood] = (getProgress.meals[idFood])
-      ? [...getProgress.meals[idFood], value]
-      : [value];
+  if (type === 'localIngredients') {
+    getProgress.meals[idFood] = ingredients;
     setStorageProgress(getProgress);
   }
 }
