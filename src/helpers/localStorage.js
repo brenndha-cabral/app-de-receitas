@@ -12,4 +12,3 @@ export function setStorageProgress(obj) {
 
 export function getStorageProgress() {
   return (JSON.parse(localStorage.getItem('inProgressRecipes')));
-}
