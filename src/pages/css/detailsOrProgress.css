@@ -1,0 +1,30 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.container {
+  height: 100vh;
+}
+
+.carousel-wrapper {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  max-width: 100vw;
+  overflow-x: scroll;
+}
+
+.main_photo {
+  max-width: 100vw;
+}
+
+.recommendation_photo {
+  max-width: 50vw;
+}
+
+.start-recipe {
+  position: fixed;
+  bottom: 0px;
+}

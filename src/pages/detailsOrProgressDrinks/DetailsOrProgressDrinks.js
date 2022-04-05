@@ -1,24 +1,28 @@
 import React, { useEffect, useState } from 'react';
+import toast, { Toaster } from 'react-hot-toast';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { useLocation } from 'react-router-dom';
+import shareIcon from '../../images/shareIcon.svg';
+import blackHeartIcon from '../../images/blackHeartIcon.svg';
+import { getStoragefavoritesRecipes } from '../../helpers/localStorage';
+import whiteHeartIcon from '../../images/whiteHeartIcon.svg';
 import { getDrinksDetails, getFoodsRecommendation } from '../../services/requestApi';
-import { setDetails } from '../../redux/actions';
+import '../css/detailsOrProgress.css';
+import { ingredientFilter, measureFilter } from '../../helpers/filterDrinksOrFoodDetails';
+import favoritesDrinksRecipes from '../../helpers/localStorageDrink';
+import { handleFinishBtnDrink } from '../../helpers/handleFinishBtn';
+import { handleChangeDrink } from '../../helpers/handleChange';
 
 function DetailsOrProgressDrinks(props) {
   const [drinksDetails, setDrinksDetails] = useState([]);
-
   const [foodsRecommendations, setFoodsRecommendations] = useState([]);
+  const [changeHeart, setChangeHeart] = useState(false);
 
-  const { match: { params: { id } }, actionDetails, history } = props;
-
-  const location = useLocation();
-  const { pathname } = location;
+  const { match: { params: { id: idRecipe } }, history, location: { pathname } } = props;
 
   useEffect(() => {
     document.title = 'All Tasty | Details Drink';
     (async () => {
-      const fetchDrink = await getDrinksDetails(id);
+      const fetchDrink = await getDrinksDetails(idRecipe);
       const { drinks } = fetchDrink;
       setDrinksDetails(drinks);
       const fetchFoodRecommendation = await getFoodsRecommendation();
@@ -26,37 +30,27 @@ function DetailsOrProgressDrinks(props) {
       setFoodsRecommendations(meals);
     })();
   },
-  [id]);
+  [idRecipe]);
 
-  const six = 6;
+  const toggleHeart = () => {
+    const getFavorites = getStoragefavoritesRecipes()
+      .some(({ id }) => (
+        id === idRecipe
+      ));
+    setChangeHeart(getFavorites);
+  };
+
+  useEffect(() => { toggleHeart(); }, []);
+
+  const SIX = 6;
   if (drinksDetails.length === 0) return null;
 
-  const ingredientFilter = Object.entries(drinksDetails[0]).filter((element) => (
-    element[0].includes('Ingredient')
-  )).filter((element) => (element[1] !== ' ' && element[1] !== '' && element[1] !== null))
-    .map((element) => element[1]);
+  const ingredientFiltered = ingredientFilter(drinksDetails);
 
-  const measureFilter = Object.entries(drinksDetails[0]).filter((element) => (
-    element[0].includes('Measure')
-  )).filter((element) => (element[1] !== ' ' && element[1] !== '' && element[1] !== null))
-    .map((element) => element[1]);
+  const measureFiltered = measureFilter(drinksDetails);
 
   function handleStartBtn() {
-    const { idDrink,
-      strDrinkThumb,
-      strDrink,
-      strCategory,
-      strInstructions } = drinksDetails[0];
-    const payload = {
-      id: idDrink,
-      name: strDrink,
-      photo: strDrinkThumb,
-      category: strCategory,
-      ingredients: ingredientFilter,
-      quantity: measureFilter,
-      instructions: strInstructions,
-    };
-    actionDetails(payload);
+    const { idDrink } = drinksDetails[0];
     history.push(`/drinks/${idDrink}/in-progress`);
   }
 
@@ -69,19 +63,38 @@ function DetailsOrProgressDrinks(props) {
             data-testid="recipe-photo"
             src={ drink.strDrinkThumb }
             alt="recipe-details"
+            className="main_photo"
           />
-          <button
-            type="button"
-            data-testid="share-btn"
-          >
-            Share
-          </button>
-          <button
-            type="button"
+          <div>
+            <button
+              className="share-button"
+              type="button"
+              data-testid="share-btn"
+              onClick={ () => {
+                navigator.clipboard.writeText((window.location.href)
+                  .replace('/in-progress', ''));
+                toast('Link copied!');
+              } }
+            >
+              <img
+                src={ shareIcon }
+                alt="Share recipe"
+              />
+            </button>
+            <Toaster />
+            {/* Sugestão do Tonn Turma XP/Tribo B | Referência biblioteca Toaster: https://react-hot-toast.com/  */}
+          </div>
+          <input
+            className={ `favorite ${changeHeart && 'favorite--active'}` }
             data-testid="favorite-btn"
-          >
-            Favorite
-          </button>
+            src={ changeHeart ? blackHeartIcon : whiteHeartIcon }
+            alt="Favorite recipe"
+            type="image"
+            onClick={ () => {
+              favoritesDrinksRecipes(drinksDetails[0]);
+              toggleHeart();
+            } }
+          />
           <h2
             data-testid="recipe-category"
           >
@@ -91,7 +104,7 @@ function DetailsOrProgressDrinks(props) {
             { (pathname === `/drinks/${drink.idDrink}/in-progress`)
               ? (
                 <ol>
-                  { ingredientFilter.map((ingredient, indexIngredient) => (
+                  { ingredientFiltered.map((ingredient, indexIngredient) => (
                     <li
                       key={ ingredient }
                       data-testid={ `${indexIngredient}-ingredient-step` }
@@ -101,11 +114,11 @@ function DetailsOrProgressDrinks(props) {
                           id={ ingredient }
                           type="checkbox"
                           name={ ingredient }
+                          value={ ingredient }
+                          onChange={ (event) => handleChangeDrink(event, idRecipe) }
                         />
-                        {' '}
                         { ingredient }
-                        {' '}
-                        { measureFilter[indexIngredient] }
+                        { measureFiltered[indexIngredient] }
                       </label>
                     </li>
                   ))}
@@ -113,18 +126,15 @@ function DetailsOrProgressDrinks(props) {
               : (
                 <div>
                   <ol>
-                    { ingredientFilter.map((ingredient, indexIngredient) => (
+                    { ingredientFiltered.map((ingredient, indexIngredient) => (
                       <li
                         key={ ingredient }
                         data-testid={ `${indexIngredient}-ingredient-name-and-measure` }
                       >
-                        {' '}
                         { ingredient }
-                        {' '}
-                        { measureFilter[indexIngredient] }
+                        { measureFiltered[indexIngredient] }
                       </li>
                     ))}
-
                   </ol>
                 </div>
               )}
@@ -134,26 +144,30 @@ function DetailsOrProgressDrinks(props) {
           >
             {drink.strInstructions}
           </p>
-          { foodsRecommendations.slice(0, six).map((foods, ii) => (
-
-            <div
-              key={ ii }
-              data-testid={ `${ii}-recomendation-card` }
-            >
-              <img
-                src={ foods.strMealThumb }
-                alt={ foods.strMeal }
-                width="200"
-                height="200"
-              />
-            </div>
-          ))}
+          <div className="carousel-wrapper">
+            { foodsRecommendations.slice(0, SIX).map((foods, ii) => (
+              <div
+                key={ ii }
+                data-testid={ `${ii}-recomendation-card` }
+                className="recommendation_photo"
+              >
+                <h1 data-testid={ `${ii}-recomendation-title` }>{foods.strMeal }</h1>
+                <img
+                  src={ foods.strMealThumb }
+                  alt={ foods.strMeal }
+                  width="200"
+                  height="200"
+                />
+              </div>
+            ))}
+          </div>
           { (pathname === `/drinks/${drink.idDrink}/in-progress`)
             ? (
               <button
-                onClick={ handleStartBtn }
+                onClick={ () => handleFinishBtnDrink(drinksDetails[0]) }
                 data-testid="finish-recipe-btn"
                 type="button"
+                className="start-recipe"
               >
                 Finish Recipe
               </button>)
@@ -162,6 +176,7 @@ function DetailsOrProgressDrinks(props) {
                 onClick={ handleStartBtn }
                 data-testid="start-recipe-btn"
                 type="button"
+                className="start-recipe"
               >
                 Start Recipe
               </button>
@@ -172,18 +187,11 @@ function DetailsOrProgressDrinks(props) {
   );
 }
 
-const mapDispatchToProps = (dispatch) => ({
-  actionDetails: (payload) => dispatch(setDetails(payload)),
-});
-
 DetailsOrProgressDrinks.propTypes = {
   match: PropTypes.shape({
-    params: PropTypes.objectOf(PropTypes.string, PropTypes.object),
-  }).isRequired,
-  actionDetails: PropTypes.func.isRequired,
-  history: PropTypes.shape({
-    push: PropTypes.func,
-  }).isRequired,
+    params: PropTypes.objectOf(PropTypes.string, PropTypes.object) }).isRequired,
+  history: PropTypes.shape({ push: PropTypes.func }).isRequired,
+  location: PropTypes.shape({ pathname: PropTypes.string }).isRequired,
 };
 
-export default connect(null, mapDispatchToProps)(DetailsOrProgressDrinks);
+export default DetailsOrProgressDrinks;

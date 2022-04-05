@@ -1,24 +1,31 @@
 import React, { useEffect, useState } from 'react';
+import toast, { Toaster } from 'react-hot-toast';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { useLocation } from 'react-router-dom';
+import shareIcon from '../../images/shareIcon.svg';
+import blackHeartIcon from '../../images/blackHeartIcon.svg';
+import whiteHeartIcon from '../../images/whiteHeartIcon.svg';
+import { getStoragefavoritesRecipes,
+  getStorageProgress } from '../../helpers/localStorage';
 import { getFoodDetails, getDrinksRecommendation } from '../../services/requestApi';
-import { setDetails } from '../../redux/actions';
+import '../css/detailsOrProgress.css';
+import convertVideo from '../../helpers/convertVideo';
+import { ingredientFilter, measureFilter } from '../../helpers/filterDrinksOrFoodDetails';
+import favoritesFoodsRecipes from '../../helpers/localStorageFood';
+import { handleFinishBtnFood } from '../../helpers/handleFinishBtn';
+import { handleChangeFood } from '../../helpers/handleChange';
 
 function DetailsOrProgressFoods(props) {
   const [foodDetails, setFoodDetails] = useState([]);
-
   const [drinksRecommendations, setDrinksRecommendations] = useState([]);
+  const [changeHeart, setChangeHeart] = useState(false);
+  const [inProgressIngredients, setInProgressIngredients] = useState([]);
 
-  const { match: { params: { id } }, actionDetails, history } = props;
-
-  const location = useLocation();
-  const { pathname } = location;
+  const { match: { params: { id: idRecipe } }, history, location: { pathname } } = props;
 
   useEffect(() => {
     document.title = 'All Tasty | Details Food';
     (async () => {
-      const fetchFood = await getFoodDetails(id);
+      const fetchFood = await getFoodDetails(idRecipe);
       const { meals } = fetchFood;
       setFoodDetails(meals);
       const fetchDrinksRecommendation = await getDrinksRecommendation();
@@ -26,54 +33,34 @@ function DetailsOrProgressFoods(props) {
       setDrinksRecommendations(drinks);
     })();
   },
-  [id]);
+  [idRecipe]);
 
-  const six = 6;
-  if (foodDetails.length === 0) return null;
+  const toggleHeart = () => {
+    const getFavorites = getStoragefavoritesRecipes()
+      .some(({ id }) => (
+        id === idRecipe
+      ));
+    setChangeHeart(getFavorites);
+  };
 
-  console.log(foodDetails[0]);
-
-  const ingredientFilter = Object.entries(foodDetails[0]).filter((element) => (
-    element[0].includes('Ingredient')
-  )).filter((element) => (element[1] !== ' ' && element[1] !== '' && element[1] !== null))
-    .map((element) => element[1]);
-
-  const measureFilter = Object.entries(foodDetails[0]).filter((element) => (
-    element[0].includes('Measure')
-  )).filter((element) => (element[1] !== ' ' && element[1] !== '' && element[1] !== null))
-    .map((element) => element[1]);
-
-  // const sourceFilter =
-
-  //  Referência: https://stackoverflow.com/questions/21607808/convert-a-youtube-video-url-to-embed-code
-  function convertVideo(url) {
-    const ELEVEN = 11;
-    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
-    const match = url.match(regExp);
-    return (match && match[2].length === ELEVEN)
-      ? match[2]
-      : null;
+  function getInProgressIngredients() {
+    const progressRecipes = (getStorageProgress() || {});
+    if (Object.keys(progressRecipes.meals).includes(idRecipe)) {
+      setInProgressIngredients(progressRecipes.meals[idRecipe]);
+    }
   }
 
+  useEffect(() => { toggleHeart(); getInProgressIngredients(); }, []);
+
+  const SIX = 6;
+  if (foodDetails.length === 0) return null;
+  const ingredientFiltered = ingredientFilter(foodDetails);
+  const measureFiltered = measureFilter(foodDetails);
   const videoId = convertVideo(foodDetails[0].strYoutube);
   const iframeMarkup = `https://www.youtube.com/embed/${videoId}`;
 
   function handleStartBtn() {
-    const { idMeal,
-      strMealThumb,
-      strMeal,
-      strCategory,
-      strInstructions } = foodDetails[0];
-    const payload = {
-      id: idMeal,
-      name: strMeal,
-      photo: strMealThumb,
-      category: strCategory,
-      ingredients: ingredientFilter,
-      quantity: measureFilter,
-      instructions: strInstructions,
-    };
-    actionDetails(payload);
+    const { idMeal } = foodDetails[0];
     history.push(`/foods/${idMeal}/in-progress`);
   }
 
@@ -86,19 +73,38 @@ function DetailsOrProgressFoods(props) {
             data-testid="recipe-photo"
             src={ foods.strMealThumb }
             alt="recipe-details"
+            className="main_photo"
           />
-          <button
-            type="button"
-            data-testid="share-btn"
-          >
-            Share
-          </button>
-          <button
-            type="button"
+          <div>
+            <button
+              className="share-button"
+              type="button"
+              data-testid="share-btn"
+              onClick={ () => {
+                navigator.clipboard.writeText((window.location.href)
+                  .replace('/in-progress', ''));
+                toast('Link copied!');
+              } }
+            >
+              <img
+                src={ shareIcon }
+                alt="Share recipe"
+              />
+            </button>
+            <Toaster />
+            {/* Sugestão do Tonn Turma XP/Tribo B | Referência biblioteca Toaster: https://react-hot-toast.com/  */}
+          </div>
+          <input
+            className={ `favorite ${changeHeart && 'favorite--active'}` }
             data-testid="favorite-btn"
-          >
-            Favorite
-          </button>
+            src={ changeHeart ? blackHeartIcon : whiteHeartIcon }
+            alt="Favorite recipe"
+            type="image"
+            onClick={ () => {
+              favoritesFoodsRecipes(foodDetails[0]);
+              toggleHeart();
+            } }
+          />
           <h2
             data-testid="recipe-category"
           >
@@ -108,7 +114,7 @@ function DetailsOrProgressFoods(props) {
             { (pathname === `/foods/${foods.idMeal}/in-progress`)
               ? (
                 <ol>
-                  { ingredientFilter.map((ingredient, indexIngredient) => (
+                  { ingredientFiltered.map((ingredient, indexIngredient) => (
                     <li
                       key={ ingredient }
                       data-testid={ `${indexIngredient}-ingredient-step` }
@@ -118,11 +124,12 @@ function DetailsOrProgressFoods(props) {
                           id={ ingredient }
                           type="checkbox"
                           name={ ingredient }
+                          value={ ingredient }
+                          checked={ inProgressIngredients.includes(ingredient) }
+                          onChange={ (event) => handleChangeFood(event, idRecipe) }
                         />
-                        {' '}
                         { ingredient }
-                        {' '}
-                        { measureFilter[indexIngredient] }
+                        { measureFiltered[indexIngredient] }
                       </label>
                     </li>
                   ))}
@@ -130,27 +137,20 @@ function DetailsOrProgressFoods(props) {
               : (
                 <div>
                   <ol>
-                    { ingredientFilter.map((ingredient, indexIngredient) => (
+                    { ingredientFiltered.map((ingredient, indexIngredient) => (
                       <li
                         key={ ingredient }
                         data-testid={ `${indexIngredient}-ingredient-name-and-measure` }
                       >
-                        {' '}
                         { ingredient }
-                        {' '}
-                        { measureFilter[indexIngredient] }
+                        { measureFiltered[indexIngredient] }
                       </li>
                     ))}
-
                   </ol>
                 </div>
               )}
           </section>
-          <p
-            data-testid="instructions"
-          >
-            {foods.strInstructions}
-          </p>
+          <p data-testid="instructions">{foods.strInstructions}</p>
           { pathname === `/foods/${foods.idMeal}`
           && (
             <div data-testid="video">
@@ -166,26 +166,31 @@ function DetailsOrProgressFoods(props) {
               />
             </div>
           )}
-          { drinksRecommendations.slice(0, six).map((drink, ii) => (
-
-            <div
-              key={ ii }
-              data-testid={ `${ii}-recomendation-card` }
-            >
-              <img
-                src={ drink.strDrinkThumb }
-                alt={ drink.strGlass }
-                width="200"
-                height="200"
-              />
-            </div>
-          ))}
+          <p>recomendation</p>
+          <div className="carousel-wrapper">
+            { drinksRecommendations.slice(0, SIX).map((drink, ii) => (
+              <div
+                key={ ii }
+                data-testid={ `${ii}-recomendation-card` }
+                className="recommendation_photo"
+              >
+                <h1 data-testid={ `${ii}-recomendation-title` }>{drink.strDrink}</h1>
+                <img
+                  src={ drink.strDrinkThumb }
+                  alt={ drink.strGlass }
+                  width="200"
+                  height="200"
+                />
+              </div>
+            ))}
+          </div>
           { (pathname === `/foods/${foods.idMeal}/in-progress`)
             ? (
               <button
-                onClick={ handleStartBtn }
+                onClick={ () => handleFinishBtnFood(foodDetails[0]) }
                 data-testid="finish-recipe-btn"
                 type="button"
+                className="start-recipe"
               >
                 Finish Recipe
               </button>)
@@ -194,6 +199,7 @@ function DetailsOrProgressFoods(props) {
                 onClick={ handleStartBtn }
                 data-testid="start-recipe-btn"
                 type="button"
+                className="start-recipe"
               >
                 Start Recipe
               </button>
@@ -204,18 +210,11 @@ function DetailsOrProgressFoods(props) {
   );
 }
 
-const mapDispatchToProps = (dispatch) => ({
-  actionDetails: (payload) => dispatch(setDetails(payload)),
-});
-
 DetailsOrProgressFoods.propTypes = {
   match: PropTypes.shape({
-    params: PropTypes.objectOf(PropTypes.string, PropTypes.object),
-  }).isRequired,
-  actionDetails: PropTypes.func.isRequired,
-  history: PropTypes.shape({
-    push: PropTypes.func,
-  }).isRequired,
+    params: PropTypes.objectOf(PropTypes.string, PropTypes.object) }).isRequired,
+  history: PropTypes.shape({ push: PropTypes.func }).isRequired,
+  location: PropTypes.shape({ pathname: PropTypes.string }).isRequired,
 };
 
-export default connect(null, mapDispatchToProps)(DetailsOrProgressFoods);
+export default DetailsOrProgressFoods;
