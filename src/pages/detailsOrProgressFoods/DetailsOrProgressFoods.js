@@ -123,7 +123,11 @@ function DetailsOrProgressFoods(props) {
             </div>
           )}
       </section>
-      <p data-testid="instructions">{strInstructions}</p>
+      <p
+        data-testid="instructions"
+      >
+        {strInstructions}
+      </p>
       { pathname === `/foods/${idMeal}`
           && (
             <div data-testid="video">
@@ -139,27 +143,30 @@ function DetailsOrProgressFoods(props) {
               />
             </div>
           )}
-      { drinksRecommendations.slice(0, SIX).map((drink, ii) => (
-        <div
-          key={ ii }
-          data-testid={ `${ii}-recomendation-card` }
-          className="recommendation_photo"
-        >
-          <h1 data-testid={ `${ii}-recomendation-title` }>{drink.strDrink }</h1>
-          <img
-            src={ drink.strDrinkThumb }
-            alt={ drink.strGlass }
-            width="200"
-            height="200"
-          />
-        </div>
-      ))}
+      <div className="carousel-wrapper">
+        { drinksRecommendations.slice(0, SIX).map((drink, ii) => (
+          <div
+            key={ ii }
+            data-testid={ `${ii}-recomendation-card` }
+            className="recommendation_photo"
+          >
+            <h1 data-testid={ `${ii}-recomendation-title` }>{drink.strDrink }</h1>
+            <img
+              src={ drink.strDrinkThumb }
+              alt={ drink.strGlass }
+              width="200"
+              height="200"
+            />
+          </div>
+        ))}
+      </div>
       { (pathname === `/foods/${idMeal}/in-progress`)
         ? (
           <button
             onClick={ () => handleFinishBtnFood(foodDetails[0]) }
             data-testid="finish-recipe-btn"
             type="button"
+            className="start-recipe"
           >
             Finish Recipe
           </button>)

@@ -25,16 +25,6 @@ function DetailsComponent(props) {
     toggleHeart();
   }, []);
 
-  function favoriteRecipe(favorite) {
-    const { strMeal } = foodDetails;
-    const key = Object.keys(favorite);
-
-    if (key.includes(strMeal)) {
-      return favoritesFoodsRecipes(favorite);
-    }
-    return favoritesDrinksRecipes(favorite);
-  }
-
   const {
     strMeal,
     strMealThumb,
@@ -85,7 +75,11 @@ function DetailsComponent(props) {
         alt="Favorite recipe"
         type="image"
         onClick={ () => {
-          favoriteRecipe(foodDetails !== {} || drinkDetails);
+          if (strMeal) {
+            favoritesFoodsRecipes(foodDetails);
+          } else {
+            favoritesDrinksRecipes(drinkDetails);
+          }
           toggleHeart();
         } }
       />
