@@ -13,26 +13,34 @@ function DetailsOrProgressFoods(props) {
   const [foodDetails, setFoodDetails] = useState([]);
   const [drinksRecommendations, setDrinksRecommendations] = useState([]);
   const [inProgressIngredients, setInProgressIngredients] = useState([]);
-  const [localIngredients, setLocalIngredients] = useState([]);
-
-  console.log(inProgressIngredients);
 
   const { match: { params: { id: idRecipe } }, history, location: { pathname } } = props;
 
   function handleLocalIngredients({ target }) {
     const { value } = target;
 
-    setLocalIngredients((prev) => {
+    setInProgressIngredients((prev) => {
       if (prev.includes(value)) return prev.filter((item) => item !== value);
       return [...prev, value];
     });
   }
 
-  //  handleChangeFood('localIngredients', idRecipe, inProgressIngredients);
+  function getInProgressIngredients() {
+    const progressRecipes = getStorageProgress();
+    const inProgressArr = progressRecipes.meals[idRecipe];
+
+    setInProgressIngredients(inProgressArr);
+  }
+
   useEffect(() => {
-    console.log(inProgressIngredients);
-    handleChangeFood('localIngrediens', idRecipe, inProgressIngredients);
+    console.log('meuEffect');
+    if (pathname === `/foods/${idRecipe}/in-progress`) {
+      console.log('meu effect no pathname');
+      handleChangeFood('localIngredients', idRecipe, inProgressIngredients);
+    }
   }, [inProgressIngredients]);
+
+  /*   useEffect(() => { getInProgressIngredients(); }, []); */
 
   useEffect(() => {
     document.title = 'All Tasty | Details Food';
@@ -47,20 +55,6 @@ function DetailsOrProgressFoods(props) {
   },
   [idRecipe]);
 
-  function getInProgressIngredients() {
-    const progressRecipes = getStorageProgress();
-
-    if (!progressRecipes) {
-      return null;
-    }
-
-    if (Object.keys(progressRecipes.meals).includes(idRecipe)) {
-      setInProgressIngredients(progressRecipes.meals[idRecipe]);
-    }
-  }
-
-  useEffect(() => { getInProgressIngredients(); }, []);
-
   const SIX = 6;
 
   if (foodDetails.length === 0) return null;
@@ -71,11 +65,6 @@ function DetailsOrProgressFoods(props) {
 
   const videoId = convertVideo(foodDetails[0].strYoutube);
   const iframeMarkup = `https://www.youtube.com/embed/${videoId}`;
-
-  function handleStartBtn() {
-    const { idMeal } = foodDetails[0];
-    history.push(`/foods/${idMeal}/in-progress`);
-  }
 
   const verifyButton = (idMeal) => {
     const startedRecipes = getStorageProgress();
@@ -91,6 +80,18 @@ function DetailsOrProgressFoods(props) {
     }
     return 'Start Recipe';
   };
+
+  function handleStartBtn() {
+    const { idMeal } = foodDetails[0];
+
+    if (verifyButton(idMeal) === 'Start Recipe') {
+      handleChangeFood('button', idRecipe);
+    } else {
+      getInProgressIngredients();
+    }
+
+    history.push(`/foods/${idMeal}/in-progress`);
+  }
 
   const {
     idMeal,
@@ -116,7 +117,7 @@ function DetailsOrProgressFoods(props) {
                       type="checkbox"
                       name={ ingredient }
                       value={ ingredient }
-                      checked={ localIngredients.includes(ingredient) }
+                      checked={ inProgressIngredients.includes(ingredient) }
                       onChange={ (event) => {
                         handleLocalIngredients(event);
                       } }
@@ -193,10 +194,7 @@ function DetailsOrProgressFoods(props) {
         : (
           <button
             className="start-recipe"
-            onClick={ () => {
-              handleStartBtn();
-              handleChangeFood('button', idRecipe);
-            } }
+            onClick={ () => handleStartBtn() }
             data-testid="start-recipe-btn"
             type="button"
 
