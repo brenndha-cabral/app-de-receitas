@@ -2,7 +2,16 @@ import { getStorageProgress,
   setStorageProgress } from './localStorage';
 
 export function handleChangeFood(event, idFood) {
-  const { checked, value } = event.target;
+  const { checked, value, type } = event.target;
+
+  if (type === 'button') {
+    const getProgress = getStorageProgress() || { meals: {
+      [idFood]: [],
+    },
+    cocktails: {} };
+
+    const includes = getProgress.meals[idFood];
+  }
 
   if (checked) {
     const getProgress = getStorageProgress() || { meals: {
