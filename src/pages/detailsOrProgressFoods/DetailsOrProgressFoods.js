@@ -96,6 +96,7 @@ function DetailsOrProgressFoods(props) {
             data-testid="recipe-photo"
             src={ foods.strMealThumb }
             alt="recipe-details"
+            className="main_photo"
           />
           <div>
             <button
@@ -165,7 +166,6 @@ function DetailsOrProgressFoods(props) {
                         { measureFiltered[indexIngredient] }
                       </li>
                     ))}
-
                   </ol>
                 </div>
               )}
@@ -190,26 +190,31 @@ function DetailsOrProgressFoods(props) {
               />
             </div>
           )}
-          { drinksRecommendations.slice(0, SIX).map((drink, ii) => (
-
-            <div
-              key={ ii }
-              data-testid={ `${ii}-recomendation-card` }
-            >
-              <img
-                src={ drink.strDrinkThumb }
-                alt={ drink.strGlass }
-                width="200"
-                height="200"
-              />
-            </div>
-          ))}
+          <p>recomendation</p>
+          <div className="carousel-wrapper">
+            { drinksRecommendations.slice(0, SIX).map((drink, ii) => (
+              <div
+                key={ ii }
+                data-testid={ `${ii}-recomendation-card` }
+                className="recommendation_photo"
+              >
+                <h1 data-testid={ `${ii}-recomendation-title` }>{drink.strDrink}</h1>
+                <img
+                  src={ drink.strDrinkThumb }
+                  alt={ drink.strGlass }
+                  width="200"
+                  height="200"
+                />
+              </div>
+            ))}
+          </div>
           { (pathname === `/foods/${foods.idMeal}/in-progress`)
             ? (
               <button
                 onClick={ handleFinishBtn }
                 data-testid="finish-recipe-btn"
                 type="button"
+                className="start-recipe"
               >
                 Finish Recipe
               </button>)
@@ -218,6 +223,7 @@ function DetailsOrProgressFoods(props) {
                 onClick={ handleStartBtn }
                 data-testid="start-recipe-btn"
                 type="button"
+                className="start-recipe"
               >
                 Start Recipe
               </button>
