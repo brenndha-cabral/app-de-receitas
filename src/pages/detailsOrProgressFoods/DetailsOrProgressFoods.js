@@ -8,14 +8,15 @@ import { getFoodDetails, getDrinksRecommendation } from '../../services/requestA
 import '../css/detailsOrProgress.css';
 import convertVideo from '../../helpers/convertVideo';
 import { ingredientFilter, measureFilter } from '../../helpers/filterDrinksOrFoodDetails';
-import { getStoragefavoritesRecipes } from '../../helpers/localStorage';
+import { getStoragefavoritesRecipes, setStorageRecipes,
+  getStorageRecipes } from '../../helpers/localStorage';
 import favoritesFoodsRecipes from '../../helpers/localStorageFood';
 
 function DetailsOrProgressFoods(props) {
   const [foodDetails, setFoodDetails] = useState([]);
   const [drinksRecommendations, setDrinksRecommendations] = useState([]);
   const [changeHeart, setChangeHeart] = useState(false);
-
+  const [recipes, setRecipes] = useState([]);
   const { match: { params: { id: idRecipe } }, history, location: { pathname } } = props;
 
   useEffect(() => {
@@ -30,6 +31,17 @@ function DetailsOrProgressFoods(props) {
     })();
   },
   [idRecipe]);
+
+  useEffect(() => {
+    const previousStorageRecipes = JSON.parse(localStorage.getItem('Recipes'));
+    console.log(previousStorageRecipes)
+    if (previousStorageRecipes) {
+      const newRecipes = [...startedRecipes, recipes];
+      setStorageRecipes(newRecipes);
+    } else {
+      setStorageRecipes(recipes);
+    }
+  }, [recipes]);
 
   const toggleHeart = () => {
     const getFavorites = getStoragefavoritesRecipes()
@@ -76,9 +88,7 @@ function DetailsOrProgressFoods(props) {
       doneDate: new Date().toLocaleDateString(),
       tags: strTags.split(','),
     };
-
     const previousDoneRecipes = JSON.parse(localStorage.getItem('doneRecipes'));
-
     if (previousDoneRecipes) {
       const newDoneRecipes = [...previousDoneRecipes, newDoneRecipe];
       localStorage.setItem('doneRecipes', JSON.stringify(newDoneRecipes));
@@ -86,6 +96,20 @@ function DetailsOrProgressFoods(props) {
       localStorage.setItem('doneRecipes', JSON.stringify([newDoneRecipe]));
     }
   }
+  const verifyButton = (idMeal) => {
+    const startedRecipes = getStorageRecipes();
+
+    if (startedRecipes === null) {
+      return 'startedRecipes';
+    }
+
+    const verificationRecipes = startedRecipes.some((element) => element === idMeal);
+    if (verificationRecipes === true) {
+      return 'Continue Recipe';
+    } if (verificationRecipes === false) {
+      return 'Start Recipe';
+    }
+  };
 
   return (
     <div>
@@ -96,7 +120,6 @@ function DetailsOrProgressFoods(props) {
             data-testid="recipe-photo"
             src={ foods.strMealThumb }
             alt="recipe-details"
-            className="main_photo"
           />
           <div>
             <button
@@ -190,42 +213,38 @@ function DetailsOrProgressFoods(props) {
               />
             </div>
           )}
-          <p>recomendation</p>
-          <div className="carousel-wrapper">
-            { drinksRecommendations.slice(0, SIX).map((drink, ii) => (
-              <div
-                key={ ii }
-                data-testid={ `${ii}-recomendation-card` }
-                className="recommendation_photo"
-              >
-                <h1 data-testid={ `${ii}-recomendation-title` }>{drink.strDrink}</h1>
-                <img
-                  src={ drink.strDrinkThumb }
-                  alt={ drink.strGlass }
-                  width="200"
-                  height="200"
-                />
-              </div>
-            ))}
-          </div>
+          { drinksRecommendations.slice(0, SIX).map((drink, ii) => (
+            <div
+              key={ ii }
+              data-testid={ `${ii}-recomendation-card` }
+            >
+              <img
+                src={ drink.strDrinkThumb }
+                alt={ drink.strGlass }
+                width="200"
+                height="200"
+              />
+            </div>
+          ))}
           { (pathname === `/foods/${foods.idMeal}/in-progress`)
             ? (
               <button
                 onClick={ handleFinishBtn }
                 data-testid="finish-recipe-btn"
                 type="button"
-                className="start-recipe"
               >
                 Finish Recipe
               </button>)
             : (
               <button
-                onClick={ handleStartBtn }
+                onClick={ () => {
+                  handleStartBtn();
+                  setRecipes([...recipes, foods.idMeal]);
+                } }
                 data-testid="start-recipe-btn"
                 type="button"
-                className="start-recipe"
               >
-                Start Recipe
+                {  verifyButton(foods.idMeal) }
               </button>
             )}
         </div>
