@@ -1,21 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import toast, { Toaster } from 'react-hot-toast';
 import PropTypes from 'prop-types';
-import shareIcon from '../../images/shareIcon.svg';
-import blackHeartIcon from '../../images/blackHeartIcon.svg';
-import { getStoragefavoritesRecipes } from '../../helpers/localStorage';
-import whiteHeartIcon from '../../images/whiteHeartIcon.svg';
+import { getStorageProgress } from '../../helpers/localStorage';
 import { getDrinksDetails, getFoodsRecommendation } from '../../services/requestApi';
 import '../css/detailsOrProgress.css';
 import { ingredientFilter, measureFilter } from '../../helpers/filterDrinksOrFoodDetails';
-import favoritesDrinksRecipes from '../../helpers/localStorageDrink';
 import { handleFinishBtnDrink } from '../../helpers/handleFinishBtn';
 import { handleChangeDrink } from '../../helpers/handleChange';
+import DetailsComponent from '../../components/detailsComponents/DetailsComponent';
 
 function DetailsOrProgressDrinks(props) {
   const [drinksDetails, setDrinksDetails] = useState([]);
   const [foodsRecommendations, setFoodsRecommendations] = useState([]);
-  const [changeHeart, setChangeHeart] = useState(false);
+  const [inProgressIngredients, setInProgressIngredients] = useState([]);
 
   const { match: { params: { id: idRecipe } }, history, location: { pathname } } = props;
 
@@ -32,17 +28,22 @@ function DetailsOrProgressDrinks(props) {
   },
   [idRecipe]);
 
-  const toggleHeart = () => {
-    const getFavorites = getStoragefavoritesRecipes()
-      .some(({ id }) => (
-        id === idRecipe
-      ));
-    setChangeHeart(getFavorites);
-  };
+  function getInProgressIngredients() {
+    const progressRecipes = getStorageProgress();
 
-  useEffect(() => { toggleHeart(); }, []);
+    if (!progressRecipes) {
+      return null;
+    }
+
+    if (Object.keys(progressRecipes.cocktails).includes(idRecipe)) {
+      setInProgressIngredients(progressRecipes.cocktails[idRecipe]);
+    }
+  }
+
+  useEffect(() => { getInProgressIngredients(); }, []);
 
   const SIX = 6;
+
   if (drinksDetails.length === 0) return null;
 
   const ingredientFiltered = ingredientFilter(drinksDetails);
@@ -54,135 +55,115 @@ function DetailsOrProgressDrinks(props) {
     history.push(`/drinks/${idDrink}/in-progress`);
   }
 
+  const verifyButton = (idDrink) => {
+    const startedRecipes = getStorageProgress();
+
+    if (startedRecipes === null) {
+      return 'Start Recipe';
+    }
+
+    const keys = Object.keys(startedRecipes.cocktails).includes(idDrink);
+
+    if (keys) {
+      return 'Continue Recipe';
+    }
+    return 'Start Recipe';
+  };
+
+  const {
+    idDrink,
+    strInstructions,
+  } = drinksDetails[0];
+
   return (
     <div>
-      { drinksDetails.map((drink, index) => (
-        <div key={ index }>
-          <h1 data-testid="recipe-title">{ drink.strDrink }</h1>
-          <img
-            data-testid="recipe-photo"
-            src={ drink.strDrinkThumb }
-            alt="recipe-details"
-            className="main_photo"
-          />
-          <div>
-            <button
-              className="share-button"
-              type="button"
-              data-testid="share-btn"
-              onClick={ () => {
-                navigator.clipboard.writeText((window.location.href)
-                  .replace('/in-progress', ''));
-                toast('Link copied!');
-              } }
-            >
-              <img
-                src={ shareIcon }
-                alt="Share recipe"
-              />
-            </button>
-            <Toaster />
-            {/* Sugestão do Tonn Turma XP/Tribo B | Referência biblioteca Toaster: https://react-hot-toast.com/  */}
+      <DetailsComponent idRecipe={ idRecipe } drinkDetails={ drinksDetails[0] } />
+      <section>
+        { (pathname === `/drinks/${idDrink}/in-progress`)
+          ? (
+            <ol>
+              { ingredientFiltered.map((ingredient, indexIngredient) => (
+                <li
+                  key={ ingredient }
+                  data-testid={ `${indexIngredient}-ingredient-step` }
+                >
+                  <label htmlFor={ ingredient }>
+                    <input
+                      id={ ingredient }
+                      type="checkbox"
+                      name={ ingredient }
+                      value={ ingredient }
+                      checked={ inProgressIngredients.includes(ingredient) }
+                      onChange={ (event) => handleChangeDrink(event, idRecipe) }
+                    />
+                    { ingredient }
+                    { measureFiltered[indexIngredient] }
+                  </label>
+                </li>
+              ))}
+            </ol>)
+          : (
+            <div>
+              <ol>
+                { ingredientFiltered.map((ingredient, indexIngredient) => (
+                  <li
+                    key={ ingredient }
+                    data-testid={ `${indexIngredient}-ingredient-name-and-measure` }
+                  >
+                    { ingredient }
+                    { measureFiltered[indexIngredient] }
+                  </li>
+                ))}
+              </ol>
+            </div>
+          )}
+      </section>
+      <p
+        data-testid="instructions"
+      >
+        {strInstructions}
+      </p>
+      <div className="carousel-wrapper">
+        { foodsRecommendations.slice(0, SIX).map((foods, ii) => (
+          <div
+            key={ ii }
+            data-testid={ `${ii}-recomendation-card` }
+            className="recommendation_photo"
+          >
+            <h1 data-testid={ `${ii}-recomendation-title` }>{foods.strMeal }</h1>
+            <img
+              src={ foods.strMealThumb }
+              alt={ foods.strMeal }
+              width="200"
+              height="200"
+            />
           </div>
-          <input
-            className={ `favorite ${changeHeart && 'favorite--active'}` }
-            data-testid="favorite-btn"
-            src={ changeHeart ? blackHeartIcon : whiteHeartIcon }
-            alt="Favorite recipe"
-            type="image"
-            onClick={ () => {
-              favoritesDrinksRecipes(drinksDetails[0]);
-              toggleHeart();
+        ))}
+      </div>
+      { (pathname === `/drinks/${idDrink}/in-progress`)
+        ? (
+          <button
+            onClick={ () => handleFinishBtnDrink(drinksDetails[0]) }
+            data-testid="finish-recipe-btn"
+            type="button"
+            className="start-recipe"
+          >
+            Finish Recipe
+          </button>)
+        : (
+          <button
+            className="start-recipe"
+            onClick={ (event) => {
+              handleStartBtn();
+              handleChangeDrink(event, idRecipe);
             } }
-          />
-          <h2
-            data-testid="recipe-category"
+            data-testid="start-recipe-btn"
+            type="button"
+
           >
-            { drink.strAlcoholic }
-          </h2>
-          <section>
-            { (pathname === `/drinks/${drink.idDrink}/in-progress`)
-              ? (
-                <ol>
-                  { ingredientFiltered.map((ingredient, indexIngredient) => (
-                    <li
-                      key={ ingredient }
-                      data-testid={ `${indexIngredient}-ingredient-step` }
-                    >
-                      <label htmlFor={ ingredient }>
-                        <input
-                          id={ ingredient }
-                          type="checkbox"
-                          name={ ingredient }
-                          value={ ingredient }
-                          onChange={ (event) => handleChangeDrink(event, idRecipe) }
-                        />
-                        { ingredient }
-                        { measureFiltered[indexIngredient] }
-                      </label>
-                    </li>
-                  ))}
-                </ol>)
-              : (
-                <div>
-                  <ol>
-                    { ingredientFiltered.map((ingredient, indexIngredient) => (
-                      <li
-                        key={ ingredient }
-                        data-testid={ `${indexIngredient}-ingredient-name-and-measure` }
-                      >
-                        { ingredient }
-                        { measureFiltered[indexIngredient] }
-                      </li>
-                    ))}
-                  </ol>
-                </div>
-              )}
-          </section>
-          <p
-            data-testid="instructions"
-          >
-            {drink.strInstructions}
-          </p>
-          <div className="carousel-wrapper">
-            { foodsRecommendations.slice(0, SIX).map((foods, ii) => (
-              <div
-                key={ ii }
-                data-testid={ `${ii}-recomendation-card` }
-                className="recommendation_photo"
-              >
-                <h1 data-testid={ `${ii}-recomendation-title` }>{foods.strMeal }</h1>
-                <img
-                  src={ foods.strMealThumb }
-                  alt={ foods.strMeal }
-                  width="200"
-                  height="200"
-                />
-              </div>
-            ))}
-          </div>
-          { (pathname === `/drinks/${drink.idDrink}/in-progress`)
-            ? (
-              <button
-                onClick={ () => handleFinishBtnDrink(drinksDetails[0]) }
-                data-testid="finish-recipe-btn"
-                type="button"
-                className="start-recipe"
-              >
-                Finish Recipe
-              </button>)
-            : (
-              <button
-                onClick={ handleStartBtn }
-                data-testid="start-recipe-btn"
-                type="button"
-                className="start-recipe"
-              >
-                Start Recipe
-              </button>
-            )}
-        </div>
-      ))}
+            { verifyButton(idDrink) }
+          </button>
+        )}
     </div>
   );
 }

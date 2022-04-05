@@ -13,7 +13,6 @@ function DetailsOrProgressFoods(props) {
   const [foodDetails, setFoodDetails] = useState([]);
   const [drinksRecommendations, setDrinksRecommendations] = useState([]);
   const [inProgressIngredients, setInProgressIngredients] = useState([]);
-  const [recipes, setRecipes] = useState([]);
 
   const { match: { params: { id: idRecipe } }, history, location: { pathname } } = props;
 
@@ -47,8 +46,11 @@ function DetailsOrProgressFoods(props) {
   const SIX = 6;
 
   if (foodDetails.length === 0) return null;
+
   const ingredientFiltered = ingredientFilter(foodDetails);
+
   const measureFiltered = measureFilter(foodDetails);
+
   const videoId = convertVideo(foodDetails[0].strYoutube);
   const iframeMarkup = `https://www.youtube.com/embed/${videoId}`;
 
@@ -141,7 +143,9 @@ function DetailsOrProgressFoods(props) {
         <div
           key={ ii }
           data-testid={ `${ii}-recomendation-card` }
+          className="recommendation_photo"
         >
+          <h1 data-testid={ `${ii}-recomendation-title` }>{drink.strDrink }</h1>
           <img
             src={ drink.strDrinkThumb }
             alt={ drink.strGlass }
@@ -161,9 +165,9 @@ function DetailsOrProgressFoods(props) {
           </button>)
         : (
           <button
+            className="start-recipe"
             onClick={ (event) => {
               handleStartBtn();
-              setRecipes([...recipes, idMeal]);
               handleChangeFood(event, idRecipe);
             } }
             data-testid="start-recipe-btn"

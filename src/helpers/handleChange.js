@@ -23,14 +23,19 @@ export function handleChangeFood(event, idFood) {
 }
 
 export function handleChangeDrink(event, idDrink) {
-  const { checked, value } = event.target;
+  const { checked, value, type } = event.target;
+
+  const getProgress = getStorageProgress() || { cocktails: {
+    [idDrink]: [],
+  },
+  meals: {} };
+
+  if (type === 'button') {
+    getProgress.cocktails[idDrink] = [];
+    setStorageProgress(getProgress);
+  }
 
   if (checked) {
-    const getProgress = getStorageProgress() || { cocktails: {
-      [idDrink]: [],
-    },
-    meals: {} };
-
     getProgress.cocktails[idDrink] = (getProgress.cocktails[idDrink])
       ? [...getProgress.cocktails[idDrink], value]
       : [value];

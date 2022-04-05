@@ -7,9 +7,10 @@ import whiteHeartIcon from '../../images/whiteHeartIcon.svg';
 import '../../pages/css/detailsOrProgress.css';
 import { getStoragefavoritesRecipes } from '../../helpers/localStorage';
 import favoritesFoodsRecipes from '../../helpers/localStorageFood';
+import favoritesDrinksRecipes from '../../helpers/localStorageDrink';
 
 function DetailsComponent(props) {
-  const { foodDetails, idRecipe } = props;
+  const { foodDetails, drinkDetails, idRecipe } = props;
   const [changeHeart, setChangeHeart] = useState(false);
 
   const toggleHeart = () => {
@@ -24,20 +25,36 @@ function DetailsComponent(props) {
     toggleHeart();
   }, []);
 
+  function favoriteRecipe(favorite) {
+    const { strMeal } = foodDetails;
+    const key = Object.keys(favorite);
+
+    if (key.includes(strMeal)) {
+      return favoritesFoodsRecipes(favorite);
+    }
+    return favoritesDrinksRecipes(favorite);
+  }
+
   const {
     strMeal,
     strMealThumb,
     strCategory,
   } = foodDetails;
 
+  const {
+    strDrink,
+    strDrinkThumb,
+    strAlcoholic,
+  } = drinkDetails;
+
   return (
     <div>
 
-      <h1 data-testid="recipe-title">{ strMeal }</h1>
+      <h1 data-testid="recipe-title">{ strMeal || strDrink }</h1>
 
       <img
         data-testid="recipe-photo"
-        src={ strMealThumb }
+        src={ strMealThumb || strDrinkThumb }
         alt="recipe-details"
       />
 
@@ -68,7 +85,7 @@ function DetailsComponent(props) {
         alt="Favorite recipe"
         type="image"
         onClick={ () => {
-          favoritesFoodsRecipes(foodDetails);
+          favoriteRecipe(foodDetails !== {} || drinkDetails);
           toggleHeart();
         } }
       />
@@ -76,7 +93,7 @@ function DetailsComponent(props) {
       <h2
         data-testid="recipe-category"
       >
-        { strCategory }
+        { strCategory || strAlcoholic }
       </h2>
 
     </div>
@@ -84,8 +101,14 @@ function DetailsComponent(props) {
 }
 
 DetailsComponent.propTypes = {
-  foodDetails: PropTypes.objectOf(PropTypes.string).isRequired,
+  foodDetails: PropTypes.objectOf(PropTypes.string),
+  drinkDetails: PropTypes.objectOf(PropTypes.string),
   idRecipe: PropTypes.string.isRequired,
+};
+
+DetailsComponent.defaultProps = {
+  foodDetails: {},
+  drinkDetails: {},
 };
 
 export default DetailsComponent;
