@@ -4,21 +4,17 @@ import { getStorageProgress,
 export function handleChangeFood(event, idFood) {
   const { checked, value, type } = event.target;
 
-  if (type === 'button') {
-    const getProgress = getStorageProgress() || { meals: {
-      [idFood]: [],
-    },
-    cocktails: {} };
+  const getProgress = getStorageProgress() || { meals: {
+    [idFood]: [],
+  },
+  cocktails: {} };
 
-    const includes = getProgress.meals[idFood];
+  if (type === 'button') {
+    getProgress.meals[idFood] = [];
+    setStorageProgress(getProgress);
   }
 
   if (checked) {
-    const getProgress = getStorageProgress() || { meals: {
-      [idFood]: [],
-    },
-    cocktails: {} };
-
     getProgress.meals[idFood] = (getProgress.meals[idFood])
       ? [...getProgress.meals[idFood], value]
       : [value];

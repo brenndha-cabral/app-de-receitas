@@ -15,17 +15,6 @@ function DetailsOrProgressFoods(props) {
   const [inProgressIngredients, setInProgressIngredients] = useState([]);
   const [recipes, setRecipes] = useState([]);
 
-  /*   const [isChecked, setIsChecked] = useState([
-    checkbox1 = false,
-    checkbox2 = false,
-    checkbox3 = true,
-    checkbox4 = false,
-  ]);
-
-  useEffect(() => {
-    handleChangeFood();
-  }, [isChecked]) */
-
   const { match: { params: { id: idRecipe } }, history, location: { pathname } } = props;
 
   useEffect(() => {
@@ -70,8 +59,6 @@ function DetailsOrProgressFoods(props) {
 
   const verifyButton = (idMeal) => {
     const startedRecipes = getStorageProgress();
-
-    console.log(startedRecipes);
 
     if (startedRecipes === null) {
       return 'Start Recipe';
