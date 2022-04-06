@@ -1,0 +1,91 @@
+@import url('https://fonts.googleapis.com/css2?family=Lobster&display=swap');
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* @media screen and (max-width: 360px) and (max-height: 640px) { */
+  .container-login {
+    align-items: center;
+    background-color: #FF2253;
+    display: flex;
+    height: 640px;
+    width: 360px;
+    flex-direction: column;
+  }
+
+  .title-login {
+    color: #fff;
+    padding-top: 50px;
+    padding-bottom: 20px;
+    text-align: center;
+    font-size: 35px;
+    font-family: 'Lobster', cursive;
+  }
+
+  .form-login {
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-top: 20px;
+  }
+
+  .label-email {
+    padding-left: 3px;
+    color: #fff;
+    
+  }
+
+  .label-password {
+    padding-left: 3px;
+    color: #fff;
+  }
+
+  .email {
+    border-radius: 5px;
+    border: none;
+    box-shadow: 2px 2px 1px #00000057;
+    font-size: 20px;
+    width: 100%;
+    height: 45px;
+    margin-bottom: 20px;
+    margin-top: 2px;
+    padding-left: 5px;
+  }
+
+  .password {
+    border-radius: 5px;
+    border: none;
+    box-shadow: 2px 2px 1px #00000057;
+    height: 40px;
+    margin-bottom: 30px;
+    height: 45px;
+    font-size: 20px;
+    margin-top: 2px;
+    width: 100%;
+    padding-left: 5px;
+  }
+
+  .button-login {
+    border: none;
+    border-radius: 5px;
+    box-shadow: 2px 2px 1px #00000057;
+    background-color: #fff;
+    color: #000000;
+    font-size: 20px;
+    height: 40px;
+    width: 100%;
+    cursor: pointer;
+  }
+
+  .button-login:disabled {
+    background-color: #E0E0E0;
+    color: #828282;
+  }
+
+  .chef-hat {
+    width: 150px;
+    margin-top: 80px;
+  }
+/* } */
