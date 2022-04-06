@@ -96,8 +96,8 @@ function Header(props) {
   };
 
   return (
-    <header>
-      <div>
+    <header className="container-header">
+      <div className="sub-container-header">
         <button
           className="profile-picture"
           type="button"
@@ -109,7 +109,7 @@ function Header(props) {
             alt="Profile"
           />
         </button>
-        <h1 data-testid="page-title">{ title }</h1>
+        <h1 className="title-header" data-testid="page-title">{ title }</h1>
         { searchButtonIsVisible && (
           <button
             className="search-button"
@@ -125,46 +125,54 @@ function Header(props) {
         )}
       </div>
       { inputIsVisible && (
-        <div>
+        <div className="radios-buttons-header">
           <input
             id="search"
             name="search"
             type="search"
+            className="search-input-header"
+            placeholder="Type here..."
             onChange={ handleChange }
             data-testid="search-input"
           />
-          <label htmlFor="ingredient">
-            <input
-              id="ingredient"
-              name="category"
-              type="radio"
-              onClick={ handleFilter }
-              data-testid="ingredient-search-radio"
-            />
-            Ingredient
-          </label>
-          <label htmlFor="name">
-            <input
-              id="name"
-              name="category"
-              type="radio"
-              onClick={ handleFilter }
-              data-testid="name-search-radio"
-            />
-            Name
-          </label>
-          <label htmlFor="first-letter">
-            <input
-              id="first-letter"
-              name="category"
-              type="radio"
-              onClick={ handleFilter }
-              data-testid="first-letter-search-radio"
-            />
-            First Letter
-          </label>
+          <div className="radios-container">
+            <label htmlFor="ingredient">
+              <input
+                id="ingredient"
+                name="category"
+                type="radio"
+                onClick={ handleFilter }
+                data-testid="ingredient-search-radio"
+              />
+              {' '}
+              Ingredient
+            </label>
+            <label htmlFor="name">
+              <input
+                id="name"
+                name="category"
+                type="radio"
+                onClick={ handleFilter }
+                data-testid="name-search-radio"
+              />
+              {' '}
+              Name
+            </label>
+            <label htmlFor="first-letter">
+              <input
+                id="first-letter"
+                name="category"
+                type="radio"
+                onClick={ handleFilter }
+                data-testid="first-letter-search-radio"
+              />
+              {' '}
+              First Letter
+            </label>
+          </div>
           <button
             type="button"
+            className="search-button-header"
             onClick={ searchByClick }
             data-testid="exec-search-btn"
           >
