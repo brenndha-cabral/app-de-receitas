@@ -7,8 +7,6 @@ export function handleChangeFood(type, idFood, ingredients) {
   },
   cocktails: {} };
 
-  console.log(getProgress);
-
   if (type === 'button') {
     getProgress.meals[idFood] = [];
     setStorageProgress(getProgress);
@@ -20,9 +18,7 @@ export function handleChangeFood(type, idFood, ingredients) {
   }
 }
 
-export function handleChangeDrink(event, idDrink) {
-  const { checked, value, type } = event.target;
-
+export function handleChangeDrink(type, idDrink, ingredients) {
   const getProgress = getStorageProgress() || { cocktails: {
     [idDrink]: [],
   },
@@ -33,10 +29,8 @@ export function handleChangeDrink(event, idDrink) {
     setStorageProgress(getProgress);
   }
 
-  if (checked) {
-    getProgress.cocktails[idDrink] = (getProgress.cocktails[idDrink])
-      ? [...getProgress.cocktails[idDrink], value]
-      : [value];
+  if (type === 'localIngredients') {
+    getProgress.cocktails[idDrink] = ingredients;
     setStorageProgress(getProgress);
   }
 }

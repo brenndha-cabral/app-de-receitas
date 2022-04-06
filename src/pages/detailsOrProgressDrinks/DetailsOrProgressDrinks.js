@@ -11,9 +11,18 @@ import DetailsComponent from '../../components/detailsComponents/DetailsComponen
 function DetailsOrProgressDrinks(props) {
   const [drinksDetails, setDrinksDetails] = useState([]);
   const [foodsRecommendations, setFoodsRecommendations] = useState([]);
-  const [inProgressIngredients, setInProgressIngredients] = useState([]);
+  const [localIngredients, setLocalIngredients] = useState([]);
 
   const { match: { params: { id: idRecipe } }, history, location: { pathname } } = props;
+
+  function handleLocalIngredients({ target }) {
+    const { value } = target;
+
+    setLocalIngredients((prev) => {
+      if (prev.includes(value)) return prev.filter((item) => item !== value);
+      return [...prev, value];
+    });
+  }
 
   useEffect(() => {
     document.title = 'All Tasty | Details Drink';
@@ -36,11 +45,15 @@ function DetailsOrProgressDrinks(props) {
     }
 
     if (Object.keys(progressRecipes.cocktails).includes(idRecipe)) {
-      setInProgressIngredients(progressRecipes.cocktails[idRecipe]);
+      setLocalIngredients(progressRecipes.cocktails[idRecipe]);
     }
   }
 
   useEffect(() => { getInProgressIngredients(); }, []);
+
+  useEffect(() => {
+    handleChangeDrink('localIngredients', idRecipe, localIngredients);
+  }, [localIngredients]);
 
   const SIX = 6;
 
@@ -93,8 +106,8 @@ function DetailsOrProgressDrinks(props) {
                       type="checkbox"
                       name={ ingredient }
                       value={ ingredient }
-                      checked={ inProgressIngredients.includes(ingredient) }
-                      onChange={ (event) => handleChangeDrink(event, idRecipe) }
+                      checked={ localIngredients.includes(ingredient) }
+                      onChange={ (event) => handleLocalIngredients(event) }
                     />
                     { ingredient }
                     { measureFiltered[indexIngredient] }
@@ -143,19 +156,23 @@ function DetailsOrProgressDrinks(props) {
       { (pathname === `/drinks/${idDrink}/in-progress`)
         ? (
           <button
-            onClick={ () => handleFinishBtnDrink(drinksDetails[0]) }
+            onClick={ () => {
+              handleFinishBtnDrink(drinksDetails[0]);
+              history.push('/done-recipes');
+            } }
             data-testid="finish-recipe-btn"
             type="button"
             className="start-recipe"
+            disabled={ localIngredients.length < ingredientFiltered.length }
           >
             Finish Recipe
           </button>)
         : (
           <button
             className="start-recipe"
-            onClick={ (event) => {
+            onClick={ () => {
               handleStartBtn();
-              handleChangeDrink(event, idRecipe);
+              handleChangeDrink('button', idRecipe);
             } }
             data-testid="start-recipe-btn"
             type="button"

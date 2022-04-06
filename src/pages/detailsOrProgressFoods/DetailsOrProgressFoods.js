@@ -12,35 +12,18 @@ import DetailsComponent from '../../components/detailsComponents/DetailsComponen
 function DetailsOrProgressFoods(props) {
   const [foodDetails, setFoodDetails] = useState([]);
   const [drinksRecommendations, setDrinksRecommendations] = useState([]);
-  const [inProgressIngredients, setInProgressIngredients] = useState([]);
+  const [localIngredients, setLocalIngredients] = useState([]);
 
   const { match: { params: { id: idRecipe } }, history, location: { pathname } } = props;
 
   function handleLocalIngredients({ target }) {
     const { value } = target;
 
-    setInProgressIngredients((prev) => {
+    setLocalIngredients((prev) => {
       if (prev.includes(value)) return prev.filter((item) => item !== value);
       return [...prev, value];
     });
   }
-
-  function getInProgressIngredients() {
-    const progressRecipes = getStorageProgress();
-    const inProgressArr = progressRecipes.meals[idRecipe];
-
-    setInProgressIngredients(inProgressArr);
-  }
-
-  useEffect(() => {
-    console.log('meuEffect');
-    if (pathname === `/foods/${idRecipe}/in-progress`) {
-      console.log('meu effect no pathname');
-      handleChangeFood('localIngredients', idRecipe, inProgressIngredients);
-    }
-  }, [inProgressIngredients]);
-
-  /*   useEffect(() => { getInProgressIngredients(); }, []); */
 
   useEffect(() => {
     document.title = 'All Tasty | Details Food';
@@ -55,6 +38,24 @@ function DetailsOrProgressFoods(props) {
   },
   [idRecipe]);
 
+  function getInProgressIngredients() {
+    const progressRecipes = getStorageProgress();
+
+    if (!progressRecipes) {
+      return null;
+    }
+
+    if (Object.keys(progressRecipes.meals).includes(idRecipe)) {
+      setLocalIngredients(progressRecipes.meals[idRecipe]);
+    }
+  }
+
+  useEffect(() => { getInProgressIngredients(); }, []);
+
+  useEffect(() => {
+    handleChangeFood('localIngredients', idRecipe, localIngredients);
+  }, [localIngredients]);
+
   const SIX = 6;
 
   if (foodDetails.length === 0) return null;
@@ -65,6 +66,11 @@ function DetailsOrProgressFoods(props) {
 
   const videoId = convertVideo(foodDetails[0].strYoutube);
   const iframeMarkup = `https://www.youtube.com/embed/${videoId}`;
+
+  function handleStartBtn() {
+    const { idMeal } = foodDetails[0];
+    history.push(`/foods/${idMeal}/in-progress`);
+  }
 
   const verifyButton = (idMeal) => {
     const startedRecipes = getStorageProgress();
@@ -80,18 +86,6 @@ function DetailsOrProgressFoods(props) {
     }
     return 'Start Recipe';
   };
-
-  function handleStartBtn() {
-    const { idMeal } = foodDetails[0];
-
-    if (verifyButton(idMeal) === 'Start Recipe') {
-      handleChangeFood('button', idRecipe);
-    } else {
-      getInProgressIngredients();
-    }
-
-    history.push(`/foods/${idMeal}/in-progress`);
-  }
 
   const {
     idMeal,
@@ -117,7 +111,7 @@ function DetailsOrProgressFoods(props) {
                       type="checkbox"
                       name={ ingredient }
                       value={ ingredient }
-                      checked={ inProgressIngredients.includes(ingredient) }
+                      checked={ localIngredients.includes(ingredient) }
                       onChange={ (event) => {
                         handleLocalIngredients(event);
                       } }
@@ -184,17 +178,24 @@ function DetailsOrProgressFoods(props) {
       { (pathname === `/foods/${idMeal}/in-progress`)
         ? (
           <button
-            onClick={ () => handleFinishBtnFood(foodDetails[0]) }
+            onClick={ () => {
+              handleFinishBtnFood(foodDetails[0]);
+              history.push('/done-recipes');
+            } }
             data-testid="finish-recipe-btn"
             type="button"
             className="start-recipe"
+            disabled={ localIngredients.length < ingredientFiltered.length }
           >
             Finish Recipe
           </button>)
         : (
           <button
             className="start-recipe"
-            onClick={ () => handleStartBtn() }
+            onClick={ () => {
+              handleStartBtn();
+              handleChangeFood('button', idRecipe);
+            } }
             data-testid="start-recipe-btn"
             type="button"
 
