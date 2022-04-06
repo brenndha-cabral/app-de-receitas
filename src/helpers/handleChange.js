@@ -1,34 +1,36 @@
 import { getStorageProgress,
   setStorageProgress } from './localStorage';
 
-export function handleChangeFood(event, idFood) {
-  const { checked, value } = event.target;
+export function handleChangeFood(type, idFood, ingredients) {
+  const getProgress = getStorageProgress() || { meals: {
+    [idFood]: [],
+  },
+  cocktails: {} };
 
-  if (checked) {
-    const getProgress = getStorageProgress() || { meals: {
-      [idFood]: [],
-    },
-    cocktails: {} };
+  if (type === 'button') {
+    getProgress.meals[idFood] = [];
+    setStorageProgress(getProgress);
+  }
 
-    getProgress.meals[idFood] = (getProgress.meals[idFood])
-      ? [...getProgress.meals[idFood], value]
-      : [value];
+  if (type === 'localIngredients') {
+    getProgress.meals[idFood] = ingredients;
     setStorageProgress(getProgress);
   }
 }
 
-export function handleChangeDrink(event, idDrink) {
-  const { checked, value } = event.target;
+export function handleChangeDrink(type, idDrink, ingredients) {
+  const getProgress = getStorageProgress() || { cocktails: {
+    [idDrink]: [],
+  },
+  meals: {} };
 
-  if (checked) {
-    const getProgress = getStorageProgress() || { cocktails: {
-      [idDrink]: [],
-    },
-    meals: {} };
+  if (type === 'button') {
+    getProgress.cocktails[idDrink] = [];
+    setStorageProgress(getProgress);
+  }
 
-    getProgress.cocktails[idDrink] = (getProgress.cocktails[idDrink])
-      ? [...getProgress.cocktails[idDrink], value]
-      : [value];
+  if (type === 'localIngredients') {
+    getProgress.cocktails[idDrink] = ingredients;
     setStorageProgress(getProgress);
   }
 }
