@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import validateForm from '../../helpers/validateForm';
 import { setInfoUser } from '../../redux/actions';
+import '../css/login.css';
+import imageLogin from '../../images/image-login.png';
 
 function Login(props) {
   useEffect(() => {
@@ -36,26 +38,28 @@ function Login(props) {
   const { loginInformations, history } = props;
 
   return (
-    <section>
-      <h1>login</h1>
-      <form>
-        <label htmlFor="email">
-          E-mail:
+    <section className="container-login">
+      <h1 className="title-login">All Tasty</h1>
+      <form className="form-login">
+        <label className="label-email" htmlFor="email">
           <input
             id="email"
             name="email"
             type="email"
+            className="email"
+            placeholder="Email"
             required
             onChange={ handleChange }
             data-testid="email-input"
           />
         </label>
-        <label htmlFor="password">
-          Password:
+        <label className="label-password" htmlFor="password">
           <input
             id="password"
             name="password"
             type="password"
+            className="password"
+            placeholder="Password"
             required
             onChange={ handleChange }
             data-testid="password-input"
@@ -64,6 +68,7 @@ function Login(props) {
 
         <button
           type="button"
+          className="button-login"
           disabled={ !validateForm(formData) }
           onClick={ (event) => {
             loginInformations(formData);
@@ -76,6 +81,7 @@ function Login(props) {
           Login
         </button>
       </form>
+      <img className="chef-hat" src={ imageLogin } alt="chef-hat" />
     </section>
   );
 }
