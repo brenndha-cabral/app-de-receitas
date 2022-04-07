@@ -39,16 +39,14 @@ function DetailsComponent(props) {
 
   return (
     <div>
-
-      <h1 data-testid="recipe-title">{ strMeal || strDrink }</h1>
-
       <img
+        className="main_photo"
         data-testid="recipe-photo"
         src={ strMealThumb || strDrinkThumb }
         alt="recipe-details"
       />
-
-      <div>
+      <div className="container-share-favorite">
+        <h1 data-testid="recipe-title">{ strMeal || strDrink }</h1>
         <button
           className="share-button"
           type="button"
@@ -66,25 +64,26 @@ function DetailsComponent(props) {
         </button>
         {/* Sugestão do Tonn Turma XP/Tribo B | Referência biblioteca Toaster: https://react-hot-toast.com/  */}
         <Toaster />
+
+        <input
+          className={ `favorite ${changeHeart && 'favorite--active'}` }
+          data-testid="favorite-btn"
+          src={ changeHeart ? blackHeartIcon : whiteHeartIcon }
+          alt="Favorite recipe"
+          type="image"
+          onClick={ () => {
+            if (strMeal) {
+              favoritesFoodsRecipes(foodDetails);
+            } else {
+              favoritesDrinksRecipes(drinkDetails);
+            }
+            toggleHeart();
+          } }
+        />
       </div>
 
-      <input
-        className={ `favorite ${changeHeart && 'favorite--active'}` }
-        data-testid="favorite-btn"
-        src={ changeHeart ? blackHeartIcon : whiteHeartIcon }
-        alt="Favorite recipe"
-        type="image"
-        onClick={ () => {
-          if (strMeal) {
-            favoritesFoodsRecipes(foodDetails);
-          } else {
-            favoritesDrinksRecipes(drinkDetails);
-          }
-          toggleHeart();
-        } }
-      />
-
       <h2
+        className="category"
         data-testid="recipe-category"
       >
         { strCategory || strAlcoholic }

@@ -99,7 +99,7 @@ function DetailsOrProgressFoods(props) {
       <section>
         { (pathname === `/foods/${idMeal}/in-progress`)
           ? (
-            <ol>
+            <ul>
               { ingredientFiltered.map((ingredient, indexIngredient) => (
                 <li
                   key={ ingredient }
@@ -117,37 +117,42 @@ function DetailsOrProgressFoods(props) {
                       } }
                     />
                     { ingredient }
-                    { measureFiltered[indexIngredient] }
+                    <span>{ measureFiltered[indexIngredient] }</span>
                   </label>
                 </li>
               ))}
-            </ol>)
+            </ul>)
           : (
-            <div>
-              <ol>
+            <div className="ingredient-list">
+              <h3>Ingredients</h3>
+              <ul>
                 { ingredientFiltered.map((ingredient, indexIngredient) => (
                   <li
+                    className="ingredients"
                     key={ ingredient }
                     data-testid={ `${indexIngredient}-ingredient-name-and-measure` }
                   >
-                    { ingredient }
-                    { measureFiltered[indexIngredient] }
+                    <span>{ ingredient }</span>
+                    <span className="measure">{ measureFiltered[indexIngredient] }</span>
                   </li>
                 ))}
-              </ol>
+              </ul>
             </div>
           )}
       </section>
+      <h3 className="instructions-h3">Instructions</h3>
       <p
+        className="instructions"
         data-testid="instructions"
       >
         {strInstructions}
       </p>
       { pathname === `/foods/${idMeal}`
           && (
-            <div data-testid="video">
+            <div data-testid="video" className="video">
+              <h3 className="video-h3">Video</h3>
               <iframe
-                width="560"
+                width="100%"
                 height="315"
                 src={ iframeMarkup }
                 title="YouTube video player"
@@ -158,6 +163,7 @@ function DetailsOrProgressFoods(props) {
               />
             </div>
           )}
+      <h3 className="recommended-h3">Recommended</h3>
       <div className="carousel-wrapper">
         { drinksRecommendations.slice(0, SIX).map((drink, ii) => (
           <div
@@ -165,13 +171,19 @@ function DetailsOrProgressFoods(props) {
             data-testid={ `${ii}-recomendation-card` }
             className="recommendation_photo"
           >
-            <h1 data-testid={ `${ii}-recomendation-title` }>{drink.strDrink }</h1>
             <img
               src={ drink.strDrinkThumb }
               alt={ drink.strGlass }
-              width="200"
-              height="200"
             />
+            <h3 className="recomendation-alcoholic">
+              { drink.strAlcoholic }
+            </h3>
+            <h3
+              className="recomendation-title"
+              data-testid={ `${ii}-recomendation-title` }
+            >
+              {drink.strDrink }
+            </h3>
           </div>
         ))}
       </div>
@@ -184,14 +196,14 @@ function DetailsOrProgressFoods(props) {
             } }
             data-testid="finish-recipe-btn"
             type="button"
-            className="start-recipe"
+            className="start-continue-finish-recipe"
             disabled={ localIngredients.length < ingredientFiltered.length }
           >
             Finish Recipe
           </button>)
         : (
           <button
-            className="start-recipe"
+            className="start-continue-finish-recipe"
             onClick={ () => {
               handleStartBtn();
               handleChangeFood('button', idRecipe);
