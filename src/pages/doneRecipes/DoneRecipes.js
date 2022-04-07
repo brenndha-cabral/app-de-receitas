@@ -87,11 +87,105 @@ function DoneRecipes(props) {
 
         if (type === 'food') {
           return (
-            <section className="container-card-done-recipe" key={ id }>
-              <div className="card-done-recipe">
+            <section className="card-container">
+              <div key={ id } className="info-container">
+                <Toaster />
+
+                <div className="info-sub-container">
+                  <p
+                    className="recipe-subtitle"
+                    data-testid={ `${index}-horizontal-top-text` }
+                  >
+                    { ` ${nationality} - ${category}` }
+                  </p>
+                  <button
+                    className="recipe-title-btn"
+                    type="button"
+                    onClick={ () => history.push(`/foods/${id}`) }
+                    data-testid={ `${index}-horizontal-name` }
+                  >
+                    { name }
+                  </button>
+
+                  <p
+                    data-testid={ `${index}-horizontal-done-date` }
+                  >
+                    { `Done in: ${doneDate}` }
+                  </p>
+                  <div className="tags-container">
+                    { tags.map((tag) => (
+                      <p
+                        className="tags"
+                        key={ index }
+                        data-testid={ `${index}-${tag}-horizontal-tag` }
+                      >
+                        { tag }
+                      </p>
+                    )) }
+                  </div>
+                </div>
+
+                <div className="share-icon-container">
+                  <input
+                    className="share-icon"
+                    type="image"
+                    src={ shareIcon }
+                    onClick={ () => {
+                      handleCopy(id, type);
+                      toast('Link copied!');
+                    } }
+                    data-testid={ `${index}-horizontal-share-btn` }
+                    alt="recipe"
+                  />
+                </div>
+
+              </div>
+
+              <input
+                className="recipe-image"
+                type="image"
+                src={ image }
+                onClick={ () => history.push(`/foods/${id}`) }
+                alt="share image btn"
+                data-testid={ `${index}-horizontal-image` }
+              />
+            </section>
+          );
+        }
+
+        return (
+          <section className="card-container" key={ id }>
+            <div className="info-container">
+              <Toaster />
+
+              <div className="info-sub-container">
+                <p
+                  className="recipe-subtitle"
+                  data-testid={ `${index}-horizontal-top-text` }
+                >
+                  { alcoholicOrNot }
+                </p>
+
+                <button
+                  className="recipe-title-btn"
+                  type="button"
+                  onClick={ () => history.push(`/drinks/${id}`) }
+                  data-testid={ `${index}-horizontal-name` }
+                >
+                  { name }
+                </button>
+
+                <p
+                  data-testid={ `${index}-horizontal-done-date` }
+                >
+                  { `Done in: ${doneDate}` }
+                </p>
+              </div>
+
+              <div className="share-icon-container">
                 <input
-                  className="search-input"
                   type="image"
+                  className="share-icon"
                   src={ shareIcon }
                   onClick={ () => {
                     handleCopy(id, type);
@@ -100,86 +194,18 @@ function DoneRecipes(props) {
                   data-testid={ `${index}-horizontal-share-btn` }
                   alt="recipe"
                 />
-                <Toaster />
-                <p
-                  data-testid={ `${index}-horizontal-top-text` }
-                >
-                  { ` ${nationality} - ${category}` }
-                </p>
-                <button
-                  type="button"
-                  onClick={ () => history.push(`/foods/${id}`) }
-                  data-testid={ `${index}-horizontal-name` }
-                >
-                  { name }
-                </button>
-                <p
-                  data-testid={ `${index}-horizontal-done-date` }
-                >
-                  { `Done in: ${doneDate}` }
-                </p>
-                { tags.map((tag) => (
-                  <p
-                    key={ index }
-                    data-testid={ `${index}-${tag}-horizontal-tag` }
-                  >
-                    { tag }
-                  </p>
-                )) }
               </div>
-              <div className="card-done-image">
-                <input
-                  type="image"
-                  src={ image }
-                  onClick={ () => history.push(`/foods/${id}`) }
-                  alt="share image btn"
-                  data-testid={ `${index}-horizontal-image` }
-                />
-              </div>
-            </section>
-          );
-        }
-
-        return (
-          <section className="container-card-done-recipe" key={ id }>
-            <div className="card-done-recipe">
-              <input
-                type="image"
-                src={ shareIcon }
-                onClick={ () => {
-                  handleCopy(id, type);
-                  toast('Link copied!');
-                } }
-                data-testid={ `${index}-horizontal-share-btn` }
-                alt="recipe"
-              />
-              <Toaster />
-              <p
-                data-testid={ `${index}-horizontal-top-text` }
-              >
-                { alcoholicOrNot }
-              </p>
-              <button
-                type="button"
-                onClick={ () => history.push(`/drinks/${id}`) }
-                data-testid={ `${index}-horizontal-name` }
-              >
-                { name }
-              </button>
-              <p
-                data-testid={ `${index}-horizontal-done-date` }
-              >
-                { `Done in: ${doneDate}` }
-              </p>
-              <input
-                type="image"
-                src={ image }
-                onClick={ () => history.push(`/drinks/${id}`) }
-                style={ { width: '100%' } }
-                alt="share image btn"
-                data-testid={ `${index}-horizontal-image` }
-              />
             </div>
+
+            <input
+              className="recipe-image"
+              type="image"
+              src={ image }
+              onClick={ () => history.push(`/drinks/${id}`) }
+              alt="share image btn"
+              data-testid={ `${index}-horizontal-image` }
+            />
+
           </section>
         );
       }) }
