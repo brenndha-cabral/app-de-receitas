@@ -180,3 +180,19 @@
 .ingredients-h3 {
   padding-left: 7px;
 }
+
+.ingredients-drinks:before {
+  color: #ff2253;
+  content: '• ';
+  font-size: 20px;
+}
+
+.ingredients-drinks {
+  display: grid;
+  grid-template-columns: 20px 1fr 1fr;
+}
+
+.measure-drink {
+  padding-right: 7px;
+  grid-column: 4;
+}
