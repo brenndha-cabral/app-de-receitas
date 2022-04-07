@@ -17,7 +17,6 @@ function Explore() {
         type="button"
         onClick={ () => history.push('/explore/foods') }
         data-testid="explore-foods"
-
       >
         Explore Foods
       </button>
@@ -27,7 +26,6 @@ function Explore() {
         data-testid="explore-drinks"
       >
         Explore Drinks
-
       </button>
       <Footer />
     </div>

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import toast, { Toaster } from 'react-hot-toast';
 import copy from 'clipboard-copy';
 import Header from '../../components/header/Header';
 import shareIcon from '../../images/shareIcon.svg';
@@ -46,8 +47,7 @@ function DoneRecipes(props) {
     <div>
       <Header searchButtonIsVisible={ false } title="Done Recipes" />
 
-      { isVisible && <p>Link copied!</p> }
-
+      { isVisible && <p>teste</p> }
       <button
         value="All"
         type="button"
@@ -139,10 +139,14 @@ function DoneRecipes(props) {
             <input
               type="image"
               src={ shareIcon }
-              onClick={ () => handleCopy(id, type) }
+              onClick={ () => {
+                handleCopy(id, type);
+                toast('Link copied!');
+              } }
               data-testid={ `${index}-horizontal-share-btn` }
               alt="recipe"
             />
+            <Toaster />
             <p
               data-testid={ `${index}-horizontal-top-text` }
             >

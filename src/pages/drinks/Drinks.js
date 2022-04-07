@@ -75,17 +75,19 @@ function Drinks(props) {
         {
           (search === '')
         && (
-          <section>
+          <section className="container-buttons-categories">
             <button
+              className="buttons-categories"
               type="button"
               data-testid="All-category-filter"
               onClick={ handleButton }
             >
-              ALL
+              All
             </button>
             {
               buttons.slice(0, SHOW_NUMBER_BUTTOS).map(({ strCategory }, index) => (
                 <button
+                  className="buttons-categories"
                   type="button"
                   key={ strCategory }
                   data-testid={ `${strCategory}-category-filter` }
@@ -101,30 +103,33 @@ function Drinks(props) {
           </section>
         )
         }
-        {
-          results.map(({ strDrinkThumb, strDrink, idDrink }, index) => (
-            <div
-              key={ strDrink }
-              data-testid={ `${index}-recipe-card` }
-            >
-              <button
-                type="button"
-                onClick={ () => history.push(`/drinks/${idDrink}`) }
+        <section className="container-recipe-card">
+          {
+            results.map(({ strDrinkThumb, strDrink, idDrink }, index) => (
+              <div
+                key={ strDrink }
+                data-testid={ `${index}-recipe-card` }
               >
-                <img
-                  data-testid={ `${index}-card-img` }
-                  src={ strDrinkThumb }
-                  alt="drinks"
-                />
-                <h3
-                  data-testid={ `${index}-card-name` }
+                <button
+                  className="recipe-card"
+                  type="button"
+                  onClick={ () => history.push(`/drinks/${idDrink}`) }
                 >
-                  { strDrink }
-                </h3>
-              </button>
-            </div>
-          ))
-        }
+                  <img
+                    data-testid={ `${index}-card-img` }
+                    src={ strDrinkThumb }
+                    alt="drinks"
+                  />
+                  <h3
+                    data-testid={ `${index}-card-name` }
+                  >
+                    { strDrink }
+                  </h3>
+                </button>
+              </div>
+            ))
+          }
+        </section>
       </section>
       <Footer />
     </section>

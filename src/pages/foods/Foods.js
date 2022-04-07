@@ -9,6 +9,7 @@ import {
 } from '../../services/requestApi';
 import Header from '../../components/header/Header';
 import Footer from '../../components/footer/Footer';
+import '../css/buttons.css';
 
 function Foods(props) {
   useEffect(() => {
@@ -75,17 +76,19 @@ function Foods(props) {
         {
           (search === '')
         && (
-          <section>
+          <section className="container-buttons-categories">
             <button
+              className="buttons-categories"
               type="button"
               data-testid="All-category-filter"
               onClick={ handleButton }
             >
-              ALL
+              All
             </button>
             {
               buttons.slice(0, SHOW_NUMBER_BUTTOS).map(({ strCategory }, index) => (
                 <button
+                  className="buttons-categories"
                   type="button"
                   key={ strCategory }
                   value={ strCategory }
@@ -102,30 +105,33 @@ function Foods(props) {
           </section>
         )
         }
-        {
-          results.map(({ strMealThumb, strMeal, idMeal }, index) => (
-            <div
-              data-testid={ `${index}-recipe-card` }
-              key={ strMeal }
-            >
-              <button
-                type="button"
-                onClick={ () => history.push(`/foods/${idMeal}`) }
+        <section className="container-recipe-card">
+          {
+            results.map(({ strMealThumb, strMeal, idMeal }, index) => (
+              <div
+                data-testid={ `${index}-recipe-card` }
+                key={ strMeal }
               >
-                <img
-                  data-testid={ `${index}-card-img` }
-                  src={ strMealThumb }
-                  alt="drinks"
-                />
-                <h3
-                  data-testid={ `${index}-card-name` }
+                <button
+                  className="recipe-card"
+                  type="button"
+                  onClick={ () => history.push(`/foods/${idMeal}`) }
                 >
-                  { strMeal }
-                </h3>
-              </button>
-            </div>
-          ))
-        }
+                  <img
+                    data-testid={ `${index}-card-img` }
+                    src={ strMealThumb }
+                    alt="drinks"
+                  />
+                  <h3
+                    data-testid={ `${index}-card-name` }
+                  >
+                    { strMeal }
+                  </h3>
+                </button>
+              </div>
+            ))
+          }
+        </section>
       </section>
       <Footer />
     </section>

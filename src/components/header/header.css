@@ -4,13 +4,15 @@
 }
 
 .container-header {
-  background-color: #FF2253;
+  background-color: #ff2253;
   width: 100vw;
 }
 
 .title-header {
-  color: #fff;
+  color: white;
   font-size: 35px;
+  grid-column: 2/3;
+  text-align: center;
 }
 
 .radios-buttons-header {
@@ -19,47 +21,46 @@
 }
 
 .radios-container {
+  color: #0000;
   display: flex;
-  justify-content: space-between;
-  width: 95%;
-  margin: auto;
-  margin-top: 10px;
-  margin-bottom: 10px;
-  color: #000000;
-  font-weight: bold;
   font-size: 18px;
+  font-weight: 600;
+  justify-content: space-between;
+  margin: auto;
+  margin-bottom: 10px;
+  margin-top: 10px;
+  width: 95%;
 }
 
 .sub-container-header {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 50px 1fr 50px;
   padding: 10px;
 }
 
 .search-input-header {
-  display: block;
-  width: 95%;
-  margin: auto;
-  border-radius: 5px;
   border: none;
+  border-radius: 5px;
   box-shadow: 2px 2px 1px #00000057;
-  height: 40px;
+  display: block;
   font-size: 20px;
+  height: 40px;
+  margin: auto;
   margin-top: 2px;
   padding-left: 7px;
   padding-right: 7px;
+  width: 95%;
 }
 
 .search-button-header {
-  width: 95%;
+  background-color: white;
   border: none;
   border-radius: 5px;
-  /* box-shadow: 2px 2px 1px #00000057; */
-  background-color: #fff;
-  color: #000000;
+  color: #0000;
+  cursor: pointer;
   font-size: 20px;
   height: 35px;
-  cursor: pointer;
   margin: auto;
   margin-bottom: 15px;
+  width: 95%;
 }

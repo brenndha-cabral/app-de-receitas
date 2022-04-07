@@ -20,10 +20,6 @@ function Nationalities(props) {
   const [foods, setFoods] = useState([]);
 
   useEffect(() => {
-    /*     if (pathname === '/explore/drinks/nationalities') {
-      throw new Error('Not Found');
-    }
- */
     const requestAllFoods = async () => {
       const allFoods = await foodsRecipes();
       const { meals } = allFoods;
@@ -60,7 +56,7 @@ function Nationalities(props) {
 
   return (
     <div>
-      <Header searchButtonIsVisible title="Explore Nationalities" />
+      <Header searchButtonIsVisible title="Nationalities" />
       <select
         onChange={ (event) => handleFilterByArea(event) }
         data-testid="explore-by-nationality-dropdown"

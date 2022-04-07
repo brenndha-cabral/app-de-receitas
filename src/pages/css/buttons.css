@@ -1,0 +1,43 @@
+.container-buttons-categories {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  margin-top: 10px;
+  padding: 5px;
+}
+
+.buttons-categories {
+  background-color: #ff2253;
+  border: none;
+  border-radius: 5px;
+  box-shadow: 2px 2px 1px #00000057;
+  color: white;
+  font-size: 15px;
+  font-weight: 600;
+  height: 40px;
+  margin-bottom: 12px;
+  padding: 5px;
+  width: 100px;
+}
+
+.container-recipe-card {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  margin-bottom: 55px;
+}
+
+.recipe-card {
+  background-color: white;
+  border: none;
+  border-radius: 5px;
+  box-shadow: 2px 2px 1px #00000057;
+  margin-bottom: 15px;
+  width: 160px;
+}
+
+.recipe-card img {
+  border-radius: 5px 5px 0 0;
+  width: 100%;
+}
+
