@@ -60,6 +60,10 @@
   width: 100%;
 }
 
+.start-continue-finish-recipe:disabled {
+  background-color: #ee5375;
+}
+
 .container-share-favorite {
   align-content: center;
   display: grid;
