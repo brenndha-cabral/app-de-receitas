@@ -4,11 +4,11 @@ import toast, { Toaster } from 'react-hot-toast';
 import copy from 'clipboard-copy';
 import Header from '../../components/header/Header';
 import shareIcon from '../../images/shareIcon.svg';
+import '../css/doneRecipes.css';
 
 function DoneRecipes(props) {
   const { history } = props;
   const [recipes, setRecipes] = useState([]);
-  const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
     document.title = 'All Tasty | Done Recipes';
@@ -37,42 +37,41 @@ function DoneRecipes(props) {
 
     if (category === 'food') copy(`${URL}/foods/${id}`);
     else copy(`${URL}/drinks/${id}`);
-
-    const THREE = 3000;
-    setIsVisible(true);
-    setTimeout(() => { setIsVisible(false); }, THREE);
   }
 
   return (
     <div>
       <Header searchButtonIsVisible={ false } title="Done Recipes" />
 
-      { isVisible && <p>teste</p> }
-      <button
-        value="All"
-        type="button"
-        onClick={ ({ target }) => handleClick(target) }
-        data-testid="filter-by-all-btn"
-      >
-        All
-      </button>
-      <button
-        value="Food"
-        type="button"
-        onClick={ ({ target }) => handleClick(target) }
-        data-testid="filter-by-food-btn"
-      >
-        Food
-      </button>
-      <button
-        value="Drinks"
-        type="button"
-        onClick={ ({ target }) => handleClick(target) }
-        data-testid="filter-by-drink-btn"
-      >
-        Drinks
-      </button>
-
+      <div className="container-done-bottons">
+        <button
+          className="done-buttons"
+          value="All"
+          type="button"
+          onClick={ ({ target }) => handleClick(target) }
+          data-testid="filter-by-all-btn"
+        >
+          All
+        </button>
+        <button
+          className="done-buttons"
+          value="Food"
+          type="button"
+          onClick={ ({ target }) => handleClick(target) }
+          data-testid="filter-by-food-btn"
+        >
+          Food
+        </button>
+        <button
+          className="done-buttons"
+          value="Drinks"
+          type="button"
+          onClick={ ({ target }) => handleClick(target) }
+          data-testid="filter-by-drink-btn"
+        >
+          Drinks
+        </button>
+      </div>
       { recipes && recipes.map((recipe, index) => {
         const {
           id,
@@ -88,22 +87,81 @@ function DoneRecipes(props) {
 
         if (type === 'food') {
           return (
-            <section style={ { width: '400px', margin: '0 auto' } } key={ id }>
+            <section className="container-card-done-recipe" key={ id }>
+              <div className="card-done-recipe">
+                <input
+                  className="search-input"
+                  type="image"
+                  src={ shareIcon }
+                  onClick={ () => {
+                    handleCopy(id, type);
+                    toast('Link copied!');
+                  } }
+                  data-testid={ `${index}-horizontal-share-btn` }
+                  alt="recipe"
+                />
+                <Toaster />
+                <p
+                  data-testid={ `${index}-horizontal-top-text` }
+                >
+                  { ` ${nationality} - ${category}` }
+                </p>
+                <button
+                  type="button"
+                  onClick={ () => history.push(`/foods/${id}`) }
+                  data-testid={ `${index}-horizontal-name` }
+                >
+                  { name }
+                </button>
+                <p
+                  data-testid={ `${index}-horizontal-done-date` }
+                >
+                  { `Done in: ${doneDate}` }
+                </p>
+                { tags.map((tag) => (
+                  <p
+                    key={ index }
+                    data-testid={ `${index}-${tag}-horizontal-tag` }
+                  >
+                    { tag }
+                  </p>
+                )) }
+              </div>
+              <div className="card-done-image">
+                <input
+                  type="image"
+                  src={ image }
+                  onClick={ () => history.push(`/foods/${id}`) }
+                  alt="share image btn"
+                  data-testid={ `${index}-horizontal-image` }
+                />
+              </div>
+            </section>
+          );
+        }
+
+        return (
+          <section className="container-card-done-recipe" key={ id }>
+            <div className="card-done-recipe">
               <input
                 type="image"
                 src={ shareIcon }
-                onClick={ () => handleCopy(id, type) }
+                onClick={ () => {
+                  handleCopy(id, type);
+                  toast('Link copied!');
+                } }
                 data-testid={ `${index}-horizontal-share-btn` }
                 alt="recipe"
               />
+              <Toaster />
               <p
                 data-testid={ `${index}-horizontal-top-text` }
               >
-                { ` ${nationality} - ${category}` }
+                { alcoholicOrNot }
               </p>
               <button
                 type="button"
-                onClick={ () => history.push(`/foods/${id}`) }
+                onClick={ () => history.push(`/drinks/${id}`) }
                 data-testid={ `${index}-horizontal-name` }
               >
                 { name }
@@ -111,67 +169,17 @@ function DoneRecipes(props) {
               <p
                 data-testid={ `${index}-horizontal-done-date` }
               >
-                { doneDate }
+                { `Done in: ${doneDate}` }
               </p>
               <input
                 type="image"
                 src={ image }
-                onClick={ () => history.push(`/foods/${id}`) }
+                onClick={ () => history.push(`/drinks/${id}`) }
                 style={ { width: '100%' } }
                 alt="share image btn"
                 data-testid={ `${index}-horizontal-image` }
               />
-              { tags.map((tag) => (
-                <p
-                  key={ index }
-                  data-testid={ `${index}-${tag}-horizontal-tag` }
-                >
-                  { tag }
-                </p>
-              )) }
-            </section>
-          );
-        }
-
-        return (
-          <section style={ { width: '400px', margin: '0 auto' } } key={ id }>
-            <p>{ type }</p>
-            <input
-              type="image"
-              src={ shareIcon }
-              onClick={ () => {
-                handleCopy(id, type);
-                toast('Link copied!');
-              } }
-              data-testid={ `${index}-horizontal-share-btn` }
-              alt="recipe"
-            />
-            <Toaster />
-            <p
-              data-testid={ `${index}-horizontal-top-text` }
-            >
-              { alcoholicOrNot }
-            </p>
-            <button
-              type="button"
-              onClick={ () => history.push(`/drinks/${id}`) }
-              data-testid={ `${index}-horizontal-name` }
-            >
-              { name }
-            </button>
-            <p
-              data-testid={ `${index}-horizontal-done-date` }
-            >
-              { doneDate }
-            </p>
-            <input
-              type="image"
-              src={ image }
-              onClick={ () => history.push(`/drinks/${id}`) }
-              style={ { width: '100%' } }
-              alt="share image btn"
-              data-testid={ `${index}-horizontal-image` }
-            />
+            </div>
           </section>
         );
       }) }

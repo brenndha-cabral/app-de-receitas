@@ -1,0 +1,39 @@
+.container-done-bottons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  margin-top: 10px;
+  padding: 5px;
+}
+
+.search-input {
+  width: 25px;
+}
+
+.done-buttons {
+  background-color: #ff2253;
+  border: none;
+  border-radius: 5px;
+  box-shadow: 2px 2px 1px #00000057;
+  color: white;
+  font-size: 15px;
+  font-weight: 600;
+  height: 40px;
+  margin-bottom: 12px;
+  padding: 5px;
+  width: 100px;
+}
+
+.container-card-done-recipe {
+  display: flex;
+  flex-direction: row-reverse;
+}
+
+
+.card-done-recipe {
+  display: flex;
+}
+
+.card-done-image {
+
+}
