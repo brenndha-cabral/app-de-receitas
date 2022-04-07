@@ -94,7 +94,7 @@ function DetailsOrProgressDrinks(props) {
       <section>
         { (pathname === `/drinks/${idDrink}/in-progress`)
           ? (
-            <ol>
+            <ul>
               { ingredientFiltered.map((ingredient, indexIngredient) => (
                 <li
                   key={ ingredient }
@@ -114,10 +114,10 @@ function DetailsOrProgressDrinks(props) {
                   </label>
                 </li>
               ))}
-            </ol>)
+            </ul>)
           : (
             <div>
-              <ol>
+              <ul>
                 { ingredientFiltered.map((ingredient, indexIngredient) => (
                   <li
                     key={ ingredient }
@@ -127,7 +127,7 @@ function DetailsOrProgressDrinks(props) {
                     { measureFiltered[indexIngredient] }
                   </li>
                 ))}
-              </ol>
+              </ul>
             </div>
           )}
       </section>

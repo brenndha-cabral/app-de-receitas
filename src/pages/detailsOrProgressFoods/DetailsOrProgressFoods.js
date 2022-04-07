@@ -99,44 +99,62 @@ function DetailsOrProgressFoods(props) {
       <section>
         { (pathname === `/foods/${idMeal}/in-progress`)
           ? (
-            <ul>
-              { ingredientFiltered.map((ingredient, indexIngredient) => (
-                <li
-                  key={ ingredient }
-                  data-testid={ `${indexIngredient}-ingredient-step` }
-                >
-                  <label htmlFor={ ingredient }>
-                    <input
-                      id={ ingredient }
-                      type="checkbox"
-                      name={ ingredient }
-                      value={ ingredient }
-                      checked={ localIngredients.includes(ingredient) }
-                      onChange={ (event) => {
-                        handleLocalIngredients(event);
-                      } }
-                    />
-                    { ingredient }
-                    <span>{ measureFiltered[indexIngredient] }</span>
-                  </label>
-                </li>
-              ))}
-            </ul>)
+            <div>
+              <h3 className="ingredients-h3">Ingredients</h3>
+              <div className="ingredient-list-checkbox">
+                <ul>
+                  { ingredientFiltered.map((ingredient, indexIngredient) => (
+                    <li
+                      className="ingredients-checkbox"
+                      key={ ingredient }
+                      data-testid={ `${indexIngredient}-ingredient-step` }
+                    >
+                      <label
+                        className={
+                          localIngredients.includes(ingredient) && 'checked-label'
+                        }
+                        htmlFor={ ingredient }
+                      >
+                        <input
+                          id={ ingredient }
+                          type="checkbox"
+                          name={ ingredient }
+                          value={ ingredient }
+                          checked={ localIngredients.includes(ingredient) }
+                          onChange={ (event) => {
+                            handleLocalIngredients(event);
+                          } }
+                        />
+                        { ingredient }
+                        <span>{ measureFiltered[indexIngredient] }</span>
+                      </label>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>)
           : (
-            <div className="ingredient-list">
-              <h3>Ingredients</h3>
-              <ul>
-                { ingredientFiltered.map((ingredient, indexIngredient) => (
-                  <li
-                    className="ingredients"
-                    key={ ingredient }
-                    data-testid={ `${indexIngredient}-ingredient-name-and-measure` }
-                  >
-                    <span>{ ingredient }</span>
-                    <span className="measure">{ measureFiltered[indexIngredient] }</span>
-                  </li>
-                ))}
-              </ul>
+            <div>
+              <h3 className="ingredients-h3">Ingredients</h3>
+              <div className="ingredient-list">
+                <ul>
+                  { ingredientFiltered.map((ingredient, indexIngredient) => (
+                    <li
+                      className="ingredients"
+                      key={ ingredient }
+                      data-testid={ `${indexIngredient}-ingredient-name-and-measure` }
+                    >
+                      <span>{ ingredient }</span>
+                      <span
+                        className="measure"
+                      >
+                        { measureFiltered[indexIngredient] }
+
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
           )}
       </section>

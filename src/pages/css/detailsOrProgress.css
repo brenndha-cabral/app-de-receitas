@@ -93,11 +93,17 @@
   filter: brightness(0.9) invert(0.7) sepia(0.5) hue-rotate(300deg) saturate(9000%);
 }
 
+.ingredient-list {
+  background-color: #ececec;
+  margin: 10px;
+  border-radius: 5px;
+}
+
 .ingredient-list, .instructions-h3, .video-h3, .recommended-h3 {
   padding-left: 7px;
 }
 
-.ingredient-list h3, .instructions-h3, .video-h3, .recommended-h3 {
+.ingredient-list h3, .instructions-h3, .video-h3, .recommended-h3, .ingredient-list-checkbox h3 {
   margin-bottom: 10px;
 }
 
@@ -109,7 +115,7 @@
   margin-top: 10px;
 }
 
-.ingredient-list ul li:before {
+.ingredient-list .ingredients:before {
   color: #ff2253;
   content: '• ';
   font-size: 20px;
@@ -127,9 +133,11 @@
 }
 
 .instructions {
-  padding-left: 7px;
-  padding-right: 10px;
+  margin: 10px;
+  padding: 7px;
   text-align: justify;
+  background-color: #ececec;
+  border-radius: 5px;
 }
 
 .recipe-card {
@@ -139,4 +147,36 @@
   box-shadow: 2px 2px 1px #00000057;
   margin-bottom: 15px;
   width: 160px;
+}
+
+.ingredient-list-checkbox {
+  background-color: #ececec;
+  border-radius: 5px;
+  padding: 7px;
+  margin: 10px;
+}
+
+.ingredient-list-checkbox ul {
+  list-style: none;
+}
+
+.ingredients-checkbox label {
+  display: grid;
+  grid-template-columns: 20px 1fr 1fr;
+  grid-template-rows: 25px;
+  justify-content: space-between;
+}
+
+.ingredients-checkbox label span {
+  text-align: end;
+  padding-right: 7px;
+}
+
+.checked-label {
+  text-decoration: line-through ;
+  color: #ff2253;
+}
+
+.ingredients-h3 {
+  padding-left: 7px;
 }
