@@ -94,48 +94,70 @@ function DetailsOrProgressDrinks(props) {
       <section>
         { (pathname === `/drinks/${idDrink}/in-progress`)
           ? (
-            <ul>
-              { ingredientFiltered.map((ingredient, indexIngredient) => (
-                <li
-                  key={ ingredient }
-                  data-testid={ `${indexIngredient}-ingredient-step` }
-                >
-                  <label htmlFor={ ingredient }>
-                    <input
-                      id={ ingredient }
-                      type="checkbox"
-                      name={ ingredient }
-                      value={ ingredient }
-                      checked={ localIngredients.includes(ingredient) }
-                      onChange={ (event) => handleLocalIngredients(event) }
-                    />
-                    { ingredient }
-                    { measureFiltered[indexIngredient] }
-                  </label>
-                </li>
-              ))}
-            </ul>)
+            <div>
+              <h3 className="ingredients-h3">Ingredients</h3>
+              <div className="ingredient-list-checkbox">
+                <ul>
+                  { ingredientFiltered.map((ingredient, indexIngredient) => (
+                    <li
+                      className="ingredients-checkbox"
+                      key={ ingredient }
+                      data-testid={ `${indexIngredient}-ingredient-step` }
+                    >
+                      <label
+                        className={
+                          localIngredients.includes(ingredient) && 'checked-label'
+                        }
+                        htmlFor={ ingredient }
+                      >
+                        <input
+                          id={ ingredient }
+                          type="checkbox"
+                          name={ ingredient }
+                          value={ ingredient }
+                          checked={ localIngredients.includes(ingredient) }
+                          onChange={ (event) => handleLocalIngredients(event) }
+                        />
+                        { ingredient }
+                        { measureFiltered[indexIngredient] }
+                      </label>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>)
           : (
             <div>
-              <ul>
-                { ingredientFiltered.map((ingredient, indexIngredient) => (
-                  <li
-                    key={ ingredient }
-                    data-testid={ `${indexIngredient}-ingredient-name-and-measure` }
-                  >
-                    { ingredient }
-                    { measureFiltered[indexIngredient] }
-                  </li>
-                ))}
-              </ul>
+              <h3 className="ingredients-h3">Ingredients</h3>
+              <div className="ingredient-list">
+                <ul>
+                  { ingredientFiltered.map((ingredient, indexIngredient) => (
+                    <li
+                      className="ingredients-drinks"
+                      key={ ingredient }
+                      data-testid={ `${indexIngredient}-ingredient-name-and-measure` }
+                    >
+                      <span>{ ingredient }</span>
+                      <span
+                        className="measure-drink"
+                      >
+                        { measureFiltered[indexIngredient] }
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
           )}
       </section>
+      <h3 className="instructions-h3">Instructions</h3>
       <p
+        className="instructions"
         data-testid="instructions"
       >
         {strInstructions}
       </p>
+      <h3 className="recommended-h3">Recommended</h3>
       <div className="carousel-wrapper">
         { foodsRecommendations.slice(0, SIX).map((foods, ii) => (
           <div
@@ -143,13 +165,14 @@ function DetailsOrProgressDrinks(props) {
             data-testid={ `${ii}-recomendation-card` }
             className="recommendation_photo"
           >
-            <h1 data-testid={ `${ii}-recomendation-title` }>{foods.strMeal }</h1>
             <img
               src={ foods.strMealThumb }
               alt={ foods.strMeal }
-              width="200"
-              height="200"
             />
+            <h3 className="recomendation-alcoholic">
+              { foods.strCategory }
+            </h3>
+            <h3 data-testid={ `${ii}-recomendation-title` }>{foods.strMeal }</h3>
           </div>
         ))}
       </div>
@@ -162,14 +185,14 @@ function DetailsOrProgressDrinks(props) {
             } }
             data-testid="finish-recipe-btn"
             type="button"
-            className="start-recipe"
+            className="start-continue-finish-recipe"
             disabled={ localIngredients.length < ingredientFiltered.length }
           >
             Finish Recipe
           </button>)
         : (
           <button
-            className="start-recipe"
+            className="start-continue-finish-recipe"
             onClick={ () => {
               handleStartBtn();
               handleChangeDrink('button', idRecipe);
