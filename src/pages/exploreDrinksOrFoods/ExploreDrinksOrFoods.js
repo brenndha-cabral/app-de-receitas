@@ -4,6 +4,7 @@ import Header from '../../components/header/Header';
 import Footer from '../../components/footer/Footer';
 import { requestRandomDrinkDetails,
   requestRandomFoodDetails } from '../../services/requestApi';
+import '../css/exploreDrinksOrFoods.css';
 
 function ExploreDrinksOrFoods() {
   useEffect(() => {
@@ -34,32 +35,36 @@ function ExploreDrinksOrFoods() {
         searchButtonIsVisible={ false }
         title={ pathname === '/explore/drinks' ? 'Explore Drinks' : 'Explore Foods' }
       />
-
-      <button
-        type="button"
-        onClick={ () => history.push(`${pathname}/ingredients`) }
-        data-testid="explore-by-ingredient"
-      >
-        By Ingredient
-      </button>
-
-      { pathname === '/explore/foods' && (
+      <div className="conatiner-foods-drinks">
         <button
           type="button"
-          onClick={ () => history.push(`${pathname}/nationalities`) }
-          data-testid="explore-by-nationality"
+          className="explore-by-ingredient"
+          onClick={ () => history.push(`${pathname}/ingredients`) }
+          data-testid="explore-by-ingredient"
         >
-          By Nationality
+          By Ingredient
         </button>
-      ) }
 
-      <button
-        type="button"
-        onClick={ handleSurpriseButton }
-        data-testid="explore-surprise"
-      >
-        Surprise me!
-      </button>
+        { pathname === '/explore/foods' && (
+          <button
+            type="button"
+            className="explore-by-nationality"
+            onClick={ () => history.push(`${pathname}/nationalities`) }
+            data-testid="explore-by-nationality"
+          >
+            By Nationality
+          </button>
+        ) }
+
+        <button
+          type="button"
+          className="explore-surprise"
+          onClick={ handleSurpriseButton }
+          data-testid="explore-surprise"
+        >
+          Surprise me!
+        </button>
+      </div>
       <Footer />
     </div>
   );
