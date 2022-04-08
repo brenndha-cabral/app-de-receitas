@@ -95,8 +95,8 @@
 
 .ingredient-list {
   background-color: #ececec;
-  margin: 10px;
   border-radius: 5px;
+  margin: 10px;
 }
 
 .ingredient-list, .instructions-h3, .video-h3, .recommended-h3 {
@@ -133,11 +133,11 @@
 }
 
 .instructions {
+  background-color: #ececec;
+  border-radius: 5px;
   margin: 10px;
   padding: 7px;
   text-align: justify;
-  background-color: #ececec;
-  border-radius: 5px;
 }
 
 .recipe-card {
@@ -152,8 +152,8 @@
 .ingredient-list-checkbox {
   background-color: #ececec;
   border-radius: 5px;
-  padding: 7px;
   margin: 10px;
+  padding: 7px;
 }
 
 .ingredient-list-checkbox ul {
@@ -168,15 +168,31 @@
 }
 
 .ingredients-checkbox label span {
-  text-align: end;
   padding-right: 7px;
+  text-align: end;
 }
 
 .checked-label {
-  text-decoration: line-through ;
   color: #ff2253;
+  text-decoration: line-through;
 }
 
 .ingredients-h3 {
   padding-left: 7px;
+}
+
+.ingredients-drinks:before {
+  color: #ff2253;
+  content: '• ';
+  font-size: 20px;
+}
+
+.ingredients-drinks {
+  display: grid;
+  grid-template-columns: 20px 1fr 1fr;
+}
+
+.measure-drink {
+  padding-right: 7px;
+  grid-column: 4;
 }
