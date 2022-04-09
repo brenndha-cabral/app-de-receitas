@@ -23,12 +23,12 @@
 .card-container {
   border-radius: 5px;
   box-shadow: 1px 1px 3px 2px #ff2253;
-  margin: 0 auto;
-  width: 95vw;
   display: flex;
   flex-direction: row-reverse;
   justify-content: space-between;
+  margin: 0 auto;
   margin-bottom: 17px;
+  width: 95vw;
 }
 
 .info-container {
@@ -47,21 +47,17 @@
   width: 50%;
 }
 
-/* .share-icon-container {
-  width: 3%;
-} */
-
 .share-icon {
-  width: 26px;
   margin: 5px;
+  width: 26px;
 }
 
 .recipe-title-btn {
   background: none;
   border: none;
-  text-align: left;
   font-size: 1.5em;
   font-weight: 900;
+  text-align: left;
 }
 
 .recipe-subtitle {
@@ -70,14 +66,14 @@
 
 .tags {
   background: gray;
-  width: fit-content;
-  padding: 5px;
   border-radius: 5px;
   color: white;
+  padding: 5px;
+  width: fit-content;
 }
 
 .tags-container {
   display: flex;
-  justify-content: space-between;
   flex-wrap: wrap;
+  justify-content: space-between;
 }
