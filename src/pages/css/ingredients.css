@@ -1,0 +1,10 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.card-name-ingredients {
+  margin-top: 5px;
+  text-align: center;
+}

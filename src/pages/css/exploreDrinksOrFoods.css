@@ -1,0 +1,49 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.conatiner-foods-drinks {
+  margin: auto;
+  width: 90%;
+}
+
+.explore-by-ingredient {
+  background-color: #ff2253;
+  border: none;
+  border-radius: 5px;
+  box-shadow: 2px 2px 1px #00000057;
+  color: white;
+  font-size: 18px;
+  font-weight: 600;
+  height: 40px;
+  margin-top: 15px;
+  width: 100%;
+}
+
+.explore-by-nationality {
+  background-color: #ff2253;
+  border: none;
+  border-radius: 5px;
+  box-shadow: 2px 2px 1px #00000057;
+  color: white;
+  font-size: 18px;
+  font-weight: 600;
+  height: 40px;
+  margin-top: 15px;
+  width: 100%;
+}
+
+.explore-surprise {
+  background-color: #ff2253;
+  border: none;
+  border-radius: 5px;
+  box-shadow: 2px 2px 1px #00000057;
+  color: white;
+  font-size: 18px;
+  font-weight: 600;
+  height: 40px;
+  margin-top: 15px;
+  width: 100%;
+}

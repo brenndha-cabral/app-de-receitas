@@ -1,0 +1,28 @@
+.container-buttons-profile {
+  display: flex;
+  flex-direction: column;
+  height: 200px;
+  justify-content: space-between;
+  margin-left: 40px;
+  margin-right: 40px;
+  margin-top: 100px;
+}
+
+.email-profile {
+  font-size: 26px;
+  margin-top: 90px;
+  text-align: center;
+}
+
+.bottons-profile {
+  background-color: #ff2253;
+  border: none;
+  border-radius: 5px;
+  box-shadow: 2px 2px 1px #00000057;
+  color: white;
+  font-size: 20px;
+  font-weight: 600;
+  height: 40px;
+  margin-bottom: 12px;
+  padding: 5px;
+}

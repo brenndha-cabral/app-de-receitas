@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import copy from 'clipboard-copy';
+import toast, { Toaster } from 'react-hot-toast';
 import Header from '../../components/header/Header';
 import shareIcon from '../../images/shareIcon.svg';
 import blackHeartIcon from '../../images/blackHeartIcon.svg';
+import '../css/favoriteRecipes.css';
 
 function FavoriteRecipes(props) {
   const { history } = props;
   const [recipes, setRecipes] = useState([]);
-  const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
     document.title = 'All Tasty | Favorite Recipes';
@@ -37,10 +38,6 @@ function FavoriteRecipes(props) {
 
     if (category === 'food') copy(`${URL}/foods/${id}`);
     else copy(`${URL}/drinks/${id}`);
-
-    const THREE = 3000;
-    setIsVisible(true);
-    setTimeout(() => { setIsVisible(false); }, THREE);
   }
 
   function handleDisfavorButton(id) {
@@ -55,32 +52,35 @@ function FavoriteRecipes(props) {
     <div>
       <Header searchButtonIsVisible={ false } title="Favorite Recipes" />
 
-      { isVisible && <p>Link copied!</p> }
-
-      <button
-        value="All"
-        type="button"
-        onClick={ ({ target }) => handleClick(target) }
-        data-testid="filter-by-all-btn"
-      >
-        All
-      </button>
-      <button
-        value="Food"
-        type="button"
-        onClick={ ({ target }) => handleClick(target) }
-        data-testid="filter-by-food-btn"
-      >
-        Food
-      </button>
-      <button
-        value="Drinks"
-        type="button"
-        onClick={ ({ target }) => handleClick(target) }
-        data-testid="filter-by-drink-btn"
-      >
-        Drinks
-      </button>
+      <div className="container-favorite-bottons">
+        <button
+          className="favorite-buttons"
+          value="All"
+          type="button"
+          onClick={ ({ target }) => handleClick(target) }
+          data-testid="filter-by-all-btn"
+        >
+          All
+        </button>
+        <button
+          className="favorite-buttons"
+          value="Food"
+          type="button"
+          onClick={ ({ target }) => handleClick(target) }
+          data-testid="filter-by-food-btn"
+        >
+          Food
+        </button>
+        <button
+          className="favorite-buttons"
+          value="Drinks"
+          type="button"
+          onClick={ ({ target }) => handleClick(target) }
+          data-testid="filter-by-drink-btn"
+        >
+          Drinks
+        </button>
+      </div>
 
       { recipes && recipes.map((recipe, index) => {
         const {
@@ -96,45 +96,59 @@ function FavoriteRecipes(props) {
         const isFood = type === 'food';
 
         return (
-          <section style={ { width: '400px', margin: '0 auto' } } key={ id }>
+          <section key={ id } className="card-favorites-container">
+            <div className="info-favorites-container">
+              <Toaster />
 
-            <p
-              data-testid={ `${index}-horizontal-top-text` }
-            >
-              { isFood ? ` ${nationality} - ${category}` : alcoholicOrNot }
-            </p>
+              <div className="info-favorites-sub-container">
+                <p
+                  className="recipe-favorite-subtitle"
+                  data-testid={ `${index}-horizontal-top-text` }
+                >
+                  { isFood ? ` ${nationality} - ${category}` : alcoholicOrNot }
+                </p>
 
-            <button
-              type="button"
-              onClick={ isFood ? () => history.push(`/foods/${id}`)
-                : () => history.push(`/drinks/${id}`) }
-              data-testid={ `${index}-horizontal-name` }
-            >
-              { name }
-            </button>
+                <button
+                  className="recipe-favorite-title-btn"
+                  type="button"
+                  onClick={ isFood ? () => history.push(`/foods/${id}`)
+                    : () => history.push(`/drinks/${id}`) }
+                  data-testid={ `${index}-horizontal-name` }
+                >
+                  { name }
+                </button>
+              </div>
 
+              <div className="icons-container">
+                <input
+                  className="favorite-share-icon"
+                  type="image"
+                  src={ shareIcon }
+                  onClick={ () => {
+                    handleCopy(id, type);
+                    toast('Link copied!');
+                  } }
+                  data-testid={ `${index}-horizontal-share-btn` }
+                  alt="recipe"
+                />
+
+                <input
+                  className="favorite-heart"
+                  type="image"
+                  onClick={ () => handleDisfavorButton(id) }
+                  src={ blackHeartIcon }
+                  data-testid={ `${index}-horizontal-favorite-btn` }
+                  alt="recipe"
+                />
+              </div>
+
+            </div>
             <input
-              type="image"
-              src={ shareIcon }
-              onClick={ () => handleCopy(id, type) }
-              data-testid={ `${index}-horizontal-share-btn` }
-              alt="recipe"
-            />
-
-            <input
-              type="image"
-              onClick={ () => handleDisfavorButton(id) }
-              src={ blackHeartIcon }
-              data-testid={ `${index}-horizontal-favorite-btn` }
-              alt="recipe"
-            />
-
-            <input
+              className="favorite-recipe-image"
               type="image"
               src={ image }
               onClick={ isFood ? () => history.push(`/foods/${id}`)
                 : () => history.push(`/drinks/${id}`) }
-              style={ { width: '100%' } }
               alt="share image btn"
               data-testid={ `${index}-horizontal-image` }
             />

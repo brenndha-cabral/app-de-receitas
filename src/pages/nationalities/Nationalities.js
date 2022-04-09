@@ -20,10 +20,6 @@ function Nationalities(props) {
   const [foods, setFoods] = useState([]);
 
   useEffect(() => {
-    /*     if (pathname === '/explore/drinks/nationalities') {
-      throw new Error('Not Found');
-    }
- */
     const requestAllFoods = async () => {
       const allFoods = await foodsRecipes();
       const { meals } = allFoods;
@@ -60,8 +56,9 @@ function Nationalities(props) {
 
   return (
     <div>
-      <Header searchButtonIsVisible title="Explore Nationalities" />
+      <Header searchButtonIsVisible title="Nationalities" />
       <select
+        className="nationality-selections"
         onChange={ (event) => handleFilterByArea(event) }
         data-testid="explore-by-nationality-dropdown"
       >
@@ -75,30 +72,34 @@ function Nationalities(props) {
           </option>
         )) }
       </select>
-
-      { foods.map(({ strMealThumb, strMeal, idMeal }, index) => (
-        <div
-          data-testid={ `${index}-recipe-card` }
-          key={ strMeal }
-        >
-          <button
-            type="button"
-            onClick={ () => history.push(`/foods/${idMeal}`) }
+      <section
+        className="container-recipe-card"
+      >
+        { foods.map(({ strMealThumb, strMeal, idMeal }, index) => (
+          <div
+            data-testid={ `${index}-recipe-card` }
+            key={ strMeal }
           >
-            <img
-              data-testid={ `${index}-card-img` }
-              src={ strMealThumb }
-              alt="drinks"
-            />
-            <h3
-              data-testid={ `${index}-card-name` }
+            <button
+              className="recipe-card"
+              type="button"
+              onClick={ () => history.push(`/foods/${idMeal}`) }
             >
-              { strMeal }
-            </h3>
-          </button>
-        </div>
-      ))}
-
+              <img
+                className="main_photo"
+                data-testid={ `${index}-card-img` }
+                src={ strMealThumb }
+                alt="drinks"
+              />
+              <h3
+                data-testid={ `${index}-card-name` }
+              >
+                { strMeal }
+              </h3>
+            </button>
+          </div>
+        ))}
+      </section>
       <Footer />
     </div>
   );

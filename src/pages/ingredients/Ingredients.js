@@ -12,6 +12,7 @@ import { requestAllFoodsIngredients,
 } from '../../services/requestApi';
 import { setResultsApi,
   setSearch as setSearchAction } from '../../redux/actions';
+import '../css/ingredients.css';
 
 const NUMBER_TWELVE = 12;
 function Ingredients(props) {
@@ -75,7 +76,7 @@ function Ingredients(props) {
   if (ingredients.length === 0) return null;
 
   return (
-    <div>
+    <div className="container-recipe-card">
       <Header searchButtonIsVisible={ false } title="Explore Ingredients" />
       { ingredients.map((ingredient, index) => {
         const { strIngredient } = ingredient;
@@ -93,6 +94,7 @@ function Ingredients(props) {
             }
             key={ strIngredient || strIngredient1 }
             data-testid={ `${index}-ingredient-card` }
+            className="recipe-card"
           >
             <img
               src={ handleImageURL(strIngredient || strIngredient1) }
@@ -100,6 +102,7 @@ function Ingredients(props) {
               data-testid={ `${index}-card-img` }
             />
             <p
+              className="card-name-ingredients"
               data-testid={ `${index}-card-name` }
             >
               { strIngredient || strIngredient1 }

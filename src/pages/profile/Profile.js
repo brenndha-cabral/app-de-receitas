@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Header from '../../components/header/Header';
 import Footer from '../../components/footer/Footer';
+import '../css/profile.css';
 
 function Profile(props) {
   useEffect(() => {
@@ -24,9 +25,10 @@ function Profile(props) {
     <div>
       <Header searchButtonIsVisible={ false } aboutDrink={ false } title="Profile" />
       <section>
-        <span data-testid="profile-email">{ email }</span>
-        <div>
+        <h3 className="email-profile" data-testid="profile-email">{ email }</h3>
+        <div className="container-buttons-profile">
           <button
+            className="bottons-profile"
             type="button"
             data-testid="profile-done-btn"
             onClick={ () => history.push('/done-recipes') }
@@ -34,6 +36,7 @@ function Profile(props) {
             Done Recipes
           </button>
           <button
+            className="bottons-profile"
             type="button"
             data-testid="profile-favorite-btn"
             onClick={ () => history.push('/favorite-recipes') }
@@ -41,6 +44,7 @@ function Profile(props) {
             Favorite Recipes
           </button>
           <button
+            className="bottons-profile"
             type="button"
             data-testid="profile-logout-btn"
             onClick={ () => {

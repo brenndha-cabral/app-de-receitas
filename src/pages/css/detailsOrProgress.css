@@ -12,19 +12,191 @@
   align-items: center;
   display: flex;
   flex-direction: row;
+  margin-bottom: 50px;
   max-width: 100vw;
   overflow-x: scroll;
 }
 
-.main_photo {
+.main_photo, .video {
   max-width: 100vw;
 }
 
-.recommendation_photo {
-  max-width: 50vw;
+.video {
+  margin-top: 10px;
 }
 
-.start-recipe {
+.recommendation_photo {
+  border: 1px solid gray;
+  border-radius: 6px;
+  margin: 9px;
+  width: 50vw;
+}
+
+.recommendation_photo img {
+  border-radius: 6px 6px 0 0;
+  height: 172px;
+}
+
+.recomendation-title {
+  font-size: 20px;
+  margin-top: 5px;
+  padding-left: 7px;
+}
+
+.recomendation-alcoholic {
+  color: gray;
+  padding-left: 7px;
+}
+
+.start-continue-finish-recipe {
+  background-color: #ff2253;
+  border: none;
   bottom: 0;
+  color: white;
+  font-size: 20px;
+  font-weight: 600;
+  height: 40px;
   position: fixed;
+  width: 100%;
+}
+
+.start-continue-finish-recipe:disabled {
+  background-color: #ee5375;
+}
+
+.container-share-favorite {
+  align-content: center;
+  display: grid;
+  grid-template-columns: 1fr 50px 50px;
+}
+
+.container-share-favorite h1 {
+  padding-left: 7px;
+}
+
+.share-button {
+  background-color: transparent;
+  border: none;
+}
+
+.category {
+  color: gray;
+  margin-bottom: 10px;
+  padding-left: 7px;
+}
+
+.favorite {
+  margin: auto;
+}
+
+.favorite--active {
+  filter: brightness(0.9) invert(0.7) sepia(0.5) hue-rotate(300deg) saturate(9000%);
+}
+
+.ingredient-list {
+  background-color: #ececec;
+  border-radius: 5px;
+  margin: 10px;
+}
+
+.ingredient-list, .instructions-h3, .video-h3, .recommended-h3 {
+  padding-left: 7px;
+}
+
+.ingredient-list h3, .instructions-h3, .ingredient-list-checkbox h3 {
+  margin-bottom: 10px;
+}
+
+.video-h3, .recommended-h3 {
+  margin-bottom: 10px;
+}
+
+.recommended-h3 {
+  margin-top: 8px;
+}
+
+.instructions-h3 {
+  margin-top: 10px;
+}
+
+.ingredient-list .ingredients:before {
+  color: #ff2253;
+  content: '• ';
+  font-size: 20px;
+}
+
+.ingredients {
+  display: grid;
+  grid-template-columns: 10px 1fr 1fr 60px;
+  grid-template-rows: 25px;
+  justify-content: space-between;
+}
+
+.measure {
+  grid-column: 4;
+}
+
+.instructions {
+  background-color: #ececec;
+  border-radius: 5px;
+  margin: 10px;
+  padding: 7px;
+  text-align: justify;
+}
+
+.recipe-card {
+  background-color: white;
+  border: none;
+  border-radius: 5px;
+  box-shadow: 2px 2px 1px #00000057;
+  margin-bottom: 15px;
+  width: 160px;
+}
+
+.ingredient-list-checkbox {
+  background-color: #ececec;
+  border-radius: 5px;
+  margin: 10px;
+  padding: 7px;
+}
+
+.ingredient-list-checkbox ul {
+  list-style: none;
+}
+
+.ingredients-checkbox label {
+  display: grid;
+  grid-template-columns: 20px 1fr 1fr;
+  grid-template-rows: 25px;
+  justify-content: space-between;
+}
+
+.ingredients-checkbox label span {
+  padding-right: 7px;
+  text-align: end;
+}
+
+.checked-label {
+  color: #ff2253;
+  text-decoration: line-through;
+}
+
+.ingredients-h3 {
+  padding-left: 7px;
+}
+
+.ingredients-drinks:before {
+  color: #ff2253;
+  content: '• ';
+  font-size: 20px;
+}
+
+.ingredients-drinks {
+  display: grid;
+  grid-template-columns: 20px 1fr 1fr;
+}
+
+.measure-drink {
+  grid-column: 4;
+  padding-right: 7px;
 }
