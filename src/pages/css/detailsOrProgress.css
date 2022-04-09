@@ -103,7 +103,11 @@
   padding-left: 7px;
 }
 
-.ingredient-list h3, .instructions-h3, .video-h3, .recommended-h3, .ingredient-list-checkbox h3 {
+.ingredient-list h3, .instructions-h3, .ingredient-list-checkbox h3 {
+  margin-bottom: 10px;
+}
+
+.video-h3, .recommended-h3 {
   margin-bottom: 10px;
 }
 
@@ -193,6 +197,6 @@
 }
 
 .measure-drink {
-  padding-right: 7px;
   grid-column: 4;
+  padding-right: 7px;
 }
