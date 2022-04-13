@@ -32,3 +32,6 @@ cypress/reports
 README.md
 
 .trybe
+
+cypress.json
+
