@@ -7,6 +7,7 @@ import { ingredientFilter, measureFilter } from '../../helpers/filterDrinksOrFoo
 import { handleFinishBtnDrink } from '../../helpers/handleFinishBtn';
 import { handleChangeDrink } from '../../helpers/handleChange';
 import DetailsComponent from '../../components/detailsComponents/DetailsComponent';
+import { verifyButtonDrink } from '../../helpers/verifyButton';
 
 function DetailsOrProgressDrinks(props) {
   const [drinksDetails, setDrinksDetails] = useState([]);
@@ -67,21 +68,6 @@ function DetailsOrProgressDrinks(props) {
     const { idDrink } = drinksDetails[0];
     history.push(`/drinks/${idDrink}/in-progress`);
   }
-
-  const verifyButton = (idDrink) => {
-    const startedRecipes = getStorageProgress();
-
-    if (startedRecipes === null) {
-      return 'Start Recipe';
-    }
-
-    const keys = Object.keys(startedRecipes.cocktails).includes(idDrink);
-
-    if (keys) {
-      return 'Continue Recipe';
-    }
-    return 'Start Recipe';
-  };
 
   const {
     idDrink,
@@ -201,7 +187,7 @@ function DetailsOrProgressDrinks(props) {
             type="button"
 
           >
-            { verifyButton(idDrink) }
+            { verifyButtonDrink(idDrink) }
           </button>
         )}
     </div>
